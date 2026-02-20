@@ -2860,6 +2860,426 @@
                 grid-column: span 3;
             }
         }
+
+        /* ============================================================
+           GOVERNMENT RECOGNITION SECTION
+        ============================================================ */
+        .gov-rec {
+            position: relative;
+            z-index: 10;
+            padding: 100px clamp(28px, 5vw, 80px) 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .gov-rec__label {
+            font-size: .68rem;
+            font-weight: 600;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .gov-rec__h {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.1;
+            margin-bottom: 16px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gov-rec__sub {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 56px;
+            line-height: 1.6;
+        }
+
+        .gov-rec__divider {
+            height: 1px;
+            width: 100%;
+            max-width: 900px;
+            background: var(--border);
+            margin: 0 auto 56px;
+            transform: scaleX(0);
+            transition: transform 1.2s var(--expo);
+        }
+
+        .gov-rec.active .gov-rec__divider {
+            transform: scaleX(1);
+        }
+
+        .gov-rec__grid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: clamp(40px, 5vw, 80px);
+        }
+
+        .gov-logo {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.8s var(--expo);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            cursor: default;
+            background: var(--white);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 12px;
+            padding: 32px 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            width: 100%;
+            max-width: 320px;
+            /* Ensure cards don't get too wide */
+        }
+
+        .gov-rec.active .gov-logo {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger delays handled in CSS for simplicity or JS */
+        .gov-rec.active .gov-logo:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        .gov-rec.active .gov-logo:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+
+        .gov-rec.active .gov-logo:nth-child(3) {
+            transition-delay: 0.3s;
+        }
+
+        .gov-logo svg {
+            height: 64px;
+            width: auto;
+            max-width: 180px;
+            color: #0F172A;
+            /* Brand Navy */
+            fill: currentColor;
+            stroke: currentColor;
+            transition: all 0.4s ease;
+        }
+
+        .gov-logo__text {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #0F172A;
+            /* Text match logo */
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            text-align: center;
+            max-width: 200px;
+        }
+
+        .gov-logo:hover {
+            transform: translateY(-6px) !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+            border-color: rgba(15, 23, 42, 0.12);
+        }
+
+        .gov-logo:hover svg {
+            color: #0b1120;
+            /* Slightly darker */
+            transform: scale(1.02);
+        }
+
+        .gov-logo:hover .gov-logo__text {
+            opacity: 1;
+        }
+
+        /* ============================================================
+           FUTURE EXPERIMENTS CAROUSEL
+        ============================================================ */
+        .exp-carousel {
+            position: relative;
+            z-index: 10;
+            padding: 80px 0 100px;
+            max-width: 100%;
+            overflow: hidden;
+            background: var(--bg-light);
+            /* Consistent with specific user request for 'Deep Navy / Academic Premium' feel, keeping it clean/light but high-end */
+        }
+
+        .exp-header {
+            max-width: 1400px;
+            margin: 0 auto 40px;
+            padding: 0 clamp(28px, 5vw, 80px);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .exp-label {
+            font-size: .68rem;
+            font-weight: 600;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .exp-title {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.1;
+        }
+
+        .exp-controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .exp-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all .3s ease;
+        }
+
+        .exp-btn:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(0, 70, 255, 0.1);
+        }
+
+        .exp-track {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 20px clamp(28px, 5vw, 80px) 40px;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
+            scroll-behavior: smooth;
+        }
+
+        .exp-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .exp-card {
+            flex: 0 0 340px;
+            /* Fixed width cards */
+            scroll-snap-align: start;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            transition: all 0.4s var(--expo);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 380px;
+        }
+
+        .exp-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(11, 29, 58, 0.08);
+            /* Premium shadow */
+            border-color: rgba(0, 70, 255, 0.15);
+        }
+
+        .exp-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 99px;
+            background: rgba(0, 70, 255, 0.05);
+            color: var(--primary-blue);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+
+        .exp-badge--new {
+            background: rgba(80, 216, 144, 0.12);
+            color: var(--green);
+        }
+
+        .exp-card__h {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            line-height: 1.25;
+        }
+
+        .exp-card__sub {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: auto;
+            /* Push footer down */
+        }
+
+        .exp-card__footer {
+            margin-top: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .exp-link {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap .3s ease;
+        }
+
+        .exp-card:hover .exp-link {
+            color: var(--primary-blue);
+            gap: 10px;
+        }
+
+        /* Pagination dots */
+        .exp-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .exp-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .exp-dot.active {
+            background: var(--primary-blue);
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .exp-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .exp-card {
+                flex: 0 0 280px;
+                min-height: 340px;
+            }
+        }
+    </style>
+    <style>
+        /* ============================================================
+           GOVERNMENT RECOGNITION CERTIFICATE
+        ============================================================ */
+        .cert-section {
+            padding: 80px clamp(28px, 5vw, 80px);
+            background: var(--bg);
+            /* Match body bg */
+            display: flex;
+            justify-content: center;
+        }
+
+        .cert-container {
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .cert-heading {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .cert-subheading {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .cert-image-wrapper {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border);
+            transition: transform 0.6s var(--smooth), box-shadow 0.6s var(--smooth);
+            display: inline-block;
+            /* Hug content */
+            max-width: 100%;
+        }
+
+        .cert-image-wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 70, 255, 0.12);
+        }
+
+        .cert-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Animation class to be triggered by JS intersection observer if consistent with other sections */
+        .cert-section.reveal .cert-container {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealCert 0.7s ease-out forwards;
+            /* Using existing logic or new */
+        }
+
+        /* If using the global reveal class logic usually it's on the element itself */
+        .reveal-cert {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealCert 0.7s ease-out forwards;
+        }
+
+        @keyframes revealCert {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -3306,6 +3726,91 @@
         </div>
     </section>
 
+    <!-- Government Recognition Section -->
+    <section class="gov-rec" id="govRec">
+        <span class="gov-rec__label reveal">Recognition & Compliance</span>
+        <h2 class="gov-rec__h reveal">Trusted and Recognized by<br>Government Authorities</h2>
+        <p class="gov-rec__sub reveal">Our platform is officially recognized and supported by leading government
+            ministries and institutions.</p>
+
+        <div class="gov-rec__divider"></div>
+
+        <div class="gov-rec__grid">
+            <!-- Ministry of MSME -->
+            <div class="gov-logo">
+                <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- ASHOKA EMBLEM (Lion Capital) -->
+                    <g transform="translate(82, 18) scale(0.35)">
+                        <!-- Simple Lion shape approximation -->
+                        <path
+                            d="M50 0 C30 0 20 15 20 30 C20 45 35 55 50 55 C65 55 80 45 80 30 C80 15 70 0 50 0 Z M30 30 C30 20 40 10 50 10 C60 10 70 20 70 30 C70 40 60 50 50 50 C40 50 30 40 30 30 Z"
+                            fill="currentColor" />
+                        <path
+                            d="M15 35 C5 35 0 45 0 55 C0 65 10 75 25 75 L75 75 C90 75 100 65 100 55 C100 45 95 35 85 35"
+                            fill="none" stroke="currentColor" stroke-width="6" />
+                        <rect x="25" y="75" width="50" height="15" fill="currentColor" />
+                        <circle cx="50" cy="82.5" r="5" fill="white" />
+                    </g>
+                    <!-- MSME GEAR - Industrial/Chakra motif below -->
+                    <g transform="translate(100, 75)">
+                        <circle r="16" fill="none" stroke="currentColor" stroke-width="5" />
+                        <path d="M-20 0 H-12 M20 0 H12 M0 -20 V-12 M0 20 V12" stroke="currentColor" stroke-width="5" />
+                        <path d="M-14 -14 L-9 -9 M14 -14 L9 -9 M-14 14 L-9 9 M14 14 L9 9" stroke="currentColor"
+                            stroke-width="5" />
+                        <circle r="6" fill="currentColor" />
+                    </g>
+                </svg>
+                <span class="gov-logo__text">Ministry of MSME</span>
+            </div>
+
+            <!-- DPIIT / Startup India -->
+            <div class="gov-logo">
+                <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- ASHOKA EMBLEM -->
+                    <g transform="translate(82, 20) scale(0.35)">
+                        <path
+                            d="M50 0 C30 0 20 15 20 30 C20 45 35 55 50 55 C65 55 80 45 80 30 C80 15 70 0 50 0 Z M30 30 C30 20 40 10 50 10 C60 10 70 20 70 30 C70 40 60 50 50 50 C40 50 30 40 30 30 Z"
+                            fill="currentColor" />
+                        <path
+                            d="M15 35 C5 35 0 45 0 55 C0 65 10 75 25 75 L75 75 C90 75 100 65 100 55 C100 45 95 35 85 35"
+                            fill="none" stroke="currentColor" stroke-width="6" />
+                        <rect x="25" y="75" width="50" height="15" fill="currentColor" />
+                        <circle cx="50" cy="82.5" r="5" fill="white" />
+                    </g>
+                    <!-- INDUSTRIAL COG - DPIIT Motif -->
+                    <path d="M70 65 L130 65" stroke="currentColor" stroke-width="4" />
+                    <path d="M60 65 L60 85 L140 85 L140 65" fill="none" stroke="currentColor" stroke-width="4" />
+                    <path d="M85 85 L85 95 M115 85 L115 95" stroke="currentColor" stroke-width="4" />
+                </svg>
+                <span class="gov-logo__text">Department of Promotion of Industry and Internal Trade</span>
+            </div>
+
+            <!-- Ministry of Corporate Affairs -->
+            <div class="gov-logo">
+                <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- ASHOKA EMBLEM -->
+                    <g transform="translate(82, 15) scale(0.35)">
+                        <path
+                            d="M50 0 C30 0 20 15 20 30 C20 45 35 55 50 55 C65 55 80 45 80 30 C80 15 70 0 50 0 Z M30 30 C30 20 40 10 50 10 C60 10 70 20 70 30 C70 40 60 50 50 50 C40 50 30 40 30 30 Z"
+                            fill="currentColor" />
+                        <path
+                            d="M15 35 C5 35 0 45 0 55 C0 65 10 75 25 75 L75 75 C90 75 100 65 100 55 C100 45 95 35 85 35"
+                            fill="none" stroke="currentColor" stroke-width="6" />
+                        <rect x="25" y="75" width="50" height="15" fill="currentColor" />
+                        <circle cx="50" cy="82.5" r="5" fill="white" />
+                    </g>
+                    <!-- BUILDING - Corporate Affairs Motif -->
+                    <path d="M70 60 L100 45 L130 60" fill="none" stroke="currentColor" stroke-width="4" />
+                    <rect x="75" y="60" width="50" height="25" fill="none" stroke="currentColor" stroke-width="3" />
+                    <path d="M85 60 V85 M93 60 V85 M100 60 V85 M107 60 V85 M115 60 V85" stroke="currentColor"
+                        stroke-width="2" />
+                    <rect x="70" y="85" width="60" height="4" fill="currentColor" />
+                </svg>
+                <span class="gov-logo__text">Ministry of Corporate Affairs</span>
+            </div>
+        </div>
+    </section>
+
     <!-- Competitive Exams Marquee -->
     <div class="marquee-wrap" id="marqueeWrap">
         <div class="marquee">
@@ -3333,6 +3838,116 @@
             </div>
         </div>
     </div>
+
+    <!-- Government Recognition Certificate -->
+    <section class="cert-section reveal" id="certificate">
+        <div class="cert-container">
+            <h2 class="cert-heading">Government Recognition Certificate</h2>
+            <p class="cert-subheading">Official DPIIT Startup Recognition</p>
+            <div class="cert-image-wrapper">
+                <img src="./DPIIT.svg" alt="DPIIT Startup Recognition Certificate" class="cert-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Experiments Carousel -->
+    <section class="exp-carousel reveal" id="expCarousel">
+        <div class="exp-header">
+            <div class="exp-head-text">
+                <span class="exp-label">Latest Updates</span>
+                <h2 class="exp-title">Events &amp; Experiments</h2>
+            </div>
+            <div class="exp-controls">
+                <button class="exp-btn" id="expPrev" aria-label="Previous slide">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+                <button class="exp-btn" id="expNext" aria-label="Next slide">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="exp-track" id="expTrack">
+            <!-- Card 1 -->
+            <div class="exp-card">
+                <div class="exp-badge exp-badge--new">New Launch</div>
+                <h3 class="exp-card__h">AI-Powered Mock Interviewer</h3>
+                <p class="exp-card__sub">Practice behavioral and technical interviews with our real-time voice AI agent.
+                    Get instant feedback on your tone and delivery.</p>
+                <div class="exp-card__footer">
+                    <a href="#" class="exp-link">Try Beta <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="exp-card">
+                <div class="exp-badge">Hackathon</div>
+                <h3 class="exp-card__h">National Code Sprint 2026</h3>
+                <p class="exp-card__sub">Join 50,000+ developers in India's largest competitive programming event.
+                    Prizes worth ₹10 Lakhs up for grabs.</p>
+                <div class="exp-card__footer">
+                    <a href="#" class="exp-link">Register Now <svg width="16" height="16" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="exp-card">
+                <div class="exp-badge">Community</div>
+                <h3 class="exp-card__h">Campus Ambassador Program</h3>
+                <p class="exp-card__sub">Lead the tech revolution at your college. Organize workshops, meetups, and gain
+                    exclusive mentorship access.</p>
+                <div class="exp-card__footer">
+                    <a href="#" class="exp-link">Apply Today <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="exp-card">
+                <div class="exp-badge exp-badge--new">Experiment</div>
+                <h3 class="exp-card__h">Project: Neural Notes</h3>
+                <p class="exp-card__sub">Instantly turn any YouTube lecture into concise, structured study notes using
+                    our fine-tuned LLM.</p>
+                <div class="exp-card__footer">
+                    <a href="#" class="exp-link">View Demo <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="exp-card">
+                <div class="exp-badge">Event</div>
+                <h3 class="exp-card__h">System Design Live</h3>
+                <p class="exp-card__sub">A 2-day workshop on scaling distributed systems with practical case studies
+                    from Uber and Netflix architectures.</p>
+                <div class="exp-card__footer">
+                    <a href="#" class="exp-link">Get Tickets <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="exp-dots" id="expDots"></div>
+    </section>
 
     <!-- Features Section -->
     <section class="features" id="features">
@@ -3865,6 +4480,73 @@
                         });
                     }, { threshold: 0.25 });
                     divObserver.observe(divSection);
+                }
+
+                /* ══════════════════════════════════════════════════
+                   GOV REC SECTION OBSERVER
+                ══════════════════════════════════════════════════ */
+                var govSection = document.getElementById('govRec');
+                if (govSection) {
+                    var govObserver = new IntersectionObserver(function (entries) {
+                        entries.forEach(function (entry) {
+                            if (entry.isIntersecting) {
+                                govSection.classList.add('active');
+                                govObserver.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.3 });
+                    govObserver.observe(govSection);
+                }
+
+                /* ══════════════════════════════════════════════════
+                   EXP CAROUSEL LOGIC
+                ══════════════════════════════════════════════════ */
+                var expTrack = document.getElementById('expTrack');
+                var expPrev = document.getElementById('expPrev');
+                var expNext = document.getElementById('expNext');
+                var expDotsContainer = document.getElementById('expDots');
+
+                if (expTrack && expPrev && expNext) {
+                    var cardWidth = 340 + 24; // Width + Gap, approx
+
+                    expPrev.addEventListener('click', function () {
+                        expTrack.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+                    });
+
+                    expNext.addEventListener('click', function () {
+                        expTrack.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                    });
+
+                    // Update Dots
+                    var cards = expTrack.querySelectorAll('.exp-card');
+                    if (cards.length > 0 && expDotsContainer) {
+                        // Create dots
+                        cards.forEach(function (_, idx) {
+                            var dot = document.createElement('div');
+                            dot.classList.add('exp-dot');
+                            if (idx === 0) dot.classList.add('active');
+                            dot.addEventListener('click', function () {
+                                var scrollPos = idx * cardWidth;
+                                expTrack.scrollTo({ left: scrollPos, behavior: 'smooth' });
+                            });
+                            expDotsContainer.appendChild(dot);
+                        });
+
+                        // Active Dot Observer using IntersectionObserver on cards
+                        var dotObserver = new IntersectionObserver(function (entries) {
+                            entries.forEach(function (entry) {
+                                if (entry.isIntersecting) {
+                                    // Find which card this is
+                                    var index = Array.from(cards).indexOf(entry.target);
+                                    var dots = expDotsContainer.querySelectorAll('.exp-dot');
+                                    dots.forEach(function (d) { d.classList.remove('active'); });
+                                    if (dots[index]) dots[index].classList.add('active');
+                                }
+                            });
+                        }, { root: expTrack, threshold: 0.6 });
+
+                        cards.forEach(function (card) { dotObserver.observe(card); });
+                    }
                 }
 
             })();
