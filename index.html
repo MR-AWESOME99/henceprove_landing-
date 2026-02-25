@@ -31,6 +31,9 @@
         rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.2/dist/lenis.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -126,7 +129,7 @@
         }
 
         html {
-            scroll-behavior: smooth;
+            /* scroll-behavior: smooth; Removed to avoid conflict with Lenis */
             overflow-x: hidden;
         }
 
@@ -298,7 +301,9 @@
             left: 50%;
             transform: translateX(-50%) translateY(-120px);
             width: fit-content;
-            min-width: min(92%, 840px);
+            min-width: min(92vw, 840px);
+            /* Use 92vw instead of 92% to prevent horizontal overflow */
+            max-width: calc(100vw - 24px);
             z-index: 1000;
             will-change: transform;
             animation: navSlide .85s var(--expo) .12s forwards;
@@ -617,6 +622,8 @@
             display: flex;
             justify-content: center;
             width: auto;
+            max-width: calc(100vw - 24px);
+            /* Prevent overflow on small screens */
             padding-top: 16px;
             opacity: 0;
             animation: announceIn .8s var(--expo) .5s forwards;
@@ -766,7 +773,7 @@
 
         .hero__copy {
             flex: 1.2;
-            max-width: 720px;
+            max-width: 620px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -777,56 +784,7 @@
 
         .hero__h1 {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            /* 40px -> 72px */
-            font-weight: 600;
-            line-height: 0.95;
-            letter-spacing: normal;
-            color: var(--text-primary);
-            margin-bottom: 48px;
-            white-space: normal;
-        }
-
-        .hero__h1 .ln-accent {
-            font-family: "Apple Garamond", "EB Garamond", serif;
-            font-weight: 400;
-            font-style: italic;
-            font-size: 1.22em;
-            /* Scales to ~88px on desktop */
-            letter-spacing: normal;
-            line-height: 1.0;
-            display: block;
-            margin-top: 12px;
-        }
-
-        .hero__visual {
-            flex: 0.9;
-            position: relative;
-            height: 580px;
-            perspective: 1200px;
-            perspective-origin: 50% 40%;
-            width: 100%;
-        }
-
-        .hero__eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: .67rem;
-            font-weight: 600;
-            letter-spacing: .16em;
-            text-transform: uppercase;
-            color: var(--green);
-            margin-bottom: 16px;
-            opacity: 0;
-            transform: translateX(-12px);
-            animation: eyebrowIn .7s var(--expo) .7s forwards;
-        }
-
-        .hero__h1 {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: clamp(2.125rem, 5.5vw, 3.85rem);
-            /* 34px -> ~62px */
             font-weight: 600;
             line-height: 1.08;
             letter-spacing: normal;
@@ -840,31 +798,40 @@
             font-weight: 400;
             font-style: italic;
             font-size: 1.14em;
-            /* Scales to ~71px on desktop */
             letter-spacing: normal;
             line-height: 1.05;
             display: block;
             margin-top: 6px;
         }
 
+        .hero__visual {
+            flex: 0.9;
+            position: relative;
+            height: 580px;
+            perspective: 1200px;
+            perspective-origin: 50% 40%;
+            width: 100%;
+        }
+
         .hero__desc {
             font-size: 1.02rem;
-            line-height: 1.68;
+            line-height: 1.74;
             color: var(--text-secondary);
             font-weight: 400;
             max-width: 440px;
-            margin-top: 0;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
             opacity: 0;
             transform: translateY(28px);
             animation: revealSoft .85s var(--expo) 1.5s forwards;
         }
 
-        .hero__copy {
-            max-width: 620px;
-            padding-right: 40px;
-            overflow-wrap: break-word;
-            word-break: normal;
+        .hero__actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(28px);
+            animation: revealSoft .85s var(--expo) 1.65s forwards;
         }
 
         .hero__eyebrow {
@@ -2425,17 +2392,22 @@
         /* ============================================================
            RESPONSIVE
         ============================================================ */
+        /* ============================================================
+           RESPONSIVE — tablet (≤1024px)
+        ============================================================ */
         @media (max-width: 1024px) {
             .hero {
                 flex-direction: column;
                 padding-top: 140px;
                 padding-bottom: 60px;
+                min-height: auto;
             }
 
             .hero__copy {
                 flex: 1;
                 max-width: 100%;
                 padding-right: 0;
+                /* ← was 40px, caused text clipping */
                 text-align: center;
                 align-items: center;
             }
@@ -2450,6 +2422,7 @@
             .hero__desc {
                 margin-left: auto;
                 margin-right: auto;
+                max-width: 100%;
             }
 
             .hero__actions {
@@ -2493,27 +2466,89 @@
             .cta-banner__desc {
                 margin: 0 auto;
             }
+
+            /* Hide desktop nav links — hamburger takes over */
+            .nav__mid,
+            .nav-lang,
+            .nav-search {
+                display: none;
+            }
+
+            .nav-burger {
+                display: flex;
+            }
+
+            .mobile-drawer {
+                display: block;
+            }
+
+            .mobile-drawer__scrim {
+                display: block;
+            }
         }
 
+        /* ============================================================
+           RESPONSIVE — mobile (≤480px)
+        ============================================================ */
         @media (max-width: 480px) {
+            .hero {
+                padding: 120px 20px 40px;
+            }
+
             .hero__h1 {
-                font-size: 1.8rem;
+                font-size: clamp(1.75rem, 8vw, 2.4rem);
                 white-space: normal;
+                text-align: left;
             }
 
             .hero__h1 .ln {
                 white-space: normal;
             }
 
+            .hero__copy {
+                text-align: left;
+                align-items: flex-start;
+                padding-right: 0;
+            }
+
+            .hero__desc {
+                text-align: left;
+                margin-left: 0;
+                margin-right: 0;
+                font-size: 0.92rem;
+            }
+
             .hero__actions {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
                 gap: 10px;
+                width: 100%;
+            }
+
+            .hero__actions .btn-solid,
+            .hero__actions .btn-ghost {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .hero__eyebrow {
+                font-size: 0.6rem;
+                letter-spacing: 0.1em;
             }
 
             .announce__pill {
-                font-size: .72rem;
+                font-size: .68rem;
                 gap: 8px;
+                padding: 4px 4px 4px 12px;
+            }
+
+            .announce__action {
+                font-size: 0.68rem;
+                padding: 5px 10px;
+            }
+
+            .hero__visual {
+                height: 300px;
             }
 
             .hero__trust {
@@ -2536,6 +2571,22 @@
             .cta-banner__inner {
                 padding: 36px 24px;
                 border-radius: 18px;
+            }
+
+            /* Navbar very small screens */
+            .navbar {
+                top: 56px;
+            }
+
+            .navbar__shell {
+                padding: 0 6px 0 16px;
+                gap: 8px;
+            }
+
+            .nav-cta {
+                padding: 0 16px;
+                font-size: 0.78rem;
+                height: 36px;
             }
         }
 
@@ -2664,6 +2715,77 @@
         }
 
         /* ============================================================
+           CINEMATIC SCROLL-ZOOM SECTION (Lenis-inspired word zoom)
+        ============================================================ */
+        #cinematic-zoom-section {
+            position: relative;
+            height: 700vh;
+            /* epic long scroll for deep zoom drama */
+            background: #0D1B3E;
+            z-index: 5;
+        }
+
+        .czs-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #0D1B3E;
+        }
+
+
+        .czs-heading {
+            position: relative;
+            z-index: 1;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: clamp(5rem, 11vw, 10rem);
+            font-weight: 900;
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+            line-height: 1.05;
+            will-change: transform, opacity;
+            transform-origin: center center;
+            opacity: 0;
+            transform: scale(0.3);
+            /* Stable starting scale */
+            white-space: nowrap;
+        }
+
+        /* The white transition layer for 100% white-out at the end */
+        .czs-transition {
+            position: absolute;
+            inset: 0;
+            background: #fff;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Each word in the heading */
+        .czs-word {
+            display: inline-block;
+        }
+
+        .czs-focal {
+            display: inline;
+        }
+
+        /* On mobile, allow wrapping and adjust origin */
+        @media (max-width: 600px) {
+            .czs-heading {
+                font-size: clamp(2rem, 10vw, 3.5rem);
+                white-space: normal;
+                text-align: center;
+            }
+        }
+
+        /* ============================================================
            DIVISIONS SECTION - PIXEL PERFECT SCREENSHOT MATCH
         ============================================================ */
         .divisions {
@@ -2676,7 +2798,6 @@
 
         .div-shell {
             background: #f1f5f9;
-            /* The grid lines color */
             border: 1px solid #e2e8f0;
             border-radius: 6px;
             overflow: hidden;
@@ -2685,6 +2806,18 @@
             grid-template-rows: auto auto auto;
             gap: 1px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+        }
+
+        @media (max-width: 1023px) {
+            .div-shell {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 599px) {
+            .div-shell {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .div-cell {
@@ -2862,6 +2995,136 @@
         }
 
         /* ============================================================
+           INNOVATION SECTION
+        ============================================================ */
+        .innovation-section {
+            position: relative;
+            width: 100%;
+        }
+
+        .innovation-sticky {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            /* Vertically center the track */
+            justify-content: center;
+            /* overflow: hidden; Removed to prevent watermark clipping */
+            background: transparent;
+        }
+
+        .innovation-watermark {
+            position: absolute;
+            top: 35%;
+            /* Shifted up to be "half-visible" at the top */
+            left: 8vw;
+            /* Aligned to left edge for readability */
+            transform: translateY(-50%);
+            /* Removed horizontal centering */
+            width: max-content;
+            /* Ensure full word width is calculated */
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 40vw;
+            /* Huge scale matching reference screenshot */
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            color: var(--text-primary, #ffffff);
+            opacity: 0.15;
+            /* Subtle but clear prominence */
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            line-height: 1;
+            will-change: transform;
+        }
+
+        .innovation-track-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            will-change: transform;
+        }
+
+        .innovation-track {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 60px;
+            /* Fixed generous gap */
+            padding: 0 40vw;
+            /* Padding to ensure first/last cards can center */
+            width: max-content;
+            align-items: center;
+        }
+
+        .innovation-card {
+            flex: 0 0 auto;
+            width: auto;
+            height: 280px;
+            /* Fixed desktop height */
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+            /* transition removed to avoid GSAP conflict */
+            will-change: transform;
+        }
+
+        /* Subtle rotation for that floating feel */
+        .innovation-card:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .innovation-card:nth-child(odd) {
+            transform: rotate(-1.5deg);
+        }
+
+        .innovation-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        .innovation-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* Mobile: innovation section falls back to natural horizontal scroll */
+        @media (max-width: 767px) {
+            .innovation-sticky {
+                height: auto;
+                min-height: 0;
+                overflow-x: auto;
+                overflow-y: visible;
+                align-items: flex-start;
+                padding: 32px 0;
+            }
+
+            .innovation-track {
+                padding: 0 20px;
+                gap: 16px;
+            }
+
+            .innovation-card {
+                width: 240px;
+                height: 180px;
+            }
+
+            .innovation-watermark {
+                display: none;
+            }
+        }
+
+        /* ============================================================
            GOVERNMENT RECOGNITION SECTION
         ============================================================ */
         .gov-rec {
@@ -2944,6 +3207,34 @@
             /* Ensure cards don't get too wide */
         }
 
+        /* REFINED ATMOSPHERIC DEPTH */
+        .sh-aura {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+            animation: auraPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes auraPulse {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 0.8;
+            }
+        }
+
         .gov-rec.active .gov-logo {
             opacity: 1;
             transform: translateY(0);
@@ -3002,192 +3293,444 @@
         }
 
         /* ============================================================
-           FUTURE EXPERIMENTS CAROUSEL
+           REFINED ACADEMIC SUPERHUMAN SECTION
         ============================================================ */
-        .exp-carousel {
+        .sh-section {
             position: relative;
             z-index: 10;
-            padding: 80px 0 100px;
-            max-width: 100%;
+            padding: 100px 0 80px;
             overflow: hidden;
-            background: var(--bg-light);
-            /* Consistent with specific user request for 'Deep Navy / Academic Premium' feel, keeping it clean/light but high-end */
+            background: #fafafa;
         }
 
-        .exp-header {
-            max-width: 1400px;
-            margin: 0 auto 40px;
-            padding: 0 clamp(28px, 5vw, 80px);
+        .sh-heading {
+            text-align: center;
+            font-family: 'EB Garamond', Georgia, serif;
+            font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+            margin-bottom: 56px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .sh-heading em {
+            font-style: normal;
+            background: linear-gradient(90deg, #1e3a8a, #3b82f6, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sh-body {
+            position: relative;
+            min-height: 520px;
+        }
+
+        /* Thin-line Scholar Figure */
+        .sh-figure {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 15;
+            width: 200px;
+            height: 400px;
             display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 0 40px rgba(30, 58, 138, 0.13));
         }
 
-        .exp-label {
-            font-size: .68rem;
-            font-weight: 600;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            display: block;
+        .sh-figure svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
         }
 
-        .exp-title {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: clamp(1.8rem, 3vw, 2.4rem);
-            font-weight: 600;
-            color: var(--text-primary);
-            line-height: 1.1;
+        /* Fade mask strictly matching inspiration */
+        .sh-fade {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 40% 50% at center, transparent 0%, #fafafa 75%);
+            z-index: 10;
+            pointer-events: none;
         }
 
-        .exp-controls {
+        /* Pill Rows Wrapper */
+        .sh-rows {
+            position: relative;
+            z-index: 1;
             display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* ORBITAL RINGS - The "components in the back" REDESIGN */
+        .sh-rings {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: ringRotate 120s linear infinite;
+        }
+
+        @keyframes ringRotate {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .sh-ring {
+            position: absolute;
+            border: 1px solid rgba(30, 58, 138, 0.05);
+            border-radius: 50%;
+        }
+
+        /* Subtly non-circular for that perspective look */
+        .sh-ring--1 {
+            width: 320px;
+            height: 160px;
+            border-color: rgba(30, 58, 138, 0.1);
+        }
+
+        .sh-ring--2 {
+            width: 520px;
+            height: 260px;
+            border-color: rgba(30, 58, 138, 0.06);
+        }
+
+        .sh-ring--3 {
+            width: 720px;
+            height: 360px;
+            border-color: rgba(30, 58, 138, 0.04);
+        }
+
+        .sh-ring--4 {
+            width: 920px;
+            height: 460px;
+            border-color: rgba(30, 58, 138, 0.02);
+        }
+
+        /* SCHOLAR FIGURE POLISH */
+        .sh-figure {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 15;
+            width: 160px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sh-figure-head {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
+            position: relative;
+            z-index: 5;
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        }
+
+        .sh-figure-cap {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 44px;
+            z-index: 10;
+        }
+
+        .sh-figure-cap-board {
+            width: 80px;
+            height: 34px;
+            background: #0f172a;
+            transform: rotateX(60deg) rotateZ(45deg);
+            border-radius: 2px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            margin: 0 auto;
+        }
+
+        .sh-figure-cap-tassel {
+            position: absolute;
+            top: 15px;
+            right: 18px;
+            width: 3px;
+            height: 28px;
+            background: #fbbf24;
+            border-radius: 2px;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+        }
+
+        .sh-figure-visor {
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 66px;
+            height: 18px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa, #3b82f6);
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+            z-index: 6;
+        }
+
+        .sh-figure-body {
+            width: 110px;
+            height: 180px;
+            background: linear-gradient(180deg,
+                    #1e40af 0%,
+                    #1e3a8a 30%,
+                    #0f172a 100%);
+            border-radius: 45px 45px 12px 12px;
+            margin-top: -6px;
+            position: relative;
+            z-index: 4;
+            box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05), 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .sh-figure-legs {
+            display: flex;
+            gap: 6px;
+            margin-top: 0;
+            z-index: 3;
+        }
+
+        .sh-figure-leg {
+            width: 52px;
+            height: 100px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .sh-figure-leg--l {
+            background: linear-gradient(180deg, #1e3a8a, #0f172a);
+        }
+
+        .sh-figure-leg--r {
+            background: linear-gradient(180deg, #fbbf24, #d97706);
+        }
+
+        /* FADE MASK ENHANCEMENT */
+        .sh-fade {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 50% 60% at center, transparent 0%, #fafafa 88%);
+            z-index: 12;
+            pointer-events: none;
+        }
+
+        /* High-Density Pill Rows Wrapper */
+        .sh-rows {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
             gap: 12px;
         }
 
-        .exp-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 1px solid var(--border);
-            background: var(--white);
+        .sh-row {
             display: flex;
-            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        .sh-row--left {
+            animation-name: shPillLeft;
+        }
+
+        .sh-row--right {
+            animation-name: shPillRight;
+        }
+
+        /* Staggered Row Durations for Depth */
+        .sh-row--1 {
+            animation-duration: 40s;
+        }
+
+        .sh-row--2 {
+            animation-duration: 55s;
+        }
+
+        .sh-row--3 {
+            animation-duration: 35s;
+        }
+
+        .sh-row--4 {
+            animation-duration: 65s;
+        }
+
+        .sh-row--5 {
+            animation-duration: 45s;
+        }
+
+        .sh-row--6 {
+            animation-duration: 50s;
+        }
+
+        @keyframes shPillLeft {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes shPillRight {
+            0% {
+                transform: translateX(-50%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* ORBITAL RINGS - The "components in the back" */
+        .sh-rings {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
             justify-content: center;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: all .3s ease;
+            align-items: center;
         }
 
-        .exp-btn:hover {
-            border-color: var(--primary-blue);
-            color: var(--primary-blue);
-            box-shadow: 0 4px 12px rgba(0, 70, 255, 0.1);
+        .sh-ring {
+            position: absolute;
+            border: 1px solid rgba(30, 58, 138, 0.08);
+            /* Subtle Navy */
+            border-radius: 50%;
+            transition: all 0.5s ease;
         }
 
-        .exp-track {
-            display: flex;
-            gap: 24px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            padding: 20px clamp(28px, 5vw, 80px) 40px;
-            scrollbar-width: none;
-            /* Firefox */
-            -ms-overflow-style: none;
-            /* IE/Edge */
-            scroll-behavior: smooth;
+        .sh-ring--1 {
+            width: 350px;
+            height: 180px;
+            border-color: rgba(30, 58, 138, 0.12);
         }
 
-        .exp-track::-webkit-scrollbar {
-            display: none;
+        .sh-ring--2 {
+            width: 550px;
+            height: 280px;
+            border-color: rgba(30, 58, 138, 0.08);
         }
 
-        .exp-card {
-            flex: 0 0 340px;
-            /* Fixed width cards */
-            scroll-snap-align: start;
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 32px;
-            position: relative;
-            transition: all 0.4s var(--expo);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 380px;
+        .sh-ring--3 {
+            width: 750px;
+            height: 380px;
+            border-color: rgba(30, 58, 138, 0.05);
         }
 
-        .exp-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(11, 29, 58, 0.08);
-            /* Premium shadow */
-            border-color: rgba(0, 70, 255, 0.15);
+        .sh-ring--4 {
+            width: 950px;
+            height: 480px;
+            border-color: rgba(30, 58, 138, 0.03);
         }
 
-        .exp-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 99px;
-            background: rgba(0, 70, 255, 0.05);
-            color: var(--primary-blue);
-            font-size: 0.7rem;
+        .sh-pill-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 26px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 100px;
+            font-size: 0.75rem;
             font-weight: 700;
+            color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 24px;
-            width: fit-content;
-        }
-
-        .exp-badge--new {
-            background: rgba(80, 216, 144, 0.12);
-            color: var(--green);
-        }
-
-        .exp-card__h {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            line-height: 1.25;
-        }
-
-        .exp-card__sub {
-            font-size: 0.92rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: auto;
-            /* Push footer down */
-        }
-
-        .exp-card__footer {
-            margin-top: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 1px solid var(--border);
-            padding-top: 20px;
-        }
-
-        .exp-link {
-            font-size: 0.84rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: gap .3s ease;
-        }
-
-        .exp-card:hover .exp-link {
-            color: var(--primary-blue);
-            gap: 10px;
-        }
-
-        /* Pagination dots */
-        .exp-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .exp-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--border);
-            cursor: pointer;
+            letter-spacing: 0.08em;
+            background: #ffffff;
+            white-space: nowrap;
+            flex-shrink: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
             transition: all 0.3s ease;
         }
 
-        .exp-dot.active {
-            background: var(--primary-blue);
-            transform: scale(1.2);
+        .sh-pill-item:hover {
+            border-color: #fbbf24;
+            color: #1e3a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .sh-section {
+                padding: 60px 0 40px;
+            }
+
+            .sh-body {
+                min-height: 400px;
+            }
+
+            .sh-figure {
+                width: 130px;
+                height: 280px;
+            }
+
+            .sh-figure-head {
+                width: 56px;
+                height: 56px;
+            }
+
+            .sh-figure-cap {
+                width: 70px;
+                top: -10px;
+            }
+
+            .sh-figure-cap-board {
+                width: 70px;
+                height: 20px;
+            }
+
+            .sh-figure-visor {
+                width: 60px;
+                height: 18px;
+                top: 18px;
+            }
+
+            .sh-figure-body {
+                width: 90px;
+                height: 140px;
+            }
+
+            .sh-figure-leg {
+                width: 42px;
+                height: 80px;
+            }
+
+            .sh-pill-item {
+                padding: 8px 18px;
+                font-size: 0.65rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -3278,6 +3821,342 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+           BANNER CAROUSEL — High Fidelity Reference Rebuild
+        ============================================================ */
+        .bc-section {
+            padding: 48px 0;
+            background: #ffffff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bc-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .bc-track {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 0 clamp(28px, 5vw, 80px);
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
+            cursor: grab;
+            scroll-behavior: smooth;
+        }
+
+        .bc-track::-webkit-scrollbar {
+            display: none;
+            /* Chrome/Safari */
+        }
+
+        .bc-track:active {
+            cursor: grabbing;
+        }
+
+        .bc-slide {
+            flex: 0 0 85%;
+            height: clamp(190px, 22vw, 248px);
+            border-radius: 18px;
+            overflow: hidden;
+            scroll-snap-align: center;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid rgba(0, 70, 255, 0.08);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+            transition: transform 0.6s var(--expo);
+        }
+
+        /* Peeking slides effect: 2 full banners + 3rd peeking */
+        @media (min-width: 1024px) {
+            .bc-slide {
+                flex: 0 0 47%;
+            }
+        }
+
+        .bc-slide__overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+            pointer-events: none;
+        }
+
+        .bc-slide__cta {
+            pointer-events: all;
+            align-self: flex-start;
+        }
+
+        /* Banner Buttons */
+        .bc-btn {
+            display: inline-flex;
+            align-items: center;
+            height: 44px;
+            padding: 0 32px;
+            background: #002D62;
+            /* Academic Navy */
+            color: #ffffff;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.88rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .bc-btn:hover {
+            background: #0046FF;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 70, 255, 0.25);
+        }
+
+        /* Special alignment for the reference banners */
+        .bc-slide--1 .bc-slide__overlay {
+            justify-content: flex-end;
+            padding-bottom: 40px;
+            padding-left: 50px;
+        }
+
+        .bc-slide--2 .bc-slide__overlay {
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 40px;
+        }
+
+        .bc-slide--2 .bc-btn {
+            background: transparent;
+            border: 2px solid #ffffff;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bc-slide--2 .bc-btn:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* Dots */
+        .bc-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .bc-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #D1D5DB;
+            cursor: pointer;
+            transition: all 0.3s var(--expo);
+        }
+
+        .bc-dot.active {
+            background: #0046FF;
+            width: 24px;
+            border-radius: 10px;
+        }
+
+        @keyframes floatIcon {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes spinRays {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .bc-section {
+                padding: 40px 0;
+            }
+
+            .bc-slide {
+                flex: 0 0 90%;
+                height: 180px;
+                border-radius: 14px;
+            }
+
+            .bc-slide__overlay {
+                padding: 24px;
+            }
+        }
+
+        /* Tablet: show 1.5 banners so scroll is hinted */
+        @media (min-width: 600px) and (max-width: 1023px) {
+            .bc-slide {
+                flex: 0 0 65%;
+                height: 210px;
+            }
+        }
+
+        /* bc-section: isolate reflow, prevent overflow bleed */
+        .bc-section {
+            contain: layout;
+        }
+
+        /* ============================================================
+           DUAL SCROLL TICKER
+        ============================================================ */
+        .scroll-ticker {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .scroll-ticker__row {
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .scroll-ticker__row--exams {
+            background: #0D1B3E;
+            padding: 14px 0;
+        }
+
+        .scroll-ticker__row--features {
+            background: #1A56DB;
+            padding: 12px 0;
+        }
+
+        .ticker-track {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            will-change: transform;
+        }
+
+        .ticker-track--left {
+            animation: tickerLeft 35s linear infinite;
+            will-change: transform;
+        }
+
+        .ticker-track--right {
+            animation: tickerRight 40s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes tickerLeft {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes tickerRight {
+            0% {
+                transform: translateX(-50%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .ticker-item {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #ffffff;
+            padding: 0 8px;
+        }
+
+        .ticker-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #3B82F6;
+            margin: 0 4px;
+            vertical-align: middle;
+        }
+
+        .ticker-item--feat {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #ffffff;
+            padding: 0 10px;
+        }
+
+        .ticker-sparkle {
+            margin-right: 4px;
+        }
+
+        .ticker-sep {
+            display: inline-block;
+            width: 1px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.25);
+            margin: 0 6px;
+            vertical-align: middle;
+        }
+
+        .scroll-ticker__row:hover .ticker-track {
+            animation-play-state: paused;
+        }
+
+        /* Ticker responsive */
+        @media (max-width: 767px) {
+            .scroll-ticker__row--exams {
+                padding: 10px 0;
+            }
+
+            .scroll-ticker__row--features {
+                padding: 8px 0;
+            }
+
+            .ticker-item {
+                font-size: 0.72rem;
+                padding: 0 6px;
+            }
+
+            .ticker-item--feat {
+                font-size: 0.68rem;
+                padding: 0 8px;
+            }
+
+            .ticker-dot {
+                width: 4px;
+                height: 4px;
+                margin: 0 3px;
             }
         }
     </style>
@@ -3597,6 +4476,265 @@
         </div>
     </section>
 
+    <!-- Dual Scroll Ticker -->
+    <div class="scroll-ticker" id="scrollTicker">
+        <!-- Row 1: Exam Names -->
+        <div class="scroll-ticker__row scroll-ticker__row--exams">
+            <div class="ticker-track ticker-track--left">
+                <span class="ticker-item">JEE Main</span><span class="ticker-dot"></span>
+                <span class="ticker-item">JEE Advanced</span><span class="ticker-dot"></span>
+                <span class="ticker-item">NEET (UG)</span><span class="ticker-dot"></span>
+                <span class="ticker-item">EAPCET (TS)</span><span class="ticker-dot"></span>
+                <span class="ticker-item">EAPCET (AP)</span><span class="ticker-dot"></span>
+                <span class="ticker-item">CUET (UG)</span><span class="ticker-dot"></span>
+                <span class="ticker-item">BITSAT</span><span class="ticker-dot"></span>
+                <span class="ticker-item">GATE</span><span class="ticker-dot"></span>
+                <span class="ticker-item">CAT</span><span class="ticker-dot"></span>
+                <span class="ticker-item">UPSC CSE</span><span class="ticker-dot"></span>
+                <span class="ticker-item">KVPY</span><span class="ticker-dot"></span>
+                <span class="ticker-item">NTSE</span><span class="ticker-dot"></span>
+                <span class="ticker-item">Olympiads</span><span class="ticker-dot"></span>
+                <span class="ticker-item">JEE Main</span><span class="ticker-dot"></span>
+                <span class="ticker-item">JEE Advanced</span><span class="ticker-dot"></span>
+                <span class="ticker-item">NEET (UG)</span><span class="ticker-dot"></span>
+                <span class="ticker-item">EAPCET (TS)</span><span class="ticker-dot"></span>
+                <span class="ticker-item">EAPCET (AP)</span><span class="ticker-dot"></span>
+                <span class="ticker-item">CUET (UG)</span><span class="ticker-dot"></span>
+                <span class="ticker-item">BITSAT</span><span class="ticker-dot"></span>
+                <span class="ticker-item">GATE</span><span class="ticker-dot"></span>
+                <span class="ticker-item">CAT</span><span class="ticker-dot"></span>
+                <span class="ticker-item">UPSC CSE</span><span class="ticker-dot"></span>
+                <span class="ticker-item">KVPY</span><span class="ticker-dot"></span>
+                <span class="ticker-item">NTSE</span><span class="ticker-dot"></span>
+                <span class="ticker-item">Olympiads</span><span class="ticker-dot"></span>
+            </div>
+        </div>
+        <!-- Row 2: Feature Highlights -->
+        <div class="scroll-ticker__row scroll-ticker__row--features">
+            <div class="ticker-track ticker-track--right">
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Zero-Lag Simulator</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> AI Mentor 24/7</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Exact NTA Replicas</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> 15,000+ Practice
+                    Questions</span><span class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Live Doubt Resolution</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Expert Mentors</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Performance Analytics</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Structured Courses</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Zero-Lag Simulator</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> AI Mentor 24/7</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Exact NTA Replicas</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> 15,000+ Practice
+                    Questions</span><span class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Live Doubt Resolution</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Expert Mentors</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Performance Analytics</span><span
+                    class="ticker-sep"></span>
+                <span class="ticker-item--feat"><span class="ticker-sparkle">✨</span> Structured Courses</span><span
+                    class="ticker-sep"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== BANNER CAROUSEL SECTION ========== -->
+    <section class="bc-section" id="bannerCarousel">
+        <div class="bc-container">
+            <div class="bc-track" id="bcTrack">
+
+                <!-- Slide 1: JEE 2025 — deep navy, structured, premium -->
+                <div class="bc-slide"
+                    style="background:linear-gradient(130deg,#0D1B3E 0%,#0a1628 50%,#001044 100%);position:relative;overflow:hidden">
+                    <!-- Background glow orb -->
+                    <div
+                        style="position:absolute;right:-80px;top:-60px;width:340px;height:340px;background:radial-gradient(circle,rgba(0,70,255,0.18) 0%,transparent 70%);z-index:0">
+                    </div>
+                    <!-- Grid lines -->
+                    <div
+                        style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,70,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,70,255,0.04) 1px,transparent 1px);background-size:32px 32px;z-index:0">
+                    </div>
+                    <!-- Content -->
+                    <div
+                        style="position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;height:100%;padding:28px 36px;gap:10px">
+                        <div
+                            style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,70,255,0.15);border:1px solid rgba(0,70,255,0.3);border-radius:20px;padding:4px 12px;width:fit-content">
+                            <span
+                                style="width:7px;height:7px;background:#4ade80;border-radius:50%;display:block;box-shadow:0 0 6px #4ade80"></span>
+                            <span
+                                style="font-size:0.62rem;font-weight:700;color:#93c5fd;letter-spacing:.1em;text-transform:uppercase">Now
+                                Enrolling</span>
+                        </div>
+                        <h2
+                            style="font-family:'Helvetica Neue',sans-serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:900;color:#fff;line-height:1.1;margin:0;letter-spacing:-.01em">
+                            JEE Advanced 2025<br><span
+                                style="color:#60a5fa;font-size:0.7em;font-weight:600;letter-spacing:.02em">Complete
+                                Foundation Program</span></h2>
+                        <p
+                            style="font-size:0.78rem;color:rgba(255,255,255,0.6);margin:0;max-width:320px;line-height:1.5">
+                            500+ hours of structured content · AI-personalised practice · Expert IITian mentors</p>
+                        <div style="display:flex;gap:10px;margin-top:4px">
+                            <button class="bc-btn"
+                                style="background:#0046FF;border:none;border-radius:6px;padding:0 20px">Enroll
+                                Now</button>
+                            <button class="bc-btn"
+                                style="background:transparent;border:1.5px solid rgba(255,255,255,0.25);border-radius:6px;padding:0 20px;color:rgba(255,255,255,0.8)">View
+                                Syllabus</button>
+                        </div>
+                    </div>
+                    <!-- Right: Rank badge illustration -->
+                    <div
+                        style="position:absolute;right:32px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:2">
+                        <div
+                            style="background:rgba(0,70,255,0.12);border:1px solid rgba(0,70,255,0.3);border-radius:12px;padding:14px 18px;text-align:center;backdrop-filter:blur(8px)">
+                            <div
+                                style="font-size:0.55rem;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">
+                                Average Rank</div>
+                            <div style="font-size:1.8rem;font-weight:900;color:#60a5fa;line-height:1">AIR 847</div>
+                            <div style="font-size:0.55rem;color:rgba(255,255,255,0.4);margin-top:2px">Last batch · 2024
+                            </div>
+                        </div>
+                        <div
+                            style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:8px;padding:8px 14px">
+                            <div style="font-size:0.6rem;color:#4ade80;font-weight:700">✦ &nbsp;94% selection rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2: ExamSim AI — electric, analytical, futuristic -->
+                <div class="bc-slide"
+                    style="background:linear-gradient(145deg,#050b1f 0%,#060d24 40%,#0c0035 100%);position:relative;overflow:hidden">
+                    <!-- Aurora bg -->
+                    <div
+                        style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(0,70,255,0.2) 0%,transparent 60%),radial-gradient(ellipse at 70% 30%,rgba(120,0,255,0.12) 0%,transparent 50%);z-index:0">
+                    </div>
+                    <!-- Animated scan line (CSS only) -->
+                    <div
+                        style="position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,200,255,0.5),transparent);top:40%;animation:scanLine 3s ease-in-out infinite;z-index:1">
+                    </div>
+                    <!-- Content -->
+                    <div
+                        style="position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;height:100%;padding:28px 36px;gap:8px">
+                        <div
+                            style="font-size:0.6rem;font-weight:800;color:#7dd3fc;letter-spacing:.16em;text-transform:uppercase">
+                            Henceprove ExamSim</div>
+                        <h2
+                            style="font-family:'Helvetica Neue',sans-serif;font-size:clamp(1.2rem,3vw,2rem);font-weight:900;color:#fff;line-height:1.1;margin:0">
+                            AI-Powered Mock Tests<br><span style="font-size:0.65em;color:#a5b4fc;font-weight:500">Exact
+                                NTA Replica Engine</span></h2>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+                            <span
+                                style="background:rgba(0,200,255,0.1);border:1px solid rgba(0,200,255,0.25);border-radius:4px;padding:4px 10px;font-size:0.62rem;color:#7dd3fc;font-weight:600">Zero
+                                Lag</span>
+                            <span
+                                style="background:rgba(120,0,255,0.1);border:1px solid rgba(120,0,255,0.3);border-radius:4px;padding:4px 10px;font-size:0.62rem;color:#c4b5fd;font-weight:600">AI
+                                Analysis</span>
+                            <span
+                                style="background:rgba(0,255,120,0.08);border:1px solid rgba(0,255,120,0.2);border-radius:4px;padding:4px 10px;font-size:0.62rem;color:#6ee7b7;font-weight:600">Instant
+                                Score</span>
+                        </div>
+                        <button class="bc-btn"
+                            style="background:linear-gradient(90deg,#0046FF,#7c3aed);border:none;border-radius:6px;margin-top:8px;width:fit-content;padding:0 24px">Try
+                            for Free</button>
+                    </div>
+                    <!-- Right: score card visual -->
+                    <div style="position:absolute;right:28px;top:50%;transform:translateY(-50%);z-index:2">
+                        <div
+                            style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px 20px;backdrop-filter:blur(10px);min-width:130px">
+                            <div
+                                style="font-size:0.55rem;color:rgba(255,255,255,0.4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">
+                                Your Score</div>
+                            <div style="font-size:2.2rem;font-weight:900;color:#fff;line-height:1">267<span
+                                    style="font-size:0.8rem;color:rgba(255,255,255,0.3)">/300</span></div>
+                            <div
+                                style="margin-top:10px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden">
+                                <div
+                                    style="height:100%;width:89%;background:linear-gradient(90deg,#0046FF,#7c3aed);border-radius:2px">
+                                </div>
+                            </div>
+                            <div style="font-size:0.6rem;color:#60a5fa;font-weight:700;margin-top:6px">Top 3% nationally
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Mentorship — warm, credible, human -->
+                <div class="bc-slide"
+                    style="background:linear-gradient(130deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);position:relative;overflow:hidden">
+                    <!-- Warm accent glow -->
+                    <div
+                        style="position:absolute;right:0;bottom:0;width:280px;height:280px;background:radial-gradient(circle,rgba(251,191,36,0.12) 0%,transparent 70%);z-index:0">
+                    </div>
+                    <!-- Content -->
+                    <div
+                        style="position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;height:100%;padding:28px 36px;gap:10px">
+                        <div
+                            style="font-size:0.6rem;font-weight:800;color:#fbbf24;letter-spacing:.16em;text-transform:uppercase">
+                            1:1 Mentorship</div>
+                        <h2
+                            style="font-family:'Helvetica Neue',sans-serif;font-size:clamp(1.1rem,2.8vw,1.9rem);font-weight:900;color:#fff;line-height:1.15;margin:0">
+                            Learn from IIT &amp; IIM<br><span style="color:#fcd34d">Alumni Mentors</span></h2>
+                        <p style="font-size:0.76rem;color:rgba(255,255,255,0.55);margin:0;line-height:1.55">Personalised
+                            doubt resolution · Career roadmapping · Interview prep</p>
+                        <!-- Mentor avatars row -->
+                        <div style="display:flex;align-items:center;gap:12px;margin-top:6px">
+                            <div style="display:flex">
+                                <div
+                                    style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0046FF,#7c3aed);border:2px solid #1a1a2e;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-right:-8px">
+                                    AK</div>
+                                <div
+                                    style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#dc2626,#ea580c);border:2px solid #1a1a2e;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-right:-8px">
+                                    SR</div>
+                                <div
+                                    style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#059669,#0d9488);border:2px solid #1a1a2e;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-right:-8px">
+                                    PM</div>
+                                <div
+                                    style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid #1a1a2e;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:rgba(255,255,255,0.6)">
+                                    +32</div>
+                            </div>
+                            <div style="font-size:0.7rem;color:rgba(255,255,255,0.55);line-height:1.4">35+ expert
+                                mentors<br><strong style="color:#fbbf24">Available now</strong></div>
+                        </div>
+                        <button class="bc-btn"
+                            style="background:#fbbf24;color:#0f172a;border:none;border-radius:6px;font-weight:800;margin-top:4px;width:fit-content;padding:0 22px">Book
+                            a Session</button>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Pagination Dots -->
+            <div class="bc-dots" id="bcDots"></div>
+        </div>
+    </section>
+
+    <!-- ========== CINEMATIC SCROLL-ZOOM SECTION ========== -->
+
+    <section id="cinematic-zoom-section">
+        <div class="czs-sticky" id="czsSticky">
+            <!-- White fade-out overlay applied by GSAP at end of pin -->
+            <div class="czs-transition" id="czsTransition"></div>
+            <h2 class="czs-heading" id="czsHeading">
+                <span class="czs-line">
+                    <span class="czs-word">WHERE</span>&nbsp;<span class="czs-word">INTELLIGENCE</span>
+                </span><br>
+                <span class="czs-line">
+                    <span class="czs-word">MEETS</span>&nbsp;<span class="czs-word" id="czsWordEducation">E<span
+                            class="czs-focal" id="czsFocal">D</span>UCATION</span>
+                </span>
+            </h2>
+        </div>
+    </section>
+
     <!-- NEW SECTION: Divisions - ClickUp Style Grid -->
     <section class="divisions" id="divisions">
         <div class="div-shell">
@@ -3726,6 +4864,57 @@
         </div>
     </section>
 
+    <!-- ========== INNOVATION SECTION ========== -->
+    <section class="innovation-section" id="innovation-section">
+        <div class="innovation-sticky">
+            <span class="innovation-watermark">INNOVATION</span>
+            <div class="innovation-track-wrapper">
+                <div class="innovation-track">
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop"
+                            alt="AI Technology Core">
+                    </div>
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop"
+                            alt="AI Coding Lab">
+                    </div>
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop"
+                            alt="ML Analytics Dashboard">
+                    </div>
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=800&auto=format&fit=crop"
+                            alt="AI Robotics Automation">
+                    </div>
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop"
+                            alt="Enterprise System Architecture">
+                    </div>
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop"
+                            alt="Focused Exam Preparation">
+                    </div>
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=800&auto=format&fit=crop"
+                            alt="Modern Study Environment">
+                    </div>
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop"
+                            alt="Professional Mentorship">
+                    </div>
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800&auto=format&fit=crop"
+                            alt="Collab Learning Certificate">
+                    </div>
+                    <div class="innovation-card">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=800&auto=format&fit=crop"
+                            alt="Corporate Training Session">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Government Recognition Section -->
     <section class="gov-rec" id="govRec">
         <span class="gov-rec__label reveal">Recognition & Compliance</span>
@@ -3850,104 +5039,221 @@
         </div>
     </section>
 
-    <!-- Future Experiments Carousel -->
-    <section class="exp-carousel reveal" id="expCarousel">
-        <div class="exp-header">
-            <div class="exp-head-text">
-                <span class="exp-label">Latest Updates</span>
-                <h2 class="exp-title">Events &amp; Experiments</h2>
+    <!-- Academic Superhuman Section -->
+    <section class="sh-section" id="superhuman">
+        <h2 class="sh-heading reveal">Become <em>Superhuman</em>,<br>with HenceProve AI.</h2>
+
+        <div class="sh-body">
+            <!-- Background Atmospheric Depth -->
+            <div class="sh-aura"></div>
+
+            <!-- Orbital Rings behind figure with slow rotation -->
+            <div class="sh-rings">
+                <div class="sh-ring sh-ring--1"></div>
+                <div class="sh-ring sh-ring--2"></div>
+                <div class="sh-ring sh-ring--3"></div>
+                <div class="sh-ring sh-ring--4"></div>
             </div>
-            <div class="exp-controls">
-                <button class="exp-btn" id="expPrev" aria-label="Previous slide">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 18l-6-6 6-6" />
-                    </svg>
-                </button>
-                <button class="exp-btn" id="expNext" aria-label="Next slide">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 18l6-6-6-6" />
-                    </svg>
-                </button>
+
+            <!-- Thin-line Scholar SVG Figure -->
+            <div class="sh-figure">
+                <svg viewBox="0 0 200 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="figStroke" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#3b82f6" />
+                            <stop offset="100%" stop-color="#1e3a8a" />
+                        </linearGradient>
+                        <linearGradient id="figGlow" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.18" />
+                            <stop offset="100%" stop-color="#1e40af" stop-opacity="0.06" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Subtle body fill for depth -->
+                    <ellipse cx="100" cy="260" rx="52" ry="110" fill="url(#figGlow)" />
+
+                    <!-- === GRADUATION CAP === -->
+                    <!-- Board (flat top) -->
+                    <rect x="52" y="28" width="96" height="18" rx="3" stroke="url(#figStroke)" stroke-width="2.5"
+                        fill="rgba(30,58,138,0.08)" />
+                    <!-- Brim (wider flat ellipse below board) -->
+                    <ellipse cx="100" cy="46" rx="56" ry="9" stroke="url(#figStroke)" stroke-width="2.5"
+                        fill="rgba(30,58,138,0.08)" />
+                    <!-- Tassel string -->
+                    <line x1="148" y1="28" x2="148" y2="64" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" />
+                    <!-- Tassel knot -->
+                    <circle cx="148" cy="64" r="4" stroke="#fbbf24" stroke-width="2" fill="#fef3c7" />
+                    <!-- Tassel fringe -->
+                    <line x1="144" y1="68" x2="140" y2="84" stroke="#fbbf24" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <line x1="148" y1="68" x2="148" y2="86" stroke="#fbbf24" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <line x1="152" y1="68" x2="156" y2="84" stroke="#fbbf24" stroke-width="1.5"
+                        stroke-linecap="round" />
+
+                    <!-- === HEAD === -->
+                    <circle cx="100" cy="88" r="34" stroke="url(#figStroke)" stroke-width="2.5"
+                        fill="rgba(30,58,138,0.06)" />
+                    <!-- Subtle face lines -->
+                    <path d="M88 84 Q100 96 112 84" stroke="#93c5fd" stroke-width="1.5" stroke-linecap="round"
+                        fill="none" opacity="0.5" />
+
+                    <!-- === NECK === -->
+                    <line x1="94" y1="120" x2="90" y2="136" stroke="url(#figStroke)" stroke-width="2.2"
+                        stroke-linecap="round" />
+                    <line x1="106" y1="120" x2="110" y2="136" stroke="url(#figStroke)" stroke-width="2.2"
+                        stroke-linecap="round" />
+
+                    <!-- === GOWN / TORSO === -->
+                    <!-- Shoulders + gown body as a single smooth shape -->
+                    <path
+                        d="M62 140 Q48 148 44 168 L48 310 Q48 320 58 320 L142 320 Q152 320 152 310 L156 168 Q152 148 138 140 Q120 132 100 130 Q80 132 62 140 Z"
+                        stroke="url(#figStroke)" stroke-width="2.5" fill="rgba(30,58,138,0.07)"
+                        stroke-linejoin="round" />
+                    <!-- Gown center line -->
+                    <line x1="100" y1="130" x2="100" y2="320" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="4 5"
+                        opacity="0.5" />
+                    <!-- Collar V -->
+                    <path d="M88 138 L100 162 L112 138" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round" fill="none" />
+
+                    <!-- === ARMS === -->
+                    <!-- Left arm (holding a book shape at the end) -->
+                    <path d="M62 158 Q36 180 30 220" stroke="url(#figStroke)" stroke-width="2.5" stroke-linecap="round"
+                        fill="none" />
+                    <!-- Book in left hand -->
+                    <rect x="14" y="216" width="32" height="22" rx="3" stroke="#3b82f6" stroke-width="2"
+                        fill="rgba(59,130,246,0.08)" />
+                    <line x1="30" y1="216" x2="30" y2="238" stroke="#60a5fa" stroke-width="1.2" />
+                    <!-- Right arm (relaxed, slight bend) -->
+                    <path d="M138 158 Q162 180 166 215" stroke="url(#figStroke)" stroke-width="2.5"
+                        stroke-linecap="round" fill="none" />
+                    <!-- Right hand as small circle -->
+                    <circle cx="167" cy="220" r="7" stroke="url(#figStroke)" stroke-width="2"
+                        fill="rgba(30,58,138,0.06)" />
+
+                    <!-- === LEGS === -->
+                    <path d="M80 318 L74 390 Q74 400 84 400 L96 400 Q100 400 100 390 L100 318 Z"
+                        stroke="url(#figStroke)" stroke-width="2.5" fill="rgba(30,58,138,0.07)"
+                        stroke-linejoin="round" />
+                    <path d="M120 318 L126 390 Q126 400 116 400 L104 400 Q100 400 100 390 L100 318 Z"
+                        stroke="url(#figStroke)" stroke-width="2.5" fill="rgba(30,58,138,0.07)"
+                        stroke-linejoin="round" />
+                    <!-- Shoes -->
+                    <ellipse cx="82" cy="402" rx="16" ry="7" stroke="#1e3a8a" stroke-width="2"
+                        fill="rgba(30,58,138,0.15)" />
+                    <ellipse cx="118" cy="402" rx="16" ry="7" stroke="#1e3a8a" stroke-width="2"
+                        fill="rgba(30,58,138,0.15)" />
+                </svg>
+            </div>
+
+            <!-- Fade effect mask -->
+            <div class="sh-fade"></div>
+
+            <!-- High-Density Marquee Pill Rows -->
+            <div class="sh-rows">
+                <!-- Row 1 -->
+                <div class="sh-row sh-row--left sh-row--1">
+                    <div class="sh-pill-item">AI Mentorship</div>
+                    <div class="sh-pill-item">JEE Preparation</div>
+                    <div class="sh-pill-item">Structured Logic</div>
+                    <div class="sh-pill-item">NEET UG Specialist</div>
+                    <div class="sh-pill-item">Personalized Paths</div>
+                    <div class="sh-pill-item">Adaptive Learning</div>
+                    <div class="sh-pill-item">AI Mentorship</div>
+                    <div class="sh-pill-item">JEE Preparation</div>
+                    <div class="sh-pill-item">Structured Logic</div>
+                    <div class="sh-pill-item">NEET UG Specialist</div>
+                    <div class="sh-pill-item">Personalized Paths</div>
+                    <div class="sh-pill-item">Adaptive Learning</div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="sh-row sh-row--right sh-row--2">
+                    <div class="sh-pill-item">Deep Analysis</div>
+                    <div class="sh-pill-item">Exam Simulations</div>
+                    <div class="sh-pill-item">Cognitive Growth</div>
+                    <div class="sh-pill-item">HenceProve Core</div>
+                    <div class="sh-pill-item">Academic Premium</div>
+                    <div class="sh-pill-item">Skill Validation</div>
+                    <div class="sh-pill-item">Deep Analysis</div>
+                    <div class="sh-pill-item">Exam Simulations</div>
+                    <div class="sh-pill-item">Cognitive Growth</div>
+                    <div class="sh-pill-item">HenceProve Core</div>
+                    <div class="sh-pill-item">Academic Premium</div>
+                    <div class="sh-pill-item">Skill Validation</div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="sh-row sh-row--left sh-row--3">
+                    <div class="sh-pill-item">Concept Mastery</div>
+                    <div class="sh-pill-item">Doubt-Free Learning</div>
+                    <div class="sh-pill-item">Strategic Planning</div>
+                    <div class="sh-pill-item">Machine Learning</div>
+                    <div class="sh-pill-item">Future Ready</div>
+                    <div class="sh-pill-item">Intelligent Analytics</div>
+                    <div class="sh-pill-item">Concept Mastery</div>
+                    <div class="sh-pill-item">Doubt-Free Learning</div>
+                    <div class="sh-pill-item">Strategic Planning</div>
+                    <div class="sh-pill-item">Machine Learning</div>
+                    <div class="sh-pill-item">Future Ready</div>
+                    <div class="sh-pill-item">Intelligent Analytics</div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="sh-row sh-row--right sh-row--4">
+                    <div class="sh-pill-item">Logical Reasoning</div>
+                    <div class="sh-pill-item">Physics Specialist</div>
+                    <div class="sh-pill-item">Chemistry Mastery</div>
+                    <div class="sh-pill-item">Math Precision</div>
+                    <div class="sh-pill-item">HenceProve AI</div>
+                    <div class="sh-pill-item">Academic Superhuman</div>
+                    <div class="sh-pill-item">Logical Reasoning</div>
+                    <div class="sh-pill-item">Physics Specialist</div>
+                    <div class="sh-pill-item">Chemistry Mastery</div>
+                    <div class="sh-pill-item">Math Precision</div>
+                    <div class="sh-pill-item">HenceProve AI</div>
+                    <div class="sh-pill-item">Academic Superhuman</div>
+                </div>
+
+                <!-- Row 5 -->
+                <div class="sh-row sh-row--left sh-row--5">
+                    <div class="sh-pill-item">Data Science</div>
+                    <div class="sh-pill-item">Critical Thinking</div>
+                    <div class="sh-pill-item">Problem Solving</div>
+                    <div class="sh-pill-item">Logic-Driven</div>
+                    <div class="sh-pill-item">Self-Paced</div>
+                    <div class="sh-pill-item">Peer Verification</div>
+                    <div class="sh-pill-item">Data Science</div>
+                    <div class="sh-pill-item">Critical Thinking</div>
+                    <div class="sh-pill-item">Problem Solving</div>
+                    <div class="sh-pill-item">Logic-Driven</div>
+                    <div class="sh-pill-item">Self-Paced</div>
+                    <div class="sh-pill-item">Peer Verification</div>
+                </div>
+
+                <!-- Row 6 -->
+                <div class="sh-row sh-row--right sh-row--6">
+                    <div class="sh-pill-item">Exam Simulation</div>
+                    <div class="sh-pill-item">Real-world Application</div>
+                    <div class="sh-pill-item">Structured Syllabus</div>
+                    <div class="sh-pill-item">Intelligent Feedback</div>
+                    <div class="sh-pill-item">Growth Mindset</div>
+                    <div class="sh-pill-item">Confidence Booster</div>
+                    <div class="sh-pill-item">Exam Simulation</div>
+                    <div class="sh-pill-item">Real-world Application</div>
+                    <div class="sh-pill-item">Structured Syllabus</div>
+                    <div class="sh-pill-item">Intelligent Feedback</div>
+                    <div class="sh-pill-item">Growth Mindset</div>
+                    <div class="sh-pill-item">Confidence Booster</div>
+                </div>
             </div>
         </div>
-
-        <div class="exp-track" id="expTrack">
-            <!-- Card 1 -->
-            <div class="exp-card">
-                <div class="exp-badge exp-badge--new">New Launch</div>
-                <h3 class="exp-card__h">AI-Powered Mock Interviewer</h3>
-                <p class="exp-card__sub">Practice behavioral and technical interviews with our real-time voice AI agent.
-                    Get instant feedback on your tone and delivery.</p>
-                <div class="exp-card__footer">
-                    <a href="#" class="exp-link">Try Beta <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg></a>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="exp-card">
-                <div class="exp-badge">Hackathon</div>
-                <h3 class="exp-card__h">National Code Sprint 2026</h3>
-                <p class="exp-card__sub">Join 50,000+ developers in India's largest competitive programming event.
-                    Prizes worth ₹10 Lakhs up for grabs.</p>
-                <div class="exp-card__footer">
-                    <a href="#" class="exp-link">Register Now <svg width="16" height="16" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg></a>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="exp-card">
-                <div class="exp-badge">Community</div>
-                <h3 class="exp-card__h">Campus Ambassador Program</h3>
-                <p class="exp-card__sub">Lead the tech revolution at your college. Organize workshops, meetups, and gain
-                    exclusive mentorship access.</p>
-                <div class="exp-card__footer">
-                    <a href="#" class="exp-link">Apply Today <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg></a>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="exp-card">
-                <div class="exp-badge exp-badge--new">Experiment</div>
-                <h3 class="exp-card__h">Project: Neural Notes</h3>
-                <p class="exp-card__sub">Instantly turn any YouTube lecture into concise, structured study notes using
-                    our fine-tuned LLM.</p>
-                <div class="exp-card__footer">
-                    <a href="#" class="exp-link">View Demo <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg></a>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="exp-card">
-                <div class="exp-badge">Event</div>
-                <h3 class="exp-card__h">System Design Live</h3>
-                <p class="exp-card__sub">A 2-day workshop on scaling distributed systems with practical case studies
-                    from Uber and Netflix architectures.</p>
-                <div class="exp-card__footer">
-                    <a href="#" class="exp-link">Get Tickets <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="exp-dots" id="expDots"></div>
     </section>
+
+
+
+
 
     <!-- Features Section -->
     <section class="features" id="features">
@@ -4062,494 +5368,738 @@
          JAVASCRIPT
     ======================================== -->
     <script>
-            (function () {
-                'use strict';
+        // Register ScrollTrigger FIRST — must happen before any ScrollTrigger reference
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.ticker.lagSmoothing(0);
 
-                /* ── Refs ─────────────────────────────────────── */
-                var navbar = document.getElementById('navbar');
-                var langBtn = document.getElementById('langBtn');
-                var langOverlay = document.getElementById('langOverlay');
-                var langBg = document.getElementById('langBg');
-                var langClose = document.getElementById('langClose');
-                var redirect = document.getElementById('redirect');
-                var redirectMsg = document.getElementById('redirectMsg');
-                var featHead = document.getElementById('featHead');
-                var featGrid = document.getElementById('featGrid');
-                var feats = document.querySelectorAll('.feat');
-                var marqueeWrap = document.getElementById('marqueeWrap');
-                var heroVisual = document.getElementById('heroVisual');
-                var heroH1 = document.getElementById('heroH1');
-                var navBurger = document.getElementById('navBurger');
-                var mobileDrawer = document.getElementById('mobileDrawer');
-                var mobileScrim = document.getElementById('mobileScrim');
-                var langBtnMobile = document.getElementById('langBtnMobile');
+        // Initialize Lenis Smooth Scroll
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            touchMultiplier: 2,
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            infinite: false,
+        });
+
+        // Sync ScrollTrigger with Lenis (ScrollTrigger is now registered before this runs)
+        lenis.on('scroll', ScrollTrigger.update);
+
+        // Use GSAP ticker to drive Lenis (recommended for GSAP integration)
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+
+        (function () {
+            'use strict';
+
+            /* ── Refs ─────────────────────────────────────── */
+            var navbar = document.getElementById('navbar');
+            var langBtn = document.getElementById('langBtn');
+            var langOverlay = document.getElementById('langOverlay');
+            var langBg = document.getElementById('langBg');
+            var langClose = document.getElementById('langClose');
+            var redirect = document.getElementById('redirect');
+            var redirectMsg = document.getElementById('redirectMsg');
+            var featHead = document.getElementById('featHead');
+            var featGrid = document.getElementById('featGrid');
+            var feats = document.querySelectorAll('.feat');
+            var marqueeWrap = document.getElementById('marqueeWrap');
+            var heroVisual = document.getElementById('heroVisual');
+            var heroH1 = document.getElementById('heroH1');
+            var navBurger = document.getElementById('navBurger');
+            var mobileDrawer = document.getElementById('mobileDrawer');
+            var mobileScrim = document.getElementById('mobileScrim');
+            var langBtnMobile = document.getElementById('langBtnMobile');
 
 
-                /* ══════════════════════════════════════════════════
-                   LIFECYCLE MANAGER
-                ══════════════════════════════════════════════════ */
-                function initAll() {
-                    initHeroText();
-                    playHeroHeadline();
-                    observeHeroText();
-                    initMotionSystem();
-                    initSubtleParallax();
+            /* ══════════════════════════════════════════════════
+               LIFECYCLE MANAGER
+            ══════════════════════════════════════════════════ */
+            function initAll() {
+                initHeroText();
+                playHeroHeadline();
+                observeHeroText();
+                initMotionSystem();
+                initSubtleParallax();
 
-                    // Re-check visibility of elements already in viewport
-                    window.dispatchEvent(new Event('scroll'));
-                }
+                // Re-check visibility of elements already in viewport
+                window.dispatchEvent(new Event('scroll'));
+            }
 
-                if (document.readyState === 'complete') {
-                    initAll();
-                } else {
-                    window.addEventListener('load', initAll);
-                }
+            if (document.readyState === 'complete') {
+                initAll();
+            } else {
+                window.addEventListener('load', initAll);
+            }
 
-                /* ══════════════════════════════════════════════════
-                   MOBILE DRAWER — hamburger toggle
-                ══════════════════════════════════════════════════ */
-                function openDrawer() {
-                    navBurger.classList.add('is-open');
-                    mobileDrawer.classList.add('is-open');
-                    mobileScrim.classList.add('is-open');
-                    document.body.style.overflow = 'hidden';
-                    navBurger.setAttribute('aria-label', 'Close menu');
-                }
-                function closeDrawer() {
-                    navBurger.classList.remove('is-open');
-                    mobileDrawer.classList.remove('is-open');
-                    mobileScrim.classList.remove('is-open');
-                    document.body.style.overflow = '';
-                    navBurger.setAttribute('aria-label', 'Open menu');
-                }
-                if (navBurger) {
-                    navBurger.addEventListener('click', function () {
-                        if (mobileDrawer.classList.contains('is-open')) closeDrawer();
-                        else openDrawer();
+            /* ══════════════════════════════════════════════════
+               MOBILE DRAWER — hamburger toggle
+            ══════════════════════════════════════════════════ */
+            function openDrawer() {
+                navBurger.classList.add('is-open');
+                mobileDrawer.classList.add('is-open');
+                mobileScrim.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+                navBurger.setAttribute('aria-label', 'Close menu');
+            }
+            function closeDrawer() {
+                navBurger.classList.remove('is-open');
+                mobileDrawer.classList.remove('is-open');
+                mobileScrim.classList.remove('is-open');
+                document.body.style.overflow = '';
+                navBurger.setAttribute('aria-label', 'Open menu');
+            }
+            if (navBurger) {
+                navBurger.addEventListener('click', function () {
+                    if (mobileDrawer.classList.contains('is-open')) closeDrawer();
+                    else openDrawer();
+                });
+            }
+            if (mobileScrim) mobileScrim.addEventListener('click', closeDrawer);
+            // Close drawer on nav link click
+            if (mobileDrawer) {
+                mobileDrawer.querySelectorAll('a').forEach(function (a) {
+                    a.addEventListener('click', closeDrawer);
+                });
+            }
+            // Mobile language button opens the same overlay
+            if (langBtnMobile) {
+                langBtnMobile.addEventListener('click', function () {
+                    closeDrawer();
+                    setTimeout(openLang, 200);
+                });
+            }
+
+
+            /* ══════════════════════════════════════════════════
+               HERO H1 — Robust cinematic reveal
+               Reliably triggers on load and scroll entry.
+            ══════════════════════════════════════════════════ */
+            function initHeroText() {
+                if (!heroH1 || heroH1.dataset.built) return;
+                heroH1.dataset.built = 'true';
+
+                var lines = Array.from(heroH1.querySelectorAll('.ln'));
+                lines.forEach(function (ln) {
+                    var text = ln.getAttribute('data-text') || ln.textContent.trim();
+                    if (!text) return;
+
+                    ln.innerHTML = '';
+                    var isAccent = ln.classList.contains('ln-accent');
+
+                    text.split(' ').forEach(function (word, idx, arr) {
+                        var span = document.createElement('span');
+                        span.className = 'w';
+                        span.innerHTML = word + (idx === arr.length - 1 ? '' : '&nbsp;');
+                        if (isAccent) span.classList.add('italic'); // Using italic class for accent style
+                        ln.appendChild(span);
                     });
-                }
-                if (mobileScrim) mobileScrim.addEventListener('click', closeDrawer);
-                // Close drawer on nav link click
-                if (mobileDrawer) {
-                    mobileDrawer.querySelectorAll('a').forEach(function (a) {
-                        a.addEventListener('click', closeDrawer);
-                    });
-                }
-                // Mobile language button opens the same overlay
-                if (langBtnMobile) {
-                    langBtnMobile.addEventListener('click', function () {
-                        closeDrawer();
-                        setTimeout(openLang, 200);
-                    });
-                }
+                });
+            }
 
+            function playHeroHeadline() {
+                if (!heroH1) return;
+                var words = heroH1.querySelectorAll('.w');
+                requestAnimationFrame(function () {
+                    words.forEach(function (w, i) {
+                        w.style.opacity = '0';
+                        w.style.transform = 'translateY(15px)';
+                        w.offsetHeight;
 
-                /* ══════════════════════════════════════════════════
-                   HERO H1 — Robust cinematic reveal
-                   Reliably triggers on load and scroll entry.
-                ══════════════════════════════════════════════════ */
-                function initHeroText() {
-                    if (!heroH1 || heroH1.dataset.built) return;
-                    heroH1.dataset.built = 'true';
+                        w.style.transition = 'opacity 0.8s var(--expo), transform 0.8s var(--expo)';
+                        w.style.transitionDelay = (0.1 + i * 0.08) + 's';
 
-                    var lines = Array.from(heroH1.querySelectorAll('.ln'));
-                    lines.forEach(function (ln) {
-                        var text = ln.getAttribute('data-text') || ln.textContent.trim();
-                        if (!text) return;
-
-                        ln.innerHTML = '';
-                        var isAccent = ln.classList.contains('ln-accent');
-
-                        text.split(' ').forEach(function (word, idx, arr) {
-                            var span = document.createElement('span');
-                            span.className = 'w';
-                            span.innerHTML = word + (idx === arr.length - 1 ? '' : '&nbsp;');
-                            if (isAccent) span.classList.add('italic'); // Using italic class for accent style
-                            ln.appendChild(span);
+                        requestAnimationFrame(function () {
+                            w.style.opacity = '1';
+                            w.style.transform = 'translateY(0)';
                         });
                     });
-                }
+                });
+            }
 
-                function playHeroHeadline() {
-                    if (!heroH1) return;
-                    var words = heroH1.querySelectorAll('.w');
+            function observeHeroText() {
+                var target = heroH1;
+                if (!target) return;
+                var obs = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (en) {
+                        if (en.isIntersecting) {
+                            playHeroHeadline();
+                            obs.unobserve(target);
+                        }
+                    });
+                }, { threshold: 0.2 });
+                obs.observe(target);
+            }
+
+
+            /* ══════════════════════════════════════════════════
+               NAVBAR — scroll compact (rAF-throttled)
+            ══════════════════════════════════════════════════ */
+            var scrollTicking = false;
+            window.addEventListener('scroll', function () {
+                if (!scrollTicking) {
                     requestAnimationFrame(function () {
-                        words.forEach(function (w, i) {
-                            w.style.opacity = '0';
-                            w.style.transform = 'translateY(15px)';
-                            w.offsetHeight;
-
-                            w.style.transition = 'opacity 0.8s var(--expo), transform 0.8s var(--expo)';
-                            w.style.transitionDelay = (0.1 + i * 0.08) + 's';
-
-                            requestAnimationFrame(function () {
-                                w.style.opacity = '1';
-                                w.style.transform = 'translateY(0)';
-                            });
-                        });
+                        navbar.classList.toggle('is-scrolled', window.pageYOffset > 60);
+                        scrollTicking = false;
                     });
+                    scrollTicking = true;
                 }
-
-                function observeHeroText() {
-                    var target = heroH1;
-                    if (!target) return;
-                    var obs = new IntersectionObserver(function (entries) {
-                        entries.forEach(function (en) {
-                            if (en.isIntersecting) {
-                                playHeroHeadline();
-                                obs.unobserve(target);
-                            }
-                        });
-                    }, { threshold: 0.2 });
-                    obs.observe(target);
-                }
+            }, { passive: true });
 
 
-                /* ══════════════════════════════════════════════════
-                   NAVBAR — scroll compact (rAF-throttled)
-                ══════════════════════════════════════════════════ */
-                var scrollTicking = false;
+            /* ══════════════════════════════════════════════════
+               FLOATING CARDS — Breathing after entrance
+            ══════════════════════════════════════════════════ */
+            var fcards = document.querySelectorAll('.fcard');
+
+            fcards.forEach(function (card, idx) {
+                // Listen for the entrance animation to actually end
+                card.addEventListener('animationend', function handler(e) {
+                    // Only react to the entrance animations, not breathing
+                    if (e.animationName === 'breathe') return;
+
+                    // CRITICAL FIX: Lock in the visible state before
+                    // the animation property changes
+                    card.style.opacity = '1';
+
+                    // Small delay to ensure the browser has committed
+                    // the inline opacity before the animation property changes
+                    requestAnimationFrame(function () {
+                        // Stagger breathing phase per card for organic feel
+                        card.style.animationDelay = (idx * 0.5) + 's';
+                        card.classList.add('is-breathing');
+                    });
+
+                    // Remove this listener — only needed once
+                    card.removeEventListener('animationend', handler);
+                });
+            });
+
+            // Ghost panels: start drifting after their entrance animation
+            var ghosts = document.querySelectorAll('.ghost-panel');
+            ghosts.forEach(function (panel) {
+                panel.addEventListener('animationend', function handler(e) {
+                    if (e.animationName === 'ghostDrift') return;
+                    panel.style.opacity = '.5';
+                    requestAnimationFrame(function () {
+                        panel.classList.add('is-drifting');
+                    });
+                    panel.removeEventListener('animationend', handler);
+                });
+            });
+
+
+            /* ══════════════════════════════════════════════════
+               PARALLAX — lerp-smoothed mouse tracking at 60fps
+               Cards shift toward cursor, ghost panels shift
+               opposite for layered depth + anchored dashboard.
+            ══════════════════════════════════════════════════ */
+            var mouseX = 0, mouseY = 0;
+            var currentX = 0, currentY = 0;
+            var parallaxActive = false;
+            var heroDash = document.getElementById('heroDashboard');
+            var dashScrollOffset = 0;
+
+            function lerp(a, b, t) { return a + (b - a) * t; }
+
+            if (heroDash) {
                 window.addEventListener('scroll', function () {
-                    if (!scrollTicking) {
-                        requestAnimationFrame(function () {
-                            navbar.classList.toggle('is-scrolled', window.pageYOffset > 60);
-                            scrollTicking = false;
-                        });
-                        scrollTicking = true;
-                    }
+                    dashScrollOffset = window.scrollY * 0.04;
+                    heroDash.style.transform = 'translate3d(' + (currentX * 6) + 'px,' + ((currentY * 3) - dashScrollOffset) + 'px,0)';
                 }, { passive: true });
+            }
 
+            function tickParallax() {
+                currentX = lerp(currentX, mouseX, 0.07);
+                currentY = lerp(currentY, mouseY, 0.07);
 
-                /* ══════════════════════════════════════════════════
-                   FLOATING CARDS — Breathing after entrance
-                ══════════════════════════════════════════════════ */
-                var fcards = document.querySelectorAll('.fcard');
-
-                fcards.forEach(function (card, idx) {
-                    // Listen for the entrance animation to actually end
-                    card.addEventListener('animationend', function handler(e) {
-                        // Only react to the entrance animations, not breathing
-                        if (e.animationName === 'breathe') return;
-
-                        // CRITICAL FIX: Lock in the visible state before
-                        // the animation property changes
-                        card.style.opacity = '1';
-
-                        // Small delay to ensure the browser has committed
-                        // the inline opacity before the animation property changes
-                        requestAnimationFrame(function () {
-                            // Stagger breathing phase per card for organic feel
-                            card.style.animationDelay = (idx * 0.5) + 's';
-                            card.classList.add('is-breathing');
-                        });
-
-                        // Remove this listener — only needed once
-                        card.removeEventListener('animationend', handler);
-                    });
+                fcards.forEach(function (card, i) {
+                    var d = (i + 1) * 3.5;
+                    card.style.setProperty('--px', (currentX * d) + 'px');
+                    card.style.setProperty('--py', (currentY * d * 0.3) + 'px');
                 });
-
-                // Ghost panels: start drifting after their entrance animation
-                var ghosts = document.querySelectorAll('.ghost-panel');
-                ghosts.forEach(function (panel) {
-                    panel.addEventListener('animationend', function handler(e) {
-                        if (e.animationName === 'ghostDrift') return;
-                        panel.style.opacity = '.5';
-                        requestAnimationFrame(function () {
-                            panel.classList.add('is-drifting');
-                        });
-                        panel.removeEventListener('animationend', handler);
-                    });
+                ghosts.forEach(function (panel, i) {
+                    var d = (i + 1) * 1.8;
+                    panel.style.setProperty('--px', (-currentX * d) + 'px');
+                    panel.style.setProperty('--py', (-currentY * d * 0.25) + 'px');
                 });
-
-
-                /* ══════════════════════════════════════════════════
-                   PARALLAX — lerp-smoothed mouse tracking at 60fps
-                   Cards shift toward cursor, ghost panels shift
-                   opposite for layered depth + anchored dashboard.
-                ══════════════════════════════════════════════════ */
-                var mouseX = 0, mouseY = 0;
-                var currentX = 0, currentY = 0;
-                var parallaxActive = false;
-                var heroDash = document.getElementById('heroDashboard');
-                var dashScrollOffset = 0;
-
-                function lerp(a, b, t) { return a + (b - a) * t; }
-
                 if (heroDash) {
-                    window.addEventListener('scroll', function () {
-                        dashScrollOffset = window.scrollY * 0.04;
-                        heroDash.style.transform = 'translate3d(' + (currentX * 6) + 'px,' + ((currentY * 3) - dashScrollOffset) + 'px,0)';
-                    }, { passive: true });
+                    heroDash.style.transform = 'translate3d(' + (currentX * 6) + 'px,' + ((currentY * 3) - dashScrollOffset) + 'px,0)';
                 }
 
-                function tickParallax() {
-                    currentX = lerp(currentX, mouseX, 0.07);
-                    currentY = lerp(currentY, mouseY, 0.07);
+                if (parallaxActive) requestAnimationFrame(tickParallax);
+            }
 
-                    fcards.forEach(function (card, i) {
-                        var d = (i + 1) * 3.5;
-                        card.style.setProperty('--px', (currentX * d) + 'px');
-                        card.style.setProperty('--py', (currentY * d * 0.3) + 'px');
-                    });
-                    ghosts.forEach(function (panel, i) {
-                        var d = (i + 1) * 1.8;
-                        panel.style.setProperty('--px', (-currentX * d) + 'px');
-                        panel.style.setProperty('--py', (-currentY * d * 0.25) + 'px');
-                    });
-                    if (heroDash) {
-                        heroDash.style.transform = 'translate3d(' + (currentX * 6) + 'px,' + ((currentY * 3) - dashScrollOffset) + 'px,0)';
-                    }
+            function smoothReturn() {
+                currentX = lerp(currentX, 0, 0.05);
+                currentY = lerp(currentY, 0, 0.05);
 
-                    if (parallaxActive) requestAnimationFrame(tickParallax);
-                }
-
-                function smoothReturn() {
-                    currentX = lerp(currentX, 0, 0.05);
-                    currentY = lerp(currentY, 0, 0.05);
-
-                    fcards.forEach(function (card, i) {
-                        var d = (i + 1) * 3.5;
-                        card.style.setProperty('--px', (currentX * d) + 'px');
-                        card.style.setProperty('--py', (currentY * d * 0.3) + 'px');
-                    });
-                    ghosts.forEach(function (panel, i) {
-                        var d = (i + 1) * 1.8;
-                        panel.style.setProperty('--px', (-currentX * d) + 'px');
-                        panel.style.setProperty('--py', (-currentY * d * 0.25) + 'px');
-                    });
-                    if (heroDash) {
-                        heroDash.style.transform = 'translate3d(' + (currentX * 6) + 'px,' + (currentY * 3) + 'px,0)';
-                    }
-
-                    if (Math.abs(currentX) > 0.005 || Math.abs(currentY) > 0.005) {
-                        requestAnimationFrame(smoothReturn);
-                    } else {
-                        fcards.forEach(function (c) { c.style.setProperty('--px', '0'); c.style.setProperty('--py', '0'); });
-                        ghosts.forEach(function (g) { g.style.setProperty('--px', '0'); g.style.setProperty('--py', '0'); });
-                        if (heroDash) heroDash.style.transform = 'translate3d(0,0,0)';
-                    }
-                }
-
-                if (heroVisual) {
-                    heroVisual.addEventListener('mouseenter', function () {
-                        parallaxActive = true;
-                        requestAnimationFrame(tickParallax);
-                    });
-                    heroVisual.addEventListener('mousemove', function (e) {
-                        var rect = heroVisual.getBoundingClientRect();
-                        mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-                        mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-                    });
-                    heroVisual.addEventListener('mouseleave', function () {
-                        parallaxActive = false;
-                        mouseX = 0; mouseY = 0;
-                        requestAnimationFrame(smoothReturn);
-                    });
-                }
-
-
-                /* ══════════════════════════════════════════════════
-                   APPLE-STYLE MOTION SYSTEM (Persistent Reveal)
-                   Logic for re-triggering animations on every scroll entry.
-                ══════════════════════════════════════════════════ */
-                function initMotionSystem() {
-                    var observerOptions = { threshold: 0.15 };
-                    var observer = new IntersectionObserver(function (entries) {
-                        entries.forEach(function (entry) {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('visible');
-                                entry.target.classList.add('active');
-                            }
-                        });
-                    }, observerOptions);
-
-                    document.querySelectorAll('.reveal, .divisions').forEach(function (el) {
-                        observer.observe(el);
-                    });
-                }
-
-
-                /* ══════════════════════════════════════════════════
-                   FEATURE SECTION — Scroll-linked parallax
-                   Cards shift slightly on Y based on scroll position
-                   for spatial depth. Different rate per card.
-                ══════════════════════════════════════════════════ */
-                var featParallaxTick = false;
-                window.addEventListener('scroll', function () {
-                    if (!featParallaxTick) {
-                        requestAnimationFrame(function () {
-                            if (!featGrid) { featParallaxTick = false; return; }
-                            var rect = featGrid.getBoundingClientRect();
-                            var viewH = window.innerHeight;
-                            if (rect.top < viewH && rect.bottom > 0) {
-                                var progress = (viewH - rect.top) / (viewH + rect.height);
-                                feats.forEach(function (card, idx) {
-                                    if (card.classList.contains('visible')) {
-                                        var rates = [6, -10, 8];
-                                        var offset = (progress - 0.5) * (rates[idx] || 6);
-                                        card.style.transform = 'translateY(' + offset + 'px) scale(1)';
-                                    }
-                                });
-                            }
-                            featParallaxTick = false;
-                        });
-                        featParallaxTick = true;
-                    }
-                }, { passive: true });
-
-
-                /* ══════════════════════════════════════════════════
-                   LANGUAGE OVERLAY
-                ══════════════════════════════════════════════════ */
-                function openLang() {
-                    langOverlay.classList.add('is-open');
-                    document.body.style.overflow = 'hidden';
-                }
-                function closeLang() {
-                    langOverlay.classList.remove('is-open');
-                    document.body.style.overflow = '';
-                }
-                langBtn.addEventListener('click', openLang);
-                langClose.addEventListener('click', closeLang);
-                langBg.addEventListener('click', closeLang);
-                document.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape') {
-                        if (langOverlay.classList.contains('is-open')) closeLang();
-                        if (mobileDrawer && mobileDrawer.classList.contains('is-open')) closeDrawer();
-                    }
+                fcards.forEach(function (card, i) {
+                    var d = (i + 1) * 3.5;
+                    card.style.setProperty('--px', (currentX * d) + 'px');
+                    card.style.setProperty('--py', (currentY * d * 0.3) + 'px');
                 });
-
-                var closeAnnounceBtn = document.getElementById('closeAnnounce');
-                if (closeAnnounceBtn) {
-                    closeAnnounceBtn.addEventListener('click', function () {
-                        document.querySelector('.announce').classList.add('announce--hidden');
-                    });
+                ghosts.forEach(function (panel, i) {
+                    var d = (i + 1) * 1.8;
+                    panel.style.setProperty('--px', (-currentX * d) + 'px');
+                    panel.style.setProperty('--py', (-currentY * d * 0.25) + 'px');
+                });
+                if (heroDash) {
+                    heroDash.style.transform = 'translate3d(' + (currentX * 6) + 'px,' + (currentY * 3) + 'px,0)';
                 }
 
+                if (Math.abs(currentX) > 0.005 || Math.abs(currentY) > 0.005) {
+                    requestAnimationFrame(smoothReturn);
+                } else {
+                    fcards.forEach(function (c) { c.style.setProperty('--px', '0'); c.style.setProperty('--py', '0'); });
+                    ghosts.forEach(function (g) { g.style.setProperty('--px', '0'); g.style.setProperty('--py', '0'); });
+                    if (heroDash) heroDash.style.transform = 'translate3d(0,0,0)';
+                }
+            }
 
-                /* ══════════════════════════════════════════════════
-                   LANGUAGE REDIRECT LOGIC
-                   4-step orchestrated flow:
-                   1. Close overlay (CSS transition)
-                   2. 350ms settle
-                   3. Redirect overlay fades in
-                   4. 1100ms → navigate to lang domain
-                ══════════════════════════════════════════════════ */
-                document.querySelectorAll('.lang-opt').forEach(function (opt) {
-                    opt.addEventListener('click', function () {
-                        var targetUrl = this.getAttribute('data-url');
-                        var langName = this.querySelector('.lang-opt__name').textContent;
+            if (heroVisual) {
+                heroVisual.addEventListener('mouseenter', function () {
+                    parallaxActive = true;
+                    requestAnimationFrame(tickParallax);
+                });
+                heroVisual.addEventListener('mousemove', function (e) {
+                    var rect = heroVisual.getBoundingClientRect();
+                    mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+                    mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+                });
+                heroVisual.addEventListener('mouseleave', function () {
+                    parallaxActive = false;
+                    mouseX = 0; mouseY = 0;
+                    requestAnimationFrame(smoothReturn);
+                });
+            }
 
-                        closeLang();
-                        redirectMsg.textContent = 'Redirecting to ' + langName + '\u2026';
 
+            /* ══════════════════════════════════════════════════
+               APPLE-STYLE MOTION SYSTEM (Persistent Reveal)
+               Logic for re-triggering animations on every scroll entry.
+            ══════════════════════════════════════════════════ */
+            function initMotionSystem() {
+                var observerOptions = { threshold: 0.15 };
+                var observer = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            entry.target.classList.add('active');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.reveal, .divisions').forEach(function (el) {
+                    observer.observe(el);
+                });
+            }
+
+
+            /* ══════════════════════════════════════════════════
+               FEATURE SECTION — Scroll-linked parallax
+               Cards shift slightly on Y based on scroll position
+               for spatial depth. Different rate per card.
+            ══════════════════════════════════════════════════ */
+            var featParallaxTick = false;
+            window.addEventListener('scroll', function () {
+                if (!featParallaxTick) {
+                    requestAnimationFrame(function () {
+                        if (!featGrid) { featParallaxTick = false; return; }
+                        var rect = featGrid.getBoundingClientRect();
+                        var viewH = window.innerHeight;
+                        if (rect.top < viewH && rect.bottom > 0) {
+                            var progress = (viewH - rect.top) / (viewH + rect.height);
+                            feats.forEach(function (card, idx) {
+                                if (card.classList.contains('visible')) {
+                                    var rates = [6, -10, 8];
+                                    var offset = (progress - 0.5) * (rates[idx] || 6);
+                                    card.style.transform = 'translateY(' + offset + 'px) scale(1)';
+                                }
+                            });
+                        }
+                        featParallaxTick = false;
+                    });
+                    featParallaxTick = true;
+                }
+            }, { passive: true });
+
+
+            /* ══════════════════════════════════════════════════
+               LANGUAGE OVERLAY
+            ══════════════════════════════════════════════════ */
+            function openLang() {
+                langOverlay.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeLang() {
+                langOverlay.classList.remove('is-open');
+                document.body.style.overflow = '';
+            }
+            langBtn.addEventListener('click', openLang);
+            langClose.addEventListener('click', closeLang);
+            langBg.addEventListener('click', closeLang);
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    if (langOverlay.classList.contains('is-open')) closeLang();
+                    if (mobileDrawer && mobileDrawer.classList.contains('is-open')) closeDrawer();
+                }
+            });
+
+            var closeAnnounceBtn = document.getElementById('closeAnnounce');
+            if (closeAnnounceBtn) {
+                closeAnnounceBtn.addEventListener('click', function () {
+                    document.querySelector('.announce').classList.add('announce--hidden');
+                });
+            }
+
+
+            /* ══════════════════════════════════════════════════
+               LANGUAGE REDIRECT LOGIC
+               4-step orchestrated flow:
+               1. Close overlay (CSS transition)
+               2. 350ms settle
+               3. Redirect overlay fades in
+               4. 1100ms → navigate to lang domain
+            ══════════════════════════════════════════════════ */
+            document.querySelectorAll('.lang-opt').forEach(function (opt) {
+                opt.addEventListener('click', function () {
+                    var targetUrl = this.getAttribute('data-url');
+                    var langName = this.querySelector('.lang-opt__name').textContent;
+
+                    closeLang();
+                    redirectMsg.textContent = 'Redirecting to ' + langName + '\u2026';
+
+                    setTimeout(function () {
+                        redirect.classList.add('is-active');
                         setTimeout(function () {
-                            redirect.classList.add('is-active');
-                            setTimeout(function () {
-                                window.location.href = targetUrl;
-                            }, 1100);
-                        }, 350);
-                    });
+                            window.location.href = targetUrl;
+                        }, 1100);
+                    }, 350);
                 });
+            });
 
 
-                /* Subtle vertical parallax */
-                function initSubtleParallax() {
-                    var parallaxItems = document.querySelectorAll('[data-parallax]');
-                    window.addEventListener('scroll', function () {
+            /* Subtle vertical parallax */
+            function initSubtleParallax() {
+                var parallaxItems = document.querySelectorAll('[data-parallax]');
+                if (!parallaxItems.length) return;
+                var ticking = false;
+                window.addEventListener('scroll', function () {
+                    if (ticking) return;
+                    ticking = true;
+                    requestAnimationFrame(function () {
                         var scrolled = window.pageYOffset;
                         parallaxItems.forEach(function (item) {
                             var speed = parseFloat(item.getAttribute('data-parallax')) || 0.05;
-                            var yPos = -(scrolled * speed);
-                            item.style.transform = 'translate3d(0, ' + yPos + 'px, 0)';
+                            item.style.transform = 'translate3d(0, ' + (-(scrolled * speed)) + 'px, 0)';
                         });
-                    }, { passive: true });
-                }
-
-                /* ══════════════════════════════════════════════════
-                   DIVISIONS SECTION OBSERVER
-                ══════════════════════════════════════════════════ */
-                var divSection = document.getElementById('divisions');
-                if (divSection) {
-                    var divObserver = new IntersectionObserver(function (entries) {
-                        entries.forEach(function (entry) {
-                            if (entry.isIntersecting) {
-                                divSection.classList.add('active');
-                                divObserver.unobserve(entry.target);
-                            }
-                        });
-                    }, { threshold: 0.25 });
-                    divObserver.observe(divSection);
-                }
-
-                /* ══════════════════════════════════════════════════
-                   GOV REC SECTION OBSERVER
-                ══════════════════════════════════════════════════ */
-                var govSection = document.getElementById('govRec');
-                if (govSection) {
-                    var govObserver = new IntersectionObserver(function (entries) {
-                        entries.forEach(function (entry) {
-                            if (entry.isIntersecting) {
-                                govSection.classList.add('active');
-                                govObserver.unobserve(entry.target);
-                            }
-                        });
-                    }, { threshold: 0.3 });
-                    govObserver.observe(govSection);
-                }
-
-                /* ══════════════════════════════════════════════════
-                   EXP CAROUSEL LOGIC
-                ══════════════════════════════════════════════════ */
-                var expTrack = document.getElementById('expTrack');
-                var expPrev = document.getElementById('expPrev');
-                var expNext = document.getElementById('expNext');
-                var expDotsContainer = document.getElementById('expDots');
-
-                if (expTrack && expPrev && expNext) {
-                    var cardWidth = 340 + 24; // Width + Gap, approx
-
-                    expPrev.addEventListener('click', function () {
-                        expTrack.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+                        ticking = false;
                     });
+                }, { passive: true });
+            }
 
-                    expNext.addEventListener('click', function () {
-                        expTrack.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            /* ══════════════════════════════════════════════════
+               DIVISIONS SECTION OBSERVER
+            ══════════════════════════════════════════════════ */
+            var divSection = document.getElementById('divisions');
+            if (divSection) {
+                var divObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            divSection.classList.add('active');
+                            divObserver.unobserve(entry.target);
+                        }
                     });
+                }, { threshold: 0.25 });
+                divObserver.observe(divSection);
+            }
 
-                    // Update Dots
-                    var cards = expTrack.querySelectorAll('.exp-card');
-                    if (cards.length > 0 && expDotsContainer) {
-                        // Create dots
-                        cards.forEach(function (_, idx) {
-                            var dot = document.createElement('div');
-                            dot.classList.add('exp-dot');
-                            if (idx === 0) dot.classList.add('active');
-                            dot.addEventListener('click', function () {
-                                var scrollPos = idx * cardWidth;
-                                expTrack.scrollTo({ left: scrollPos, behavior: 'smooth' });
-                            });
-                            expDotsContainer.appendChild(dot);
-                        });
+            /* ══════════════════════════════════════════════════
+               GOV REC SECTION OBSERVER
+            ══════════════════════════════════════════════════ */
+            var govSection = document.getElementById('govRec');
+            if (govSection) {
+                var govObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            govSection.classList.add('active');
+                            govObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.3 });
+                govObserver.observe(govSection);
+            }
 
-                        // Active Dot Observer using IntersectionObserver on cards
-                        var dotObserver = new IntersectionObserver(function (entries) {
-                            entries.forEach(function (entry) {
-                                if (entry.isIntersecting) {
-                                    // Find which card this is
-                                    var index = Array.from(cards).indexOf(entry.target);
-                                    var dots = expDotsContainer.querySelectorAll('.exp-dot');
-                                    dots.forEach(function (d) { d.classList.remove('active'); });
-                                    if (dots[index]) dots[index].classList.add('active');
-                                }
-                            });
-                        }, { root: expTrack, threshold: 0.6 });
 
-                        cards.forEach(function (card) { dotObserver.observe(card); });
+        })();
+
+        /* ══════════════════════════════════════════════════
+           INNOVATION SECTION — Horizontal Scroll Logic
+        ══════════════════════════════════════════════════ */
+        (function () {
+            // Register ScrollTrigger if not already
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                // ScrollTrigger already registered at top-level — no duplicate needed
+
+                const section = document.querySelector('.innovation-section');
+                const track = document.querySelector('.innovation-track');
+                const cards = document.querySelectorAll('.innovation-card');
+                const watermark = document.querySelector('.innovation-watermark');
+
+                if (!section || !track) return;
+
+                // Disable pin + horizontal scroll on mobile — falls back to natural flow
+                const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+                if (isMobile) {
+                    // On mobile just show the cards without the pin
+                    gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
+                    track.style.overflowX = 'auto';
+                    track.style.flexWrap = 'nowrap';
+                    return;
+                }
+
+                // Dynamic scroll distance
+                const getScrollDistance = () => track.scrollWidth - window.innerWidth;
+
+                // Set initial watermark state
+                gsap.set(watermark, { xPercent: 0, yPercent: -50, x: 0 });
+
+                // Main Timeline
+                const mainTl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top top",
+                        end: () => "+=" + getScrollDistance(),
+                        scrub: 1.2, // Smoother scrub
+                        pin: true,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true
                     }
+                });
+
+                // Set initial state for individual cards (Rising & Scaling)
+                gsap.set(cards, {
+                    opacity: 0,
+                    y: 100,
+                    scale: 0.9
+                });
+
+                // Premium Staggered Entrance: Cards pop up one-by-one
+                mainTl.to(cards, {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.5, // Slightly longer duration for better visibility
+                    stagger: {
+                        each: 0.05, // Specifically staggered
+                        ease: "power2.out"
+                    },
+                    ease: "back.out(1.2)"
+                }, 0); // Start entrance immediately on pin
+
+                // Horizontal movement starts at 0.4 progress (more buffer for entrance)
+                mainTl.to(track, {
+                    x: () => -getScrollDistance(),
+                    ease: "none",
+                    duration: 0.6
+                }, 0.4);
+
+                // Watermark Parallax (Starts at 0 to maintain motion)
+                if (watermark) {
+                    mainTl.to(watermark, {
+                        x: () => -getScrollDistance() * 0.8, // Increased speed to reveal full "INNOVATION" word
+                        ease: "none",
+                        duration: 1
+                    }, 0);
                 }
 
-            })();
+                // Individual Card Animations using containerAnimation for "premium" feel
+                cards.forEach((card, i) => {
+                    const rot = (i % 2 === 0) ? 2.5 : -1.8;
+
+                    gsap.fromTo(card, {
+                        rotateZ: rot,
+                        y: 10
+                    }, {
+                        rotateZ: -rot * 0.4,
+                        y: -10,
+                        ease: "sine.inOut",
+                        scrollTrigger: {
+                            trigger: card,
+                            containerAnimation: mainTl,
+                            start: "left right",
+                            end: "right left",
+                            scrub: true
+                        }
+                    });
+                });
+            }
+        })();
+
+        /* ══════════════════════════════════════════════════
+           CINEMATIC SCROLL-ZOOM — Lenis-style GSAP pin + word zoom
+           Scrolls into the 'D' of EDUCATION, black bg → white transition
+        ══════════════════════════════════════════════════ */
+        (function () {
+            var section = document.getElementById('cinematic-zoom-section');
+            var sticky = document.getElementById('czsSticky');
+            var heading = document.getElementById('czsHeading');
+            var focal = document.getElementById('czsFocal');          // 'D' in EDUCATION
+            var overlay = document.getElementById('czsTransition');     // white fade overlay
+            if (!section || !heading) return;
+
+            // ─────────────────────────────────────────────
+            // Compute transform-origin so the scale zooms
+            // precisely into the centre of the focal letter.
+            // We do this after fonts are loaded to get correct rects.
+            // ─────────────────────────────────────────────
+            function getOrigin() {
+                if (window.innerWidth <= 600 || !focal) return '50% 50%';
+
+                var headingRect = heading.getBoundingClientRect();
+                var focalRect = focal.getBoundingClientRect();
+
+                // Aim at the LEFT STROKE (backbone/stem) of the 'D'.
+                // The geometric centre of 'D' is its hollow counter —
+                // 20% from the left edge of the glyph lands on solid ink.
+                var targetX = focalRect.left + focalRect.width * 0.2;
+                var targetY = focalRect.top + focalRect.height * 0.5;
+
+                var ox = (targetX - headingRect.left) / headingRect.width * 100;
+                var oy = (targetY - headingRect.top) / headingRect.height * 100;
+
+                return ox.toFixed(2) + '% ' + oy.toFixed(2) + '%';
+            }
+
+            // ─────────────────────────────────────────────
+            // Wait for document fonts then build ScrollTrigger
+            // ─────────────────────────────────────────────
+            function buildAnim() {
+                heading.style.transformOrigin = getOrigin();
+
+                var tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top top',
+                        end: 'bottom bottom',
+                        scrub: true,
+                        pin: sticky,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true,
+                        onRefresh: function () {
+                            heading.style.transformOrigin = getOrigin();
+                        }
+                    }
+                });
+
+                // Phase 1 (0 → 15%): Fade in + establish baseline
+                tl.fromTo(heading,
+                    { opacity: 0, scale: 0.3 },
+                    { opacity: 1, scale: 1, ease: 'power1.out', duration: 0.15 }
+                );
+
+                // Phase 2 (15% → 92%): Deep zoom rush into the 'D' stroke
+                // Scale 80 is deep enough to make the stroke swallow the screen
+                // while remaining stable and centered.
+                tl.to(heading,
+                    { scale: 80, ease: 'power3.in', duration: 0.77 }
+                );
+
+                // Phase 3 (92% → 100%): White overlay fade-in to mask edges
+                if (overlay) {
+                    tl.to(overlay,
+                        { opacity: 1, ease: 'none', duration: 0.08 },
+                        0.92
+                    );
+                }
+
+                // Final safety: Hide text once transition is complete
+                tl.to(heading, { opacity: 0, duration: 0.01 }, 1.0);
+            }
+
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(buildAnim);
+            } else {
+                window.addEventListener('load', buildAnim);
+            }
+        }());
+
+
+
+        /* ══════════════════════════════════════════════════
+           BANNER CAROUSEL LOGIC
+        ══════════════════════════════════════════════════ */
+        var bcTrack = document.getElementById('bcTrack');
+        var bcDotsContainer = document.getElementById('bcDots');
+        var bcSlides = document.querySelectorAll('.bc-slide');
+        var isDown = false;
+        var startX;
+        var scrollLeft;
+
+        if (bcTrack && bcDotsContainer && bcSlides.length > 0) {
+            // Create Dots
+            bcSlides.forEach(function (_, idx) {
+                var dot = document.createElement('div');
+                dot.classList.add('bc-dot');
+                if (idx === 0) dot.classList.add('active');
+                dot.addEventListener('click', function () {
+                    var slide = bcSlides[idx];
+                    bcTrack.scrollTo({
+                        left: slide.offsetLeft - bcTrack.offsetLeft - (bcTrack.clientWidth - slide.clientWidth) / 2,
+                        behavior: 'smooth'
+                    });
+                });
+                bcDotsContainer.appendChild(dot);
+            });
+
+            // Update Active Dot on Scroll
+            bcTrack.addEventListener('scroll', function () {
+                var scrollPos = bcTrack.scrollLeft + bcTrack.clientWidth / 2;
+                bcSlides.forEach(function (slide, idx) {
+                    if (scrollPos >= slide.offsetLeft && scrollPos <= slide.offsetLeft + slide.clientWidth) {
+                        var dots = bcDotsContainer.querySelectorAll('.bc-dot');
+                        dots.forEach(d => d.classList.remove('active'));
+                        if (dots[idx]) dots[idx].classList.add('active');
+                    }
+                });
+            });
+
+            // Mouse Drag Scroll
+            bcTrack.addEventListener('mousedown', (e) => {
+                isDown = true;
+                bcTrack.classList.add('active');
+                startX = e.pageX - bcTrack.offsetLeft;
+                scrollLeft = bcTrack.scrollLeft;
+                bcTrack.style.scrollSnapType = 'none'; // Disable snapping while dragging
+                bcTrack.style.scrollBehavior = 'auto';
+            });
+
+            bcTrack.addEventListener('mouseleave', () => {
+                isDown = false;
+                bcTrack.classList.remove('active');
+                bcTrack.style.scrollSnapType = 'x mandatory';
+            });
+
+            bcTrack.addEventListener('mouseup', () => {
+                isDown = false;
+                bcTrack.classList.remove('active');
+                bcTrack.style.scrollBehavior = 'smooth';
+                // Delay snap re-enable to avoid jitter mid-momentum
+                setTimeout(() => { bcTrack.style.scrollSnapType = 'x mandatory'; }, 300);
+            });
+
+            bcTrack.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - bcTrack.offsetLeft;
+                const walk = (x - startX) * 2;
+                bcTrack.scrollLeft = scrollLeft - walk;
+            });
+        }
+
     </script>
 
 </body>
