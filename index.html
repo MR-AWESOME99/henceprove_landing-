@@ -2805,15 +2805,12 @@
             transition-delay: 0.3s;
         }
 
-        .gov-logo svg {
-            height: 64px;
+        .gov-logo img {
+            height: 100px;
             width: auto;
-            max-width: 180px;
-            color: #0F172A;
-            /* Brand Navy */
-            fill: currentColor;
-            stroke: currentColor;
-            transition: all 0.4s ease;
+            max-width: 200px;
+            object-fit: contain;
+            display: block;
         }
 
         .gov-logo__text {
@@ -2821,27 +2818,9 @@
             font-size: 0.82rem;
             font-weight: 600;
             color: #0F172A;
-            /* Text match logo */
             opacity: 0.8;
-            transition: all 0.3s ease;
             text-align: center;
             max-width: 200px;
-        }
-
-        .gov-logo:hover {
-            transform: translateY(-6px) !important;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
-            border-color: rgba(15, 23, 42, 0.12);
-        }
-
-        .gov-logo:hover svg {
-            color: #0b1120;
-            /* Slightly darker */
-            transform: scale(1.02);
-        }
-
-        .gov-logo:hover .gov-logo__text {
-            opacity: 1;
         }
 
         /* ============================================================
@@ -4423,74 +4402,22 @@
         <div class="gov-rec__grid">
             <!-- Ministry of MSME -->
             <div class="gov-logo">
-                <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-                    <!-- ASHOKA EMBLEM (Lion Capital) -->
-                    <g transform="translate(82, 18) scale(0.35)">
-                        <!-- Simple Lion shape approximation -->
-                        <path
-                            d="M50 0 C30 0 20 15 20 30 C20 45 35 55 50 55 C65 55 80 45 80 30 C80 15 70 0 50 0 Z M30 30 C30 20 40 10 50 10 C60 10 70 20 70 30 C70 40 60 50 50 50 C40 50 30 40 30 30 Z"
-                            fill="currentColor" />
-                        <path
-                            d="M15 35 C5 35 0 45 0 55 C0 65 10 75 25 75 L75 75 C90 75 100 65 100 55 C100 45 95 35 85 35"
-                            fill="none" stroke="currentColor" stroke-width="6" />
-                        <rect x="25" y="75" width="50" height="15" fill="currentColor" />
-                        <circle cx="50" cy="82.5" r="5" fill="white" />
-                    </g>
-                    <!-- MSME GEAR - Industrial/Chakra motif below -->
-                    <g transform="translate(100, 75)">
-                        <circle r="16" fill="none" stroke="currentColor" stroke-width="5" />
-                        <path d="M-20 0 H-12 M20 0 H12 M0 -20 V-12 M0 20 V12" stroke="currentColor" stroke-width="5" />
-                        <path d="M-14 -14 L-9 -9 M14 -14 L9 -9 M-14 14 L-9 9 M14 14 L9 9" stroke="currentColor"
-                            stroke-width="5" />
-                        <circle r="6" fill="currentColor" />
-                    </g>
-                </svg>
+                <img src="https://pub-47efa01044fd434683856b6887195366.r2.dev/WEB-RESOURCES/msme.png"
+                    alt="MSME Official Logo">
                 <span class="gov-logo__text">Ministry of MSME</span>
             </div>
 
             <!-- DPIIT / Startup India -->
             <div class="gov-logo">
-                <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-                    <!-- ASHOKA EMBLEM -->
-                    <g transform="translate(82, 20) scale(0.35)">
-                        <path
-                            d="M50 0 C30 0 20 15 20 30 C20 45 35 55 50 55 C65 55 80 45 80 30 C80 15 70 0 50 0 Z M30 30 C30 20 40 10 50 10 C60 10 70 20 70 30 C70 40 60 50 50 50 C40 50 30 40 30 30 Z"
-                            fill="currentColor" />
-                        <path
-                            d="M15 35 C5 35 0 45 0 55 C0 65 10 75 25 75 L75 75 C90 75 100 65 100 55 C100 45 95 35 85 35"
-                            fill="none" stroke="currentColor" stroke-width="6" />
-                        <rect x="25" y="75" width="50" height="15" fill="currentColor" />
-                        <circle cx="50" cy="82.5" r="5" fill="white" />
-                    </g>
-                    <!-- INDUSTRIAL COG - DPIIT Motif -->
-                    <path d="M70 65 L130 65" stroke="currentColor" stroke-width="4" />
-                    <path d="M60 65 L60 85 L140 85 L140 65" fill="none" stroke="currentColor" stroke-width="4" />
-                    <path d="M85 85 L85 95 M115 85 L115 95" stroke="currentColor" stroke-width="4" />
-                </svg>
+                <img src="https://pub-47efa01044fd434683856b6887195366.r2.dev/WEB-RESOURCES/dpiit.png"
+                    alt="DPIIT Official Logo">
                 <span class="gov-logo__text">Department of Promotion of Industry and Internal Trade</span>
             </div>
 
             <!-- Ministry of Corporate Affairs -->
             <div class="gov-logo">
-                <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-                    <!-- ASHOKA EMBLEM -->
-                    <g transform="translate(82, 15) scale(0.35)">
-                        <path
-                            d="M50 0 C30 0 20 15 20 30 C20 45 35 55 50 55 C65 55 80 45 80 30 C80 15 70 0 50 0 Z M30 30 C30 20 40 10 50 10 C60 10 70 20 70 30 C70 40 60 50 50 50 C40 50 30 40 30 30 Z"
-                            fill="currentColor" />
-                        <path
-                            d="M15 35 C5 35 0 45 0 55 C0 65 10 75 25 75 L75 75 C90 75 100 65 100 55 C100 45 95 35 85 35"
-                            fill="none" stroke="currentColor" stroke-width="6" />
-                        <rect x="25" y="75" width="50" height="15" fill="currentColor" />
-                        <circle cx="50" cy="82.5" r="5" fill="white" />
-                    </g>
-                    <!-- BUILDING - Corporate Affairs Motif -->
-                    <path d="M70 60 L100 45 L130 60" fill="none" stroke="currentColor" stroke-width="4" />
-                    <rect x="75" y="60" width="50" height="25" fill="none" stroke="currentColor" stroke-width="3" />
-                    <path d="M85 60 V85 M93 60 V85 M100 60 V85 M107 60 V85 M115 60 V85" stroke="currentColor"
-                        stroke-width="2" />
-                    <rect x="70" y="85" width="60" height="4" fill="currentColor" />
-                </svg>
+                <img src="https://pub-47efa01044fd434683856b6887195366.r2.dev/WEB-RESOURCES/mca.png"
+                    alt="MCA Official Logo">
                 <span class="gov-logo__text">Ministry of Corporate Affairs</span>
             </div>
         </div>
