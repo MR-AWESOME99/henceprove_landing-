@@ -759,58 +759,226 @@
         /* ============================================================
            HERO
         ============================================================ */
+        /* --- HERO: THE NEURAL ODYSSEY (Awwwards Grade) --- */
         .hero {
             position: relative;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 120px clamp(28px, 5vw, 80px) 40px;
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%;
             min-height: 100vh;
-        }
-
-        .hero__copy {
-            flex: 1.2;
-            max-width: 620px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding-right: 40px;
-            overflow-wrap: break-word;
-            word-break: normal;
-        }
-
-        .hero__h1 {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: clamp(2.125rem, 5.5vw, 3.85rem);
-            font-weight: 600;
-            line-height: 1.08;
-            letter-spacing: normal;
-            color: var(--text-primary);
-            margin-bottom: 38px;
-            white-space: normal;
-        }
-
-        .hero__h1 .ln-accent {
-            font-family: "Apple Garamond", "EB Garamond", serif;
-            font-weight: 400;
-            font-style: italic;
-            font-size: 1.14em;
-            letter-spacing: normal;
-            line-height: 1.05;
+            background: #ffffff;
+            overflow: hidden;
             display: block;
-            margin-top: 6px;
+            z-index: 10;
+        }
+
+        .hero__inner {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
         }
 
         .hero__visual {
-            flex: 0.9;
-            position: relative;
-            height: 580px;
-            perspective: 1200px;
-            perspective-origin: 50% 40%;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero__narrative {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .hero__stage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -45%);
+            width: 100%;
+            max-width: 950px;
+            padding: 0 40px;
+            opacity: 0;
+            visibility: hidden;
+            transition:
+                opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: blur(15px);
+            pointer-events: none;
+        }
+
+        .hero__stage.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%);
+            filter: blur(0);
+            pointer-events: auto;
+        }
+
+        /* Awwwards Typography Reveal System */
+        .clip-text {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            padding-bottom: 0.15em;
+            margin-bottom: -0.15em;
+        }
+
+        .clip-text>span {
+            display: inline-block;
+            transform: translateY(140%);
+            opacity: 0;
+            transition:
+                transform 1.0s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero__stage.active .clip-text>span {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Sequential Delays */
+        .delay-1 {
+            transition-delay: 0.0s;
+        }
+
+        .delay-2 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-3 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-4 {
+            transition-delay: 0.3s;
+        }
+
+        .delay-5 {
+            transition-delay: 0.4s;
+        }
+
+        /* Secondary elements fade in */
+        .hero__stage>*:not(.hero__h1):not(.hero__signature) {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+        }
+
+        .hero__stage.active>*:not(.hero__h1):not(.hero__signature) {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero__signature-wrapper {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+
+        .hero__signature-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 200%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .sig-symbol {
+            position: absolute;
+            color: var(--primary-blue);
+            font-family: monospace;
+            font-size: 1.2rem;
+            opacity: 0;
+            filter: blur(2px);
+            will-change: transform, opacity, filter;
+            transition: opacity 0.8s ease;
+        }
+
+        .hero__stage.active .sig-symbol {
+            opacity: 0.6;
+            animation: float-symbol 8s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes float-symbol {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                filter: blur(2px);
+            }
+
+            50% {
+                filter: blur(0px);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translate(var(--tx), var(--ty)) rotate(var(--tr)) scale(var(--ts));
+                filter: blur(3px);
+            }
+        }
+
+        .hero__signature {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: clamp(3.5rem, 9vw, 8rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .hero__signature em {
+            font-style: normal;
+            color: var(--primary-blue);
+        }
+
+        .hero__signature .dud {
+            display: inline-block;
+            color: var(--primary-blue);
+            opacity: 0.8;
+            text-shadow: 0 0 8px rgba(0, 70, 255, 0.6);
+            animation: glitch-anim 0.08s infinite alternate;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-0.5px, 0.5px);
+            }
+
+            40% {
+                transform: translate(-0.5px, -0.5px);
+            }
+
+            60% {
+                transform: translate(0.5px, 0.5px);
+            }
+
+            80% {
+                transform: translate(0.5px, -0.5px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
         }
 
         #hero-3d-canvas {
@@ -819,7 +987,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            cursor: move;
             z-index: 1;
         }
 
@@ -829,18 +996,25 @@
             color: var(--text-secondary);
             font-weight: 400;
             max-width: 440px;
-            margin-bottom: 28px;
+            margin: 0 auto 28px;
             opacity: 0;
             transform: translateY(28px);
+        }
+
+        .hero__stage.active .hero__desc {
             animation: revealSoft .85s var(--expo) 1.5s forwards;
         }
 
         .hero__actions {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 20px;
             opacity: 0;
             transform: translateY(28px);
+        }
+
+        .hero__stage.active .hero__actions {
             animation: revealSoft .85s var(--expo) 1.65s forwards;
         }
 
@@ -856,6 +1030,9 @@
             margin-bottom: 20px;
             opacity: 0;
             transform: translateX(-12px);
+        }
+
+        .hero__stage.active .hero__eyebrow {
             animation: eyebrowIn .7s var(--expo) .7s forwards;
         }
 
@@ -872,6 +1049,9 @@
             height: 2px;
             background: var(--primary-blue);
             border-radius: 2px;
+        }
+
+        .hero__stage.active .hero__eyebrow::before {
             animation: lineGrow .5s var(--expo) .9s forwards;
         }
 
@@ -881,48 +1061,19 @@
             }
         }
 
-        /* ============================================================
-           HERO H1 — Word-by-word reveal animation
-           Each word is wrapped in a span by JS on load.
-           Words reveal with staggered fade + upward slide.
-        ============================================================ */
+        .hero__h1 {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: clamp(2.3rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin: 0 0 24px;
+        }
+
         .hero__h1 .ln {
-            display: block;
-            overflow: visible;
-            white-space: normal;
-            padding-bottom: 6px;
-        }
-
-        /* Word wrapper — each word animates independently */
-        .hero__h1 .w {
             display: inline-block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Small gap between words */
-        .hero__h1 .w+.w {
-            margin-left: .22em;
-        }
-
-        @keyframes wordRise {
-            0% {
-                opacity: 0;
-                transform: translateY(32px) scale(.98);
-                filter: blur(6px);
-            }
-
-            60% {
-                opacity: 1;
-                transform: translateY(-4px) scale(1);
-                filter: blur(0);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                filter: blur(0);
-            }
+            position: relative;
         }
 
         .hero__h1 .italic {
@@ -932,25 +1083,104 @@
             font-weight: 500;
         }
 
-        .hero__desc {
-            font-size: 1.02rem;
-            line-height: 1.74;
-            color: var(--text-secondary);
-            font-weight: 400;
-            max-width: 440px;
-            margin-bottom: 28px;
-            opacity: 0;
-            transform: translateY(28px);
-            animation: revealSoft .85s var(--expo) 1.5s forwards;
-        }
-
-        .hero__actions {
+        .hero__trust {
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 48px;
             opacity: 0;
-            transform: translateY(28px);
-            animation: revealSoft .85s var(--expo) 1.65s forwards;
+            transform: translateY(18px);
+            /* Add fallback starting transform */
+        }
+
+        .hero__stage.active .hero__trust {
+            animation: revealSoft .7s var(--expo) 1.85s forwards;
+        }
+
+        .hero__trust::before {
+            content: '';
+            flex-shrink: 0;
+            width: 36px;
+            height: 1px;
+            background: var(--border);
+        }
+
+
+        .hero__trust span {
+            font-family: "Inter", system-ui, sans-serif;
+            font-size: .82rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+
+
+        /* --- STAGE 4 AMBIENCE --- */
+        .stage4-ambience {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 250%;
+            transform: translate(-50%, -50%);
+            z-index: -5;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
+        }
+
+        .hero__stage.active .stage4-ambience {
+            opacity: 1;
+        }
+
+        .stage4-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 70, 255, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 70, 255, 0.06) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: center;
+            mask-image: radial-gradient(circle at center, black 0%, transparent 60%);
+            -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 60%);
+            transform: perspective(600px) rotateX(20deg) scale(1.1);
+            animation: gridPan 15s linear infinite;
+        }
+
+        .stage4-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 600px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(ellipse at center, rgba(0, 100, 255, 0.12) 0%, transparent 70%);
+            filter: blur(40px);
+            animation: stage4Pulse 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes gridPan {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 60px 60px;
+            }
+        }
+
+        @keyframes stage4Pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
         }
 
         .btn-solid {
@@ -992,7 +1222,7 @@
             background: var(--primary-blue-dark);
         }
 
-        .btn-solid svg {
+        Loading .btn-solid svg {
             transition: transform .3s ease;
         }
 
@@ -1053,681 +1283,6 @@
             font-weight: 400;
         }
 
-        /* ============================================================
-           HERO VISUAL — Floating 3D Dashboard Composition
-        ============================================================ */
-        .hero__visual {
-            position: relative;
-            height: 580px;
-            perspective: 1200px;
-            perspective-origin: 50% 40%;
-            width: 100%;
-        }
-
-        .vis-shell {
-            position: absolute;
-            top: 30px;
-            left: -10px;
-            right: -30px;
-            bottom: 60px;
-            border: 1px solid var(--border-ghost);
-            border-radius: 24px;
-            background: linear-gradient(160deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .01));
-            opacity: 0;
-            animation: shellIn 1.2s var(--expo) .8s forwards;
-            pointer-events: none;
-        }
-
-        @keyframes shellIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Central dashboard anchor behind floating cards */
-        .hero-dash {
-            position: absolute;
-            inset: 20px 0 20px 0;
-            margin: 0 28px;
-            border-radius: 22px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .05));
-            border: 1px solid rgba(255, 255, 255, .22);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), 0 26px 80px rgba(11, 29, 58, .16);
-            backdrop-filter: blur(16px) saturate(140%);
-            -webkit-backdrop-filter: blur(16px) saturate(140%);
-            overflow: hidden;
-            opacity: 0;
-            animation: dashIn 1s var(--expo) .6s forwards;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        @keyframes dashIn {
-            from {
-                opacity: 0;
-                transform: translateY(16px) scale(.98);
-            }
-
-            to {
-                opacity: .9;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .hero-dash__inner {
-            position: relative;
-            padding: 22px 22px 18px;
-            color: var(--deep-900);
-        }
-
-        .hero-dash__header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-            color: #0f1f3c;
-            font-weight: 700;
-            font-size: .92rem;
-            letter-spacing: -.01em;
-        }
-
-        .hero-dash__grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 14px;
-        }
-
-        .dash-card {
-            background: rgba(255, 255, 255, .22);
-            border-radius: 14px;
-            padding: 14px;
-            border: 1px solid rgba(255, 255, 255, .25);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45);
-        }
-
-        .dash-small {
-            grid-column: span 4;
-        }
-
-        .dash-wide {
-            grid-column: span 8;
-        }
-
-        .dash-label {
-            font-size: .7rem;
-            text-transform: uppercase;
-            letter-spacing: .14em;
-            color: rgba(11, 29, 58, .6);
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .dash-progress {
-            height: 7px;
-            border-radius: 999px;
-            background: rgba(11, 29, 58, .07);
-            overflow: hidden;
-        }
-
-        .dash-progress span {
-            display: block;
-            height: 100%;
-            border-radius: inherit;
-            background: var(--primary-blue);
-            width: var(--pct, 60%);
-        }
-
-        .dash-chart {
-            height: 100px;
-            border-radius: 12px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, .2));
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dash-chart::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(90deg, rgba(11, 29, 58, .04) 0, rgba(11, 29, 58, .04) 1px, transparent 1px, transparent 34px),
-                repeating-linear-gradient(180deg, rgba(11, 29, 58, .04) 0, rgba(11, 29, 58, .04) 1px, transparent 1px, transparent 26px);
-        }
-
-        .dash-chart__line {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 16px;
-            height: 60px;
-            background: linear-gradient(120deg, rgba(0, 70, 255, .35), rgba(80, 216, 144, .25));
-            clip-path: polygon(0% 70%, 15% 40%, 30% 62%, 45% 30%, 60% 55%, 75% 34%, 90% 48%, 100% 30%, 100% 100%, 0 100%);
-            opacity: .9;
-        }
-
-        .dash-stats {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 0;
-        }
-
-        .dash-pill {
-            flex: 1 1 120px;
-            background: rgba(11, 29, 58, .06);
-            border-radius: 12px;
-            padding: 10px 12px;
-            border: 1px solid rgba(11, 29, 58, .08);
-            color: var(--deep-900);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45);
-        }
-
-        .dash-pill strong {
-            display: block;
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        .dash-pill span {
-            font-size: .78rem;
-            color: rgba(11, 29, 58, .65);
-        }
-
-        .hero-dash__glow {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 20% 20%, rgba(0, 70, 255, .1), transparent 45%),
-                radial-gradient(ellipse at 80% 50%, rgba(80, 216, 144, .08), transparent 55%);
-            pointer-events: none;
-            mix-blend-mode: screen;
-        }
-
-        .fcard {
-            position: absolute;
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: var(--shadow-card);
-            opacity: 1;
-            transform: translate(var(--px, 0), var(--py, 0)) rotate(var(--rot, 0deg));
-            will-change: transform;
-            transform-style: preserve-3d;
-            transition: box-shadow .45s var(--expo), border-color .3s ease;
-        }
-
-        /* ---- Card entrance animations ---- */
-        .fcard--courses {
-            --rot: -2.5deg;
-            --breathe-y: -9px;
-            --breathe-dur: 7.5s;
-            top: 10px;
-            left: 0;
-            width: 278px;
-            padding: 22px;
-            z-index: 3;
-            transform: translate(-30px, 60px) rotate(-4deg) scale(.9);
-            animation: cardFromLeft 1.15s var(--expo) 1s forwards;
-        }
-
-        @keyframes cardFromLeft {
-            to {
-                opacity: 1;
-                transform: translate(0, 0) rotate(-2.5deg) scale(1);
-            }
-        }
-
-        .fcard--exam {
-            --rot: 3.8deg;
-            --breathe-y: -7px;
-            --breathe-dur: 8.2s;
-            top: 44px;
-            right: -14px;
-            width: 226px;
-            padding: 20px;
-            z-index: 2;
-            transform: translate(40px, 50px) rotate(6deg) scale(.88);
-            animation: cardFromRight 1.15s var(--expo) 1.18s forwards;
-        }
-
-        @keyframes cardFromRight {
-            to {
-                opacity: 1;
-                transform: translate(0, 0) rotate(3.8deg) scale(1);
-            }
-        }
-
-        .fcard--mentor {
-            --rot: -0.8deg;
-            --breathe-y: -10px;
-            --breathe-dur: 8.8s;
-            bottom: 80px;
-            left: 44px;
-            width: 218px;
-            padding: 18px;
-            z-index: 4;
-            transform: translate(-20px, 40px) rotate(-3deg) scale(.92);
-            animation: cardFromBottom 1.15s var(--expo) 1.36s forwards;
-        }
-
-        @keyframes cardFromBottom {
-            to {
-                opacity: 1;
-                transform: translate(0, 0) rotate(-0.8deg) scale(1);
-            }
-        }
-
-        .fcard--stats {
-            --rot: 1.5deg;
-            --breathe-y: -6px;
-            --breathe-dur: 9.4s;
-            bottom: 26px;
-            right: 20px;
-            width: 176px;
-            padding: 16px;
-            z-index: 1;
-            transform: translate(30px, 30px) rotate(4deg) scale(.85);
-            animation: cardFromRight 1.15s var(--expo) 1.54s forwards;
-        }
-
-        /* ---- Breathing: MUST include opacity: 1 to prevent vanish ---- */
-        .fcard.is-breathing {
-            animation: breathe var(--breathe-dur, 7.5s) ease-in-out infinite;
-        }
-
-        @keyframes breathe {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: translate(var(--px, 0), var(--py, 0)) translateY(0) rotate(var(--rot, 0deg)) scale(1);
-            }
-
-            50% {
-                opacity: 1;
-                transform: translate(var(--px, 0), var(--py, 0)) translateY(var(--breathe-y, -8px)) rotate(var(--rot, 0deg)) scale(1);
-            }
-        }
-
-        /* Ghost panels */
-        .ghost-panel {
-            position: absolute;
-            border: 1px solid var(--border-ghost);
-            border-radius: 14px;
-            background: rgba(255, 255, 255, .35);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            opacity: 0;
-            pointer-events: none;
-            will-change: transform, opacity;
-        }
-
-        /* Micro floating UI chips to fill hero density */
-        .microcard {
-            position: absolute;
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 14px;
-            box-shadow: var(--shadow-card);
-            font-size: .72rem;
-            color: var(--text-primary);
-            opacity: 0;
-            transform: translateY(22px) scale(.96);
-            animation: chipIn 1s var(--expo) 1.1s forwards, microDrift 8s ease-in-out 1.1s infinite;
-            will-change: transform, opacity;
-        }
-
-        .microcard__label {
-            color: var(--text-muted);
-            font-size: .64rem;
-            letter-spacing: .05em;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-
-        .microcard__num {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-weight: 700;
-            font-size: 1.15rem;
-            color: var(--text-primary);
-        }
-
-        .microcard--thin {
-            padding: 10px 12px;
-            border-radius: 11px;
-        }
-
-        .microchip {
-            position: absolute;
-            width: 120px;
-            height: 34px;
-            border-radius: 999px;
-            background: linear-gradient(120deg, rgba(0, 70, 255, .06), rgba(80, 216, 144, .05));
-            border: 1px solid rgba(255, 255, 255, .6);
-            box-shadow: 0 12px 30px rgba(0, 70, 255, .1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            opacity: 0;
-            transform: translateY(24px) scale(.95);
-            animation: chipIn 1s var(--expo) 1.35s forwards;
-            overflow: hidden;
-        }
-
-        .microchip::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .2), rgba(255, 255, 255, .08));
-            opacity: .8;
-        }
-
-        .microchip__dot {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            width: 8px;
-            height: 8px;
-            background: var(--green);
-            border-radius: 50%;
-            transform: translateY(-50%);
-            box-shadow: 0 0 0 4px rgba(34, 135, 90, .12);
-        }
-
-        .microchip__text {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: .7rem;
-            color: var(--deep-900);
-            font-weight: 600;
-        }
-
-        .microcard--mentors {
-            top: 8px;
-            right: 58px;
-        }
-
-        .microcard--sessions {
-            top: 142px;
-            right: 230px;
-        }
-
-        .microcard--uptime {
-            top: 40px;
-            left: 36px;
-        }
-
-        .microchip--pulse {
-            top: 105px;
-            left: 26px;
-            animation-delay: 1.28s, 1.28s;
-        }
-
-        @keyframes chipIn {
-            0% {
-                opacity: 0;
-                transform: translateY(22px) scale(.96);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes microDrift {
-
-            0%,
-            100% {
-                transform: translateY(0) scale(1);
-            }
-
-            50% {
-                transform: translateY(-8px) scale(1);
-            }
-        }
-
-        .ghost-panel--a {
-            width: 200px;
-            height: 120px;
-            top: -12px;
-            right: 40px;
-            z-index: 0;
-            transform: translateY(30px) rotate(1deg);
-            animation: ghostIn 1.2s var(--expo) 1.7s forwards;
-        }
-
-        .ghost-panel--b {
-            width: 150px;
-            height: 90px;
-            bottom: 20px;
-            left: -18px;
-            z-index: 0;
-            transform: translateY(20px) rotate(-2deg);
-            animation: ghostIn 1.2s var(--expo) 1.9s forwards;
-        }
-
-        .ghost-panel--c {
-            width: 120px;
-            height: 70px;
-            top: 180px;
-            right: -36px;
-            z-index: 0;
-            border-style: dashed;
-            transform: translateY(25px) rotate(3deg);
-            animation: ghostIn 1.2s var(--expo) 2.1s forwards;
-        }
-
-        @keyframes ghostIn {
-            to {
-                opacity: .5;
-                transform: translateY(0) rotate(var(--r, 0deg));
-            }
-        }
-
-        /* Ghost panel breathing — independent gentle drift */
-        .ghost-panel.is-drifting {
-            animation: ghostDrift 10s ease-in-out infinite;
-        }
-
-        @keyframes ghostDrift {
-
-            0%,
-            100% {
-                opacity: .5;
-                transform: translateY(0) rotate(var(--r, 0deg));
-            }
-
-            50% {
-                opacity: .5;
-                transform: translateY(-5px) rotate(var(--r, 0deg));
-            }
-        }
-
-        .ghost-panel__bar {
-            position: absolute;
-            left: 14px;
-            right: 14px;
-            height: 4px;
-            border-radius: 2px;
-            background: rgba(11, 29, 58, .04);
-        }
-
-        .ghost-panel__bar:nth-child(1) {
-            top: 22px;
-        }
-
-        .ghost-panel__bar:nth-child(2) {
-            top: 34px;
-            width: 60%;
-        }
-
-        .ghost-panel__bar:nth-child(3) {
-            top: 46px;
-            width: 80%;
-        }
-
-        .ghost-panel__dot {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(11, 29, 58, .06);
-            top: 16px;
-            right: 16px;
-        }
-
-        /* Card typography */
-        .fcard__label {
-            font-size: .63rem;
-            font-weight: 700;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            color: var(--text-faint);
-            margin-bottom: 14px;
-        }
-
-        .fcard__title {
-            font-size: .9rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 2px;
-        }
-
-        .fcard__sub {
-            font-size: .76rem;
-            color: var(--text-secondary);
-        }
-
-        .crs-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 9px 0;
-            border-bottom: 1px solid rgba(225, 229, 236, .4);
-        }
-
-        .crs-row:last-child {
-            border-bottom: none;
-        }
-
-        .crs-name {
-            font-size: .78rem;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .crs-tag {
-            font-size: .58rem;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 6px;
-            letter-spacing: .04em;
-            text-transform: uppercase;
-        }
-
-        .crs-tag--live {
-            background: var(--green-light);
-            color: var(--green);
-        }
-
-        .crs-tag--new {
-            background: rgba(11, 29, 58, .05);
-            color: var(--deep-900);
-        }
-
-        .exam-num {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-weight: 700;
-            font-size: 2.4rem;
-            color: var(--text-primary);
-            line-height: 1;
-            margin-bottom: 2px;
-        }
-
-        .exam-bar {
-            height: 4px;
-            background: rgba(0, 70, 255, .08);
-            border-radius: 3px;
-            margin-top: 14px;
-            overflow: hidden;
-        }
-
-        .exam-bar span {
-            display: block;
-            height: 100%;
-            width: 0;
-            background: var(--primary-blue);
-            border-radius: 3px;
-            animation: fillBar 1.4s var(--expo) 2.1s forwards;
-        }
-
-        @keyframes fillBar {
-            to {
-                width: 82%;
-            }
-        }
-
-        .mentor-av {
-            width: 34px;
-            height: 34px;
-            border-radius: 9px;
-            background: var(--primary-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: .65rem;
-            font-weight: 700;
-            margin-bottom: 11px;
-        }
-
-        .mentor-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: .69rem;
-            color: var(--green);
-            font-weight: 500;
-            margin-top: 8px;
-        }
-
-        .mentor-status::before {
-            content: '';
-            width: 5px;
-            height: 5px;
-            background: var(--green-vivid);
-            border-radius: 50%;
-            animation: blink 2.4s ease infinite;
-        }
-
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: .35;
-                transform: scale(.7);
-            }
-        }
-
-        .stat-num {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-weight: 700;
-            font-size: 1.75rem;
-            color: var(--text-primary);
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: .69rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
 
         /* ============================================================
            MARQUEE
@@ -2413,13 +1968,14 @@
                 min-height: auto;
             }
 
-            .hero__copy {
+            .hero__narrative {
                 flex: 1;
                 max-width: 100%;
                 padding-right: 0;
                 /* ← was 40px, caused text clipping */
                 text-align: center;
                 align-items: center;
+                height: auto;
             }
 
             .hero__visual {
@@ -2451,9 +2007,7 @@
                 margin-top: 0;
             }
 
-            .ghost-panel {
-                display: none;
-            }
+
 
             .vis-shell {
                 display: none;
@@ -2515,10 +2069,11 @@
                 white-space: normal;
             }
 
-            .hero__copy {
+            .hero__narrative {
                 text-align: left;
                 align-items: flex-start;
                 padding-right: 0;
+                height: auto;
             }
 
             .hero__desc {
@@ -2558,7 +2113,8 @@
             }
 
             .hero__visual {
-                height: 300px;
+                height: 100%;
+                /* Ensure full screen on mobile */
             }
 
             .hero__trust {
@@ -2655,15 +2211,7 @@
                 transform: none;
             }
 
-            .fcard {
-                opacity: 1;
-                transform: none;
-            }
 
-            .ghost-panel {
-                opacity: .5;
-                transform: none;
-            }
 
             .vis-shell {
                 opacity: 1;
@@ -2707,13 +2255,7 @@
             }
 
             /* Stop continuous animations */
-            .fcard.is-breathing {
-                animation: none !important;
-            }
 
-            .ghost-panel.is-drifting {
-                animation: none !important;
-            }
 
             .marquee__track {
                 animation: none !important;
@@ -3071,7 +2613,7 @@
 
         .innovation-card {
             flex: 0 0 auto;
-            width: auto;
+            width: 420px;
             height: 280px;
             /* Fixed desktop height */
             border-radius: 20px;
@@ -4346,49 +3888,88 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero__copy">
-            <div class="hero__eyebrow reveal">INDIA'S BESPOKE LEARNING PLATFORM</div>
+        <div class="hero__inner">
+            <div class="hero__visual" id="heroVisual">
+                <canvas id="hero-3d-canvas"></canvas>
 
-            <h1 class="hero__h1" id="heroH1">
-                <span class="ln" data-text="Structured Learning.">Structured Learning.</span>
-                <span class="ln ln-accent" data-text="Real-World Results."><em class="italic">Real-World
-                        Results.</em></span>
 
-            </h1>
-
-            <p class="hero__desc reveal">Structured curriculum, expert mentorship, and real-world
-                projects designed to take you from beginner to professional.</p>
-
-            <div class="hero__actions reveal">
-                <a href="#" class="btn-solid">
-                    Explore All Courses
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                </a>
-                <a href="#" class="btn-text">
-                    View Bootcamps
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                </a>
             </div>
 
-            <div class="hero__trust reveal">
-                <span>Trusted by 12,000+ learners across India</span>
+            <div class="hero__narrative" id="heroNarrative">
+                <!-- Stage 0 -->
+                <div class="hero__stage active" id="stage0">
+                    <div class="hero__eyebrow">THE SINGULARITY</div>
+                    <h1 class="hero__h1">
+                        <span class="clip-text"><span class="delay-1">The world is</span></span><br>
+                        <span class="clip-text"><span class="delay-2">drowning in noise.</span></span>
+                    </h1>
+                </div>
+                <!-- Stage 1 -->
+                <div class="hero__stage" id="stage1">
+                    <h1 class="hero__h1">
+                        <span class="clip-text"><span class="delay-1">We synthesize</span></span><br>
+                        <span class="clip-text"><span class="delay-2">chaos into clarity.</span></span>
+                    </h1>
+                </div>
+                <!-- Stage 2 -->
+                <div class="hero__stage" id="stage2">
+                    <h1 class="hero__h1">
+                        <span class="clip-text"><span class="delay-1">Master the fundamentals</span></span><br>
+                        <span class="clip-text"><span class="delay-2">of tomorrow.</span></span>
+                    </h1>
+                </div>
+                <!-- Stage 3 (Brand Reveal) -->
+                <div class="hero__stage" id="stage3">
+                    <div class="hero__signature-wrapper">
+                        <div class="hero__signature-bg"></div>
+                        <h1 class="hero__signature">
+                            <span class="clip-text"><span class="delay-1" id="scramble-target"><span
+                                        class="dud">∑</span><span class="dud">∞</span><span class="dud">π</span><span
+                                        class="dud">δ</span><span class="dud">λ</span><span class="dud">√</span><span
+                                        class="dud">≈</span><span class="dud">Δ</span><span class="dud">∇</span><span
+                                        class="dud">ħ</span><span class="dud">ψ</span></span></span>
+                        </h1>
+                    </div>
+                </div>
+                <!-- Stage 4 (Final Action) -->
+                <div class="hero__stage" id="stage4">
+                    <!-- Spectacular Background for Final Page -->
+                    <div class="stage4-ambience">
+                        <div class="stage4-grid"></div>
+                        <div class="stage4-glow"></div>
+                    </div>
+
+                    <div class="hero__eyebrow">INDIA'S BESPOKE LEARNING PLATFORM</div>
+                    <h1 class="hero__h1">
+                        <span class="clip-text"><span class="delay-1">Structured Learning.</span></span><br>
+                        <span class="clip-text"><span class="delay-2"
+                                style="color:var(--primary-blue); font-style:italic">Real-World
+                                Results.</span></span>
+                    </h1>
+                    <p class="hero__desc">Structured curriculum, expert mentorship, and real-world
+                        projects designed to take you from beginner to professional.</p>
+                    <div class="hero__actions">
+                        <a href="#" class="btn-solid">
+                            Explore All Courses
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <a href="#" class="btn-text">
+                            View Bootcamps
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="hero__trust">
+                        <span>Trusted by 12,000+ learners across India</span>
+                    </div>
+                </div>
             </div>
         </div>
-
-
-        <div class="hero__visual reveal" id="heroVisual">
-            <!-- 3D Canvas replacement -->
-            <canvas id="hero-3d-canvas"></canvas>
-
-            <!-- We can keep a very subtle data pill if it looks good, but let's clear the clutter first -->
-        </div>
-
     </section>
 
     <!-- Dual Scroll Ticker -->
@@ -5463,132 +5044,6 @@
             }, { passive: true });
 
 
-            /* ══════════════════════════════════════════════════
-               FLOATING CARDS — Breathing after entrance
-            ══════════════════════════════════════════════════ */
-            var fcards = document.querySelectorAll('.fcard');
-
-            fcards.forEach(function (card, idx) {
-                // Listen for the entrance animation to actually end
-                card.addEventListener('animationend', function handler(e) {
-                    // Only react to the entrance animations, not breathing
-                    if (e.animationName === 'breathe') return;
-
-                    // CRITICAL FIX: Lock in the visible state before
-                    // the animation property changes
-                    card.style.opacity = '1';
-
-                    // Small delay to ensure the browser has committed
-                    // the inline opacity before the animation property changes
-                    requestAnimationFrame(function () {
-                        // Stagger breathing phase per card for organic feel
-                        card.style.animationDelay = (idx * 0.5) + 's';
-                        card.classList.add('is-breathing');
-                    });
-
-                    // Remove this listener — only needed once
-                    card.removeEventListener('animationend', handler);
-                });
-            });
-
-            // Ghost panels: start drifting after their entrance animation
-            var ghosts = document.querySelectorAll('.ghost-panel');
-            ghosts.forEach(function (panel) {
-                panel.addEventListener('animationend', function handler(e) {
-                    if (e.animationName === 'ghostDrift') return;
-                    panel.style.opacity = '.5';
-                    requestAnimationFrame(function () {
-                        panel.classList.add('is-drifting');
-                    });
-                    panel.removeEventListener('animationend', handler);
-                });
-            });
-
-
-            /* ══════════════════════════════════════════════════
-               PARALLAX — lerp-smoothed mouse tracking at 60fps
-               Cards shift toward cursor, ghost panels shift
-               opposite for layered depth + anchored dashboard.
-            ══════════════════════════════════════════════════ */
-            var mouseX = 0, mouseY = 0;
-            var currentX = 0, currentY = 0;
-            var parallaxActive = false;
-            var heroDash = document.getElementById('heroDashboard');
-            var dashScrollOffset = 0;
-
-            function lerp(a, b, t) { return a + (b - a) * t; }
-
-            if (heroDash) {
-                window.addEventListener('scroll', function () {
-                    dashScrollOffset = window.scrollY * 0.04;
-                    heroDash.style.transform = 'translate3d(' + (currentX * 6) + 'px,' + ((currentY * 3) - dashScrollOffset) + 'px,0)';
-                }, { passive: true });
-            }
-
-            function tickParallax() {
-                currentX = lerp(currentX, mouseX, 0.07);
-                currentY = lerp(currentY, mouseY, 0.07);
-
-                fcards.forEach(function (card, i) {
-                    var d = (i + 1) * 3.5;
-                    card.style.setProperty('--px', (currentX * d) + 'px');
-                    card.style.setProperty('--py', (currentY * d * 0.3) + 'px');
-                });
-                ghosts.forEach(function (panel, i) {
-                    var d = (i + 1) * 1.8;
-                    panel.style.setProperty('--px', (-currentX * d) + 'px');
-                    panel.style.setProperty('--py', (-currentY * d * 0.25) + 'px');
-                });
-                if (heroDash) {
-                    heroDash.style.transform = 'translate3d(' + (currentX * 6) + 'px,' + ((currentY * 3) - dashScrollOffset) + 'px,0)';
-                }
-
-                if (parallaxActive) requestAnimationFrame(tickParallax);
-            }
-
-            function smoothReturn() {
-                currentX = lerp(currentX, 0, 0.05);
-                currentY = lerp(currentY, 0, 0.05);
-
-                fcards.forEach(function (card, i) {
-                    var d = (i + 1) * 3.5;
-                    card.style.setProperty('--px', (currentX * d) + 'px');
-                    card.style.setProperty('--py', (currentY * d * 0.3) + 'px');
-                });
-                ghosts.forEach(function (panel, i) {
-                    var d = (i + 1) * 1.8;
-                    panel.style.setProperty('--px', (-currentX * d) + 'px');
-                    panel.style.setProperty('--py', (-currentY * d * 0.25) + 'px');
-                });
-                if (heroDash) {
-                    heroDash.style.transform = 'translate3d(' + (currentX * 6) + 'px,' + (currentY * 3) + 'px,0)';
-                }
-
-                if (Math.abs(currentX) > 0.005 || Math.abs(currentY) > 0.005) {
-                    requestAnimationFrame(smoothReturn);
-                } else {
-                    fcards.forEach(function (c) { c.style.setProperty('--px', '0'); c.style.setProperty('--py', '0'); });
-                    ghosts.forEach(function (g) { g.style.setProperty('--px', '0'); g.style.setProperty('--py', '0'); });
-                    if (heroDash) heroDash.style.transform = 'translate3d(0,0,0)';
-                }
-            }
-
-            if (heroVisual) {
-                heroVisual.addEventListener('mouseenter', function () {
-                    parallaxActive = true;
-                    requestAnimationFrame(tickParallax);
-                });
-                heroVisual.addEventListener('mousemove', function (e) {
-                    var rect = heroVisual.getBoundingClientRect();
-                    mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-                    mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-                });
-                heroVisual.addEventListener('mouseleave', function () {
-                    parallaxActive = false;
-                    mouseX = 0; mouseY = 0;
-                    requestAnimationFrame(smoothReturn);
-                });
-            }
 
 
             /* ══════════════════════════════════════════════════
@@ -6016,8 +5471,8 @@
         }
 
         /* ══════════════════════════════════════════════════
-           FLAGSHIP v2: NEURAL CORE (THREE.JS)
-           High-end, Jaw-dropping interactive 3D
+           FLAGSHIP v3: THE KNOWLEDGE SINGULARITY
+           World-first Morphing Symbol Sculpture
         ══════════════════════════════════════════════════ */
         (function () {
             const canvas = document.getElementById('hero-3d-canvas');
@@ -6028,117 +5483,290 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-            camera.position.z = 7;
+            const camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 2000);
+            camera.position.z = 20;
 
-            // --- PREMIUM PARTICLE TEXTURE (CIRCULAR) ---
-            function createCircleTexture() {
-                const c = document.createElement('canvas');
-                c.width = 64; c.height = 64;
-                const ctx = c.getContext('2d');
-                const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-                gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-                gradient.addColorStop(0.2, 'rgba(0, 70, 255, 0.8)');
-                gradient.addColorStop(0.5, 'rgba(0, 70, 255, 0.3)');
-                gradient.addColorStop(1, 'rgba(0, 70, 255, 0)');
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, 64, 64);
-                return new THREE.CanvasTexture(c);
-            }
-            const particleTexture = createCircleTexture();
-
-            // --- NEURAL CORE STRUCTURE ---
-            const nodeCount = 200;
-            const nodes = [];
-            const positions = new Float32Array(nodeCount * 3);
-            const originalPositions = new Float32Array(nodeCount * 3);
-
-            // Generate nodes on a sphere surface for a clear "Form"
-            for (let i = 0; i < nodeCount; i++) {
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos((Math.random() * 2) - 1);
-                const radius = 2.4; // Fixed radius for a solid core silhouette
-
-                const x = radius * Math.sin(phi) * Math.cos(theta);
-                const y = radius * Math.sin(phi) * Math.sin(theta);
-                const z = radius * Math.cos(phi);
-
-                positions[i * 3] = originalPositions[i * 3] = x;
-                positions[i * 3 + 1] = originalPositions[i * 3 + 1] = y;
-                positions[i * 3 + 2] = originalPositions[i * 3 + 2] = z;
-
-                nodes.push({
-                    phase: Math.random() * Math.PI * 2,
-                    speed: 0.5 + Math.random() * 0.5
-                });
-            }
-
-            const nodeGeo = new THREE.BufferGeometry();
-            nodeGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-            const nodeMat = new THREE.PointsMaterial({
-                map: particleTexture,
-                size: 0.18,
-                transparent: true,
-                opacity: 1,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false
+            // Resize Handler for Immersive Experience
+            window.addEventListener('resize', () => {
+                const w = container.offsetWidth;
+                const h = container.offsetHeight;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
             });
 
-            const nodePoints = new THREE.Points(nodeGeo, nodeMat);
-            scene.add(nodePoints);
-
-            // --- SYNAPTIC WEB ---
-            const lineGeo = new THREE.BufferGeometry();
-            const lineMat = new THREE.LineBasicMaterial({
-                color: 0x0046FF,
-                transparent: true,
-                opacity: 0.2,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false
-            });
-            const lineSegments = new THREE.LineSegments(lineGeo, lineMat);
-            scene.add(lineSegments);
-
-            // --- ATMOSPHERIC PULSE ---
-            const dustCount = 3000;
-            const dustPositions = new Float32Array(dustCount * 3);
-            for (let i = 0; i < dustCount * 3; i++) dustPositions[i] = (Math.random() - 0.5) * 15;
-            const dustGeo = new THREE.BufferGeometry();
-            dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
-            const dustMat = new THREE.PointsMaterial({ map: particleTexture, size: 0.04, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
-            const dustPoints = new THREE.Points(dustGeo, dustMat);
-            scene.add(dustPoints);
-
-            // --- MATH SPRITES ---
-            const symbols = ['∫', '∑', '∞', 'π', 'δ', 'λ', '√', '≈', 'f(x)', 'Δ'];
-            const symbolGroup = new THREE.Group();
-            function createLabelTexture(text) {
+            // --- SYMBOL TEXTURE ATLAS ---
+            const symbols = ['∫', '∑', '∞', 'π', 'δ', 'λ', '√', '≈', 'f(x)', 'Δ', '∇', 'ħ', 'ψ', 'Ω', 'μ', 'σ'];
+            function createSymbolAtlas() {
                 const c = document.createElement('canvas');
-                c.width = 256; c.height = 128;
+                c.width = 512; c.height = 512;
                 const ctx = c.getContext('2d');
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 70px EB Garamond, serif';
+                ctx.font = 'bold 80px EB Garamond, serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = '#0046FF';
-                ctx.fillText(text, 128, 64);
+
+                symbols.forEach((s, i) => {
+                    const x = (i % 4) * 128 + 64;
+                    const y = Math.floor(i / 4) * 128 + 64;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#0046FF';
+                    ctx.fillText(s, x, y);
+                });
                 return new THREE.CanvasTexture(c);
             }
-            for (let i = 0; i < 12; i++) {
-                const tex = createLabelTexture(symbols[Math.floor(Math.random() * symbols.length)]);
-                const mat = new THREE.SpriteMaterial({ map: tex, opacity: 0, transparent: true });
-                const sprite = new THREE.Sprite(mat);
-                sprite.position.set((Math.random() - 0.5) * 12, (Math.random() - 0.5) * 12, (Math.random() - 0.5) * 8);
-                sprite.scale.set(0.8, 0.4, 1);
-                sprite.userData = { phase: Math.random() * Math.PI * 2 };
-                symbolGroup.add(sprite);
+            const symbolAtlas = createSymbolAtlas();
+
+            // --- MORPHING GEOMETRY GENERATION ---
+            const count = 8000;
+            const posData = new Float32Array(count * 3);
+            const brainData = new Float32Array(count * 3);
+            const atomData = new Float32Array(count * 3);
+            const bulbData = new Float32Array(count * 3);
+
+            for (let i = 0; i < count; i++) {
+                // 0. INITIAL POSITION (Z-Depth distribution for flythrough)
+                const zSpread = (Math.random() - 0.5) * 60; // Deep 3D field
+                posData[i * 3] = (Math.random() - 0.5) * 20;
+                posData[i * 3 + 1] = (Math.random() - 0.5) * 20;
+                posData[i * 3 + 2] = zSpread;
+
+                // 1. BRAIN (Dual Hemisphere distored Sphere)
+                const phiBrain = Math.random() * Math.PI * 2;
+                const thetaBrain = Math.acos(Math.random() * 2 - 1);
+                const rB = 2.2 + Math.sin(phiBrain * 6) * 0.2 * Math.cos(thetaBrain * 4);
+                const side = Math.random() > 0.5 ? 1 : -1;
+                brainData[i * 3] = rB * Math.sin(thetaBrain) * Math.cos(phiBrain) * 0.8 + (0.5 * side);
+                brainData[i * 3 + 1] = rB * Math.sin(thetaBrain) * Math.sin(phiBrain);
+                brainData[i * 3 + 2] = rB * Math.cos(thetaBrain);
+
+                // 2. ATOM (Nucleus + Rings)
+                if (i < 800) { // Nucleus
+                    const rN = Math.random() * 0.5;
+                    const pN = Math.random() * Math.PI * 2;
+                    const tN = Math.acos(Math.random() * 2 - 1);
+                    atomData[i * 3] = rN * Math.sin(tN) * Math.cos(pN);
+                    atomData[i * 3 + 1] = rN * Math.sin(tN) * Math.sin(pN);
+                    atomData[i * 3 + 2] = -20.0 + rN * Math.cos(tN); // Z-offset for flythrough
+                } else { // Orbitals
+                    const ring = Math.floor(Math.random() * 3);
+                    const angle = Math.random() * Math.PI * 2;
+                    const rA = 3.0;
+                    let x = rA * Math.cos(angle);
+                    let y = rA * Math.sin(angle);
+                    let z = (Math.random() - 0.5) * 0.2;
+                    if (ring === 1) { // Rotate X
+                        let tempZ = z; z = y * Math.sin(Math.PI / 3); y = y * Math.cos(Math.PI / 3);
+                    } else if (ring === 2) { // Rotate Y
+                        let tempX = x; x = x * Math.cos(Math.PI / 3); z = tempX * Math.sin(Math.PI / 3);
+                    }
+                    atomData[i * 3] = x; atomData[i * 3 + 1] = y; atomData[i * 3 + 2] = -20.0 + z; // Z-offset for flythrough
+                }
+
+                // 3. BULB (Teardrop + Base)
+                const phiBulb = Math.random() * Math.PI * 2;
+                const tBulb = Math.random() * Math.PI;
+                if (tBulb < Math.PI * 0.7) { // Top
+                    const rBulb = 2.5 * (1 - Math.cos(tBulb) * 0.2);
+                    bulbData[i * 3] = rBulb * Math.sin(tBulb) * Math.cos(phiBulb);
+                    bulbData[i * 3 + 1] = rBulb * Math.cos(tBulb) + 1;
+                    bulbData[i * 3 + 2] = -42.0 + rBulb * Math.sin(tBulb) * Math.sin(phiBulb); // Z-offset for flythrough
+                } else { // Base
+                    bulbData[i * 3] = (Math.random() - 0.5) * 1.5;
+                    bulbData[i * 3 + 1] = -1.5 - (Math.random() * 1.0);
+                    bulbData[i * 3 + 2] = -42.0 + (Math.random() - 0.5) * 1.5; // Z-offset for flythrough
+                }
+
+                // Set initial random mess
+                posData[i * 3] = (Math.random() - 0.5) * 15;
+                posData[i * 3 + 1] = (Math.random() - 0.5) * 15;
+                posData[i * 3 + 2] = (Math.random() - 0.5) * 15;
             }
-            scene.add(symbolGroup);
+
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(posData, 3));
+            geo.setAttribute('brain', new THREE.BufferAttribute(brainData, 3));
+            geo.setAttribute('atom', new THREE.BufferAttribute(atomData, 3));
+            geo.setAttribute('bulb', new THREE.BufferAttribute(bulbData, 3));
+
+            // Custom Morphing Points Material
+            const mat = new THREE.ShaderMaterial({
+                uniforms: {
+                    uTime: { value: 0 },
+                    uMorph: { value: 0 }, // 0: Brain, 1: Atom, 2: Bulb
+                    uMouse: { value: new THREE.Vector2(0, 0) },
+                    uAtlas: { value: symbolAtlas }
+                },
+                vertexShader: `
+                    uniform float uTime;
+                    uniform float uMorph;
+                    uniform vec2 uMouse;
+                    attribute vec3 brain;
+                    attribute vec3 atom;
+                    attribute vec3 bulb;
+                    varying float vOpacity;
+                    varying float vDist;
+                    varying vec2 vUv;
+                    
+                    void main() {
+                        vec3 target;
+                        if(uMorph < 1.0) target = mix(position, brain, smoothstep(0.0, 1.0, uMorph));
+                        else if(uMorph < 2.0) target = mix(brain, atom, smoothstep(1.0, 2.0, uMorph));
+                        else target = mix(atom, bulb, smoothstep(2.0, 3.0, uMorph));
+                        
+                        // Core Singularity Pulse
+                        float pulse = sin(uTime * 1.5) * 0.1;
+                        target *= 1.0 + pulse * (1.0 - smoothstep(0.0, 4.0, length(target.xy))); // Use XY
+                        
+                        // Breathing
+                        target *= 1.0 + sin(uTime * 0.5 + float(gl_VertexID)) * 0.05;
+                        
+                        // Gravitational Lens (Mouse)
+                        vec2 m = uMouse * 5.0;
+                        float dist = distance(target.xy, m);
+                        float warp = smoothstep(4.0, 0.0, dist) * 1.2;
+                        vec3 finalPos = target;
+                        finalPos.xy += normalize(target.xy - m) * warp;
+                        finalPos.z += warp * 0.5;
+
+                        vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
+                        gl_PointSize = (200.0 / -mvPosition.z) * (1.0 + pulse);
+                        gl_Position = projectionMatrix * mvPosition;
+                        
+                        vDist = length(finalPos.xy); // CYLINDER DISTANCE (Solves Z-clipping and square canvas)
+                        vOpacity = 0.8 + sin(uTime + float(gl_VertexID)) * 0.1; // Boosted for visibility on white
+                        // Select random symbol from atlas
+                        float idx = mod(float(gl_VertexID), 16.0);
+                        vUv = vec2(mod(idx, 4.0), floor(idx / 4.0)) * 0.25;
+                    }
+                `,
+                fragmentShader: `
+                    uniform sampler2D uAtlas;
+                    varying float vOpacity;
+                    varying float vDist;
+                    varying vec2 vUv;
+                    void main() {
+                        vec2 uv = vUv + gl_PointCoord * 0.25;
+                        vec4 tex = texture2D(uAtlas, uv);
+                        if(tex.a < 0.1) discard;
+                        
+                        // Strict Radial Kill-Switch (Cylinder instead of sphere)
+                        float mask = 1.0 - smoothstep(12.0, 22.0, vDist); 
+                        
+                        // Signature Blue Palette - Optimized for White background
+                        // Technical Drawing Style
+                        vec3 color = vec3(0.0, 0.27, 1.0); 
+                        
+                        gl_FragColor = vec4(tex.rgb * color, tex.a * vOpacity * mask);
+                    }
+                `,
+                transparent: true,
+                depthWrite: false,
+                blending: THREE.NormalBlending
+            });
+
+            const singularity = new THREE.Points(geo, mat);
+            scene.add(singularity);
+
+            // --- KNOWLEDGE RAIN ---
+            const rainCount = 1000;
+            const rainGeo = new THREE.BufferGeometry();
+            const rainPos = new Float32Array(rainCount * 3);
+            for (let i = 0; i < rainCount * 3; i += 3) {
+                rainPos[i] = (Math.random() - 0.5) * 15;
+                rainPos[i + 1] = (Math.random() - 0.5) * 15;
+                rainPos[i + 2] = -5 - Math.random() * 5;
+            }
+            rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
+            const rainMat = new THREE.ShaderMaterial({
+                uniforms: {
+                    uAtlas: { value: symbolAtlas },
+                    uOpacity: { value: 0.1 }
+                },
+                vertexShader: `
+                    varying float vY;
+                    varying vec2 vUv;
+                    void main() {
+                        vY = position.y;
+                        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                        gl_PointSize = (100.0 / -mvPosition.z);
+                        gl_Position = projectionMatrix * mvPosition;
+                        float idx = mod(float(gl_VertexID), 16.0);
+                        vUv = vec2(mod(idx, 4.0), floor(idx / 4.0)) * 0.25;
+                    }
+                `,
+                fragmentShader: `
+                    uniform sampler2D uAtlas;
+                    uniform float uOpacity;
+                    varying float vY;
+                    varying vec2 vUv;
+                    void main() {
+                        vec2 uv = vUv + gl_PointCoord * 0.25;
+                        vec4 tex = texture2D(uAtlas, uv);
+                        if(tex.a < 0.1) discard;
+                        // Vertical Fade-out way before reaching the bottom glitch zone
+                        float fade = smoothstep(-6.5, -3.5, vY);
+                        gl_FragColor = vec4(tex.rgb * vec3(0.0, 0.27, 1.0), tex.a * uOpacity * fade);
+                    }
+                `,
+                transparent: true,
+                depthWrite: false,
+                blending: THREE.NormalBlending
+            });
+            const rainPoints = new THREE.Points(rainGeo, rainMat);
+            scene.add(rainPoints);
+
+            // --- ORBITAL DATA RINGS ---
+            const ringCount = 400;
+            const ringGeo = new THREE.BufferGeometry();
+            const ringPos = new Float32Array(ringCount * 3);
+            for (let i = 0; i < ringCount; i++) {
+                const angle = (i / ringCount) * Math.PI * 2;
+                const radius = 5.5 + Math.random() * 0.8;
+                ringPos[i * 3] = Math.cos(angle) * radius;
+                ringPos[i * 3 + 1] = (Math.random() - 0.5) * 0.2;
+                ringPos[i * 3 + 2] = Math.sin(angle) * radius;
+            }
+            ringGeo.setAttribute('position', new THREE.BufferAttribute(ringPos, 3));
+            const ringMat = new THREE.ShaderMaterial({
+                uniforms: {
+                    uTime: { value: 0 },
+                    uAtlas: { value: symbolAtlas }
+                },
+                vertexShader: `
+                    uniform float uTime;
+                    varying float vOpacity;
+                    varying vec2 vUv;
+                    void main() {
+                        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                        gl_PointSize = (120.0 / -mvPosition.z);
+                        gl_Position = projectionMatrix * mvPosition;
+                        vOpacity = 0.2 + sin(uTime * 2.0 + float(gl_VertexID)) * 0.1;
+                        float idx = mod(float(gl_VertexID), 16.0);
+                        vUv = vec2(mod(idx, 4.0), floor(idx / 4.0)) * 0.25;
+                    }
+                `,
+                fragmentShader: `
+                    uniform sampler2D uAtlas;
+                    varying float vOpacity;
+                    varying vec2 vUv;
+                    void main() {
+                        vec2 uv = vUv + gl_PointCoord * 0.25;
+                        vec4 tex = texture2D(uAtlas, uv);
+                        if(tex.a < 0.1) discard;
+                        gl_FragColor = vec4(tex.rgb * vec3(0.0, 0.27, 1.0), tex.a * vOpacity * 3.0);
+                    }
+                `,
+                transparent: true,
+                depthWrite: false,
+                blending: THREE.NormalBlending
+            });
+            const ring1 = new THREE.Points(ringGeo, ringMat);
+            const ring2 = ring1.clone();
+            ring2.rotation.x = Math.PI * 0.4;
+            scene.add(ring1, ring2);
 
             // --- INTERACTION ---
-            let mouse = new THREE.Vector2(0, 0);
             let targetMouse = new THREE.Vector2(0, 0);
             function onMove(e) {
                 const r = container.getBoundingClientRect();
@@ -6156,73 +5784,233 @@
             window.addEventListener('resize', resize);
             resize();
 
-            // --- ANIMATION ENGINE ---
+            // --- ANIMATION ENGINE & SCROLLTELLING ---
             const clock = new THREE.Clock();
+            let scrollProgress = 0;
+
+            // --- TEXT SCRAMBLE SYSTEM ---
+            class TextScramble {
+                constructor(el) {
+                    this.el = el;
+                    this.chars = ['∫', '∑', '∞', 'π', 'δ', 'λ', '√', '≈', 'Δ', '∇', 'ħ', 'ψ'];
+                    this.update = this.update.bind(this);
+                }
+                setText(newText, htmlTemplate) {
+                    const length = newText.length;
+                    const promise = new Promise((resolve) => this.resolve = resolve);
+                    this.queue = [];
+                    for (let i = 0; i < length; i++) {
+                        const to = newText[i] || '';
+                        // Fast snappy scramble: 20 to 40 frames
+                        const end = Math.floor(Math.random() * 20) + 20;
+                        this.queue.push({ to, end });
+                    }
+                    cancelAnimationFrame(this.frameRequest);
+                    this.frame = 0;
+                    this.htmlTemplate = htmlTemplate;
+                    this.update();
+                    return promise;
+                }
+                update() {
+                    let output = '';
+                    let complete = 0;
+                    for (let i = 0, n = this.queue.length; i < n; i++) {
+                        let { to, end, char } = this.queue[i];
+                        if (this.frame >= end) {
+                            complete++;
+                            output += to;
+                        } else {
+                            if (!char || Math.random() < 0.28) {
+                                char = this.randomChar();
+                                this.queue[i].char = char;
+                            }
+                            output += '<span class="dud">' + char + '</span>';
+                        }
+                    }
+
+                    if (complete === this.queue.length && this.htmlTemplate) {
+                        this.el.innerHTML = this.htmlTemplate;
+                    } else {
+                        this.el.innerHTML = output;
+                    }
+
+                    if (complete === this.queue.length) {
+                        this.resolve();
+                    } else {
+                        this.frameRequest = requestAnimationFrame(this.update);
+                        this.frame++;
+                    }
+                }
+                randomChar() {
+                    return this.chars[Math.floor(Math.random() * this.chars.length)];
+                }
+            }
+
+            let brandScrambled = false;
+            const targetEl = document.getElementById('scramble-target');
+            const targetText = "Henceprove.";
+            const targetHtml = "Hence<em>prove</em><span style='color:var(--text-primary)'>.</span>";
+            const scrambler = targetEl ? new TextScramble(targetEl) : null;
+
+            // Only initialize ScrollTrigger if gsap is available
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+
+                ScrollTrigger.create({
+                    trigger: "#home",
+                    start: "top top",
+                    end: "+=500%", // Increased scroll distance for more relaxed, cinematic storytelling pace
+                    pin: true,
+                    scrub: 1, // smooth scrubbing
+                    onUpdate: (self) => {
+                        scrollProgress = self.progress;
+
+                        // --- KINETIC TYPOGRAPHY SYSTEM ---
+                        // Awwwards-grade text entry with blur and slide
+                        const stages = document.querySelectorAll('.hero__stage');
+                        const stageCount = stages.length; // 5 stages
+                        const step = 1.0 / stageCount; // 0.2
+
+                        stages.forEach((stage, index) => {
+                            const start = index * step;
+
+                            // Strictly separated intervals to avoid glitches/overlap
+                            // The end of a stage is slightly before the start of the next one
+                            const end = start + step - 0.02;
+
+                            // Keep the last stage active forever once reached, but strictly hide the others
+                            if (index === stageCount - 1) {
+                                if (scrollProgress >= start) {
+                                    stage.classList.add('active');
+                                } else {
+                                    stage.classList.remove('active');
+                                }
+                            } else {
+                                // For Stages 0, 1, 2, 3: They must ONLY be active within their precise window
+                                if (scrollProgress >= start && scrollProgress < end) {
+                                    stage.classList.add('active');
+
+                                    // Trigger Scramble when entering Stage 3 (Brand Reveal)
+                                    if (index === 3 && !brandScrambled && scrambler) {
+                                        brandScrambled = true;
+                                        // Start scramble immediately
+                                        scrambler.setText(targetText, targetHtml);
+                                    }
+                                } else {
+                                    stage.classList.remove('active');
+
+                                    // Handle scroll-up reset for Stage 3
+                                    if (index === 3 && scrollProgress < start) {
+                                        if (brandScrambled) {
+                                            brandScrambled = false;
+                                            setTimeout(() => {
+                                                if (!stage.classList.contains('active') && targetEl) {
+                                                    targetEl.innerHTML = '<span class="dud">∑</span><span class="dud">∞</span><span class="dud">π</span><span class="dud">δ</span><span class="dud">λ</span><span class="dud">√</span><span class="dud">≈</span><span class="dud">Δ</span><span class="dud">∇</span><span class="dud">ħ</span><span class="dud">ψ</span>';
+                                                }
+                                            }, 600);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+
+                // Crucial fix: Recalculate ScrollTrigger start/end points after pinning the hero!
+                ScrollTrigger.sort();
+                ScrollTrigger.refresh();
+            }
+
             function animate() {
                 requestAnimationFrame(animate);
                 const time = clock.getElapsedTime();
-                mouse.lerp(targetMouse, 0.08);
 
-                const posArr = nodeGeo.attributes.position.array;
-                const lineIndices = [];
-                const maxDist = 2.2; // Proximity threshold for connections
+                mat.uniforms.uTime.value = time;
+                mat.uniforms.uMouse.value.lerp(targetMouse, 0.05);
 
-                for (let i = 0; i < nodeCount; i++) {
-                    const ix = i * 3, iy = i * 3 + 1, iz = i * 3 + 2;
+                // Morph based on scroll progress
+                const targetMorph = scrollProgress * 3;
+                mat.uniforms.uMorph.value = THREE.MathUtils.lerp(mat.uniforms.uMorph.value, targetMorph, 0.05); // Smoother lerp
 
-                    // 1. Organic "Breathing" Pulse
-                    const pulse = 1 + Math.sin(time * 0.8 + nodes[i].phase) * 0.05;
-                    let nx = originalPositions[ix] * pulse;
-                    let ny = originalPositions[iy] * pulse;
-                    let nz = originalPositions[iz] * pulse;
+                // --- CINEMATIC NEURAL FLYTHROUGH ---
+                // Intense dive synchronized with structural Z-offsets to ensure a constant "zoom-in" fly-through feeling
+                const diveProgress = Math.pow(scrollProgress, 1.2);
+                const targetCamZ = 15 - (diveProgress * 55); // Dive from 15 down to -40
+                const targetCamX = Math.sin(time * 0.3) * 2;
+                const targetCamY = Math.cos(time * 0.2) * 2;
 
-                    // 2. High-Inertia Mouse Interaction
-                    const dx = nx - mouse.x * 4;
-                    const dy = ny - mouse.y * 4;
-                    const distToMouse = Math.sqrt(dx * dx + dy * dy);
+                // Acceleration & Damping for "Physical" feel
+                camera.position.z += (targetCamZ - camera.position.z) * 0.05;
+                camera.position.x += (targetCamX - camera.position.x) * 0.04;
+                camera.position.y += (targetCamY - camera.position.y) * 0.04;
 
-                    if (distToMouse < 3) {
-                        const warpFactor = (3 - distToMouse) * 0.15;
-                        nx += dx * warpFactor;
-                        ny += dy * warpFactor;
-                    }
+                // Path-ahead focus
+                camera.lookAt(targetMouse.x * 2.5, targetMouse.y * 2.5, targetCamZ - 15); // Look dynamically ahead of current cam position
 
-                    posArr[ix] = nx;
-                    posArr[iy] = ny;
-                    posArr[iz] = nz;
+                singularity.rotation.y = time * 0.15 + (scrollProgress * Math.PI);
 
-                    // 3. Dynamic Connection Building
-                    for (let j = i + 1; j < nodeCount; j++) {
-                        const jx = posArr[j * 3], jy = posArr[j * 3 + 1], jz = posArr[j * 3 + 2];
-                        const d2 = Math.pow(nx - jx, 2) + Math.pow(ny - jy, 2) + Math.pow(nz - jz, 2);
-                        if (d2 < maxDist) {
-                            lineIndices.push(nx, ny, nz, jx, jy, jz);
-                        }
-                    }
+                // Knowledge Rain Fall (Intensive depth)
+                const rainArr = rainGeo.attributes.position.array;
+                for (let i = 0; i < rainCount * 3; i += 3) {
+                    rainArr[i + 1] -= 0.02; // Fall
+                    if (rainArr[i + 1] < -10) rainArr[i + 1] = 10;
                 }
-                nodeGeo.attributes.position.needsUpdate = true;
+                rainGeo.attributes.position.needsUpdate = true;
 
-                // Efficient Line Segment Rendering
-                lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(lineIndices), 3));
+                // Rotate Orbital Rings (Mechanical detail)
+                ring1.rotation.y = time * 0.2;
+                ring1.rotation.z = time * 0.1;
+                ring2.rotation.y = -time * 0.15;
+                ring2.rotation.x = time * 0.1;
+                ringMat.uniforms.uTime.value = time;
 
-                // Global Motion
-                scene.rotation.y = time * 0.12;
-                scene.rotation.x = Math.sin(time * 0.2) * 0.15;
-
-                // Sprite Animation
-                symbolGroup.children.forEach((s) => {
-                    const p = s.userData.phase + time * 0.4;
-                    s.position.x += Math.cos(p) * 0.005;
-                    s.position.y += Math.sin(p) * 0.005;
-                    s.material.opacity = Math.max(0, 0.25 + Math.sin(time + s.userData.phase) * 0.1);
-                });
-
-                dustPoints.rotation.y -= 0.0003;
                 renderer.render(scene, camera);
             }
             animate();
-        })();
 
+            // --- LOCALIZED SIGNATURE SYMBOL ANIMATION ---
+            function createSignatureParticles() {
+                const bgContainer = document.querySelector('.hero__signature-bg');
+                if (!bgContainer) return;
+
+                const chars = ['∫', '∑', '∞', 'π', 'δ', 'λ', '√', '≈', 'Δ', '∇', 'ħ', 'ψ'];
+                const particleCount = 40;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const span = document.createElement('span');
+                    span.className = 'sig-symbol';
+                    span.innerText = chars[Math.floor(Math.random() * chars.length)];
+
+                    // Random starting positions (spread widely behind text)
+                    const left = Math.random() * 100;
+                    const top = Math.random() * 100;
+
+                    // Random destination transforms for the keyframe
+                    const tx = (Math.random() - 0.5) * 100 + 'px';
+                    const ty = (Math.random() - 0.5) * 100 + 'px';
+                    const tr = (Math.random() - 0.5) * 360 + 'deg';
+                    const ts = 0.5 + Math.random() * 1.5;
+
+                    // Assign CSS variables for animation interpolation
+                    span.style.left = `${left}%`;
+                    span.style.top = `${top}%`;
+                    span.style.setProperty('--tx', tx);
+                    span.style.setProperty('--ty', ty);
+                    span.style.setProperty('--tr', tr);
+                    span.style.setProperty('--ts', ts);
+
+                    // Stagger animation timing
+                    span.style.animationDelay = `${Math.random() * -8}s`;
+                    span.style.animationDuration = `${6 + Math.random() * 4}s`;
+
+                    bgContainer.appendChild(span);
+                }
+            }
+            createSignatureParticles();
+
+
+
+        })();
     </script>
 
 </body>
