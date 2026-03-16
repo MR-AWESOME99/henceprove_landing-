@@ -1,0 +1,64 @@
+
+## 100vh
+770: min-height: 100vh;
+781: height: 100vh;
+1977: min-height: 100vh;
+1982: height: 100vh;
+2067: min-height: 100vh;
+2072: height: 100vh;
+2316: height: 100vh;
+2593: height: 100vh;
+
+## overflow: hidden
+162: overflow: hidden;
+462: overflow: hidden;
+752: overflow: hidden;
+774: overflow: hidden;
+785: overflow: hidden;
+838: overflow: hidden;
+1137: overflow: hidden;
+1211: overflow: hidden;
+1312: overflow: hidden;
+1602: overflow: hidden;
+1692: overflow: hidden;
+2322: overflow: hidden;
+2389: overflow: hidden;
+2600: /* overflow: hidden; Removed to prevent watermark clipping */
+2657: overflow: hidden;
+2876: overflow: hidden;
+3407: overflow: hidden;
+3445: overflow: hidden;
+3609: overflow: hidden;
+3614: overflow: hidden;
+
+## overflow-x: hidden
+135: overflow-x: hidden;
+144: overflow-x: hidden;
+3756: overflow-x: hidden !important;
+
+## ScrollTrigger
+35: <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+4867: // Register ScrollTrigger FIRST — must happen before any ScrollTrigger reference
+4868: gsap.registerPlugin(ScrollTrigger);
+4881: // Sync ScrollTrigger with Lenis (ScrollTrigger is now registered before this runs)
+4882: lenis.on('scroll', ScrollTrigger.update);
+5212: // Register ScrollTrigger if not already
+5213: if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+5214: // ScrollTrigger already registered at top-level — no duplicate needed
+5348: // Wait for document fonts then build ScrollTrigger
+5537: if (window.ScrollTrigger) {
+5538: ScrollTrigger.refresh();
+5905: if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+5906: gsap.registerPlugin(ScrollTrigger);
+5912: ScrollTrigger.getAll().forEach(t => t.kill());
+5918: ScrollTrigger.create({
+5968: ScrollTrigger.sort();
+5969: ScrollTrigger.refresh();
+
+## matchMedia
+5224: const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+## pin:
+5247: pin: true,
+5359: pin: sticky,
+5922: pin: true,

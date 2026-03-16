@@ -1,0 +1,32 @@
+Line 162: overflow: hidden; | Class: none | ID: none
+Line 462: overflow: hidden; | Class: none | ID: none
+Line 752: overflow: hidden; | Class: none | ID: none
+Line 770: min-height: 100vh; | Class: none | ID: none
+Line 774: overflow: hidden; | Class: none | ID: none
+Line 781: height: 100vh; | Class: none | ID: none
+Line 785: overflow: hidden; | Class: none | ID: none
+Line 838: overflow: hidden; | Class: none | ID: none
+Line 1137: overflow: hidden; | Class: none | ID: none
+Line 1211: overflow: hidden; | Class: none | ID: none
+Line 1312: overflow: hidden; | Class: none | ID: none
+Line 1602: overflow: hidden; | Class: none | ID: none
+Line 1692: overflow: hidden; | Class: none | ID: none
+Line 1977: min-height: 100vh; | Class: none | ID: none
+Line 1982: height: 100vh; | Class: none | ID: none
+Line 2067: min-height: 100vh; | Class: none | ID: none
+Line 2072: height: 100vh; | Class: none | ID: none
+Line 2316: height: 100vh; | Class: none | ID: none
+Line 2322: overflow: hidden; | Class: none | ID: none
+Line 2389: overflow: hidden; | Class: none | ID: none
+Line 2593: height: 100vh; | Class: none | ID: none
+Line 2600: /* overflow: hidden; Removed to prevent watermark clipping */ | Class: none | ID: none
+Line 2657: overflow: hidden; | Class: none | ID: none
+Line 2876: overflow: hidden; | Class: none | ID: none
+Line 3407: overflow: hidden; | Class: none | ID: none
+Line 3445: overflow: hidden; | Class: none | ID: none
+Line 3609: overflow: hidden; | Class: none | ID: none
+Line 3614: overflow: hidden; | Class: none | ID: none
+Line 4077: style="background:linear-gradient(130deg,#0D1B3E 0%,#0a1628 50%,#001044 100%);position:relative;overflow:hidden"> | Class: class="bc-slide" | ID: id="bcTrack"
+Line 4135: style="background:linear-gradient(145deg,#050b1f 0%,#060d24 40%,#0c0035 100%);position:relative;overflow:hidden"> | Class: class="bc-slide" | ID: none
+Line 4179: style="margin-top:10px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden"> | Class: none | ID: none
+Line 4192: style="background:linear-gradient(130deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);position:relative;overflow:hidden"> | Class: class="bc-slide" | ID: none
