@@ -790,43 +790,72 @@
         .hero {
             position: relative;
             width: 100%;
-            min-height: 100vh;
-            min-height: 100svh;
-            /* Mobile-safe viewport unit */
+            min-height: 80vh;
+            min-height: 80svh;
             background: #ffffff;
-            overflow: hidden;
-            display: block;
-            z-index: 10;
-        }
-
-        .hero__inner {
-            width: 100%;
-            height: 100vh;
-            height: 100svh;
-            /* Mobile-safe viewport unit */
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero__visual {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .hero__narrative {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
             z-index: 10;
-            pointer-events: none;
+            padding: 140px 0 100px;
+        }
+
+        .hero__container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero__content {
+            max-width: 800px;
+            margin: 0 auto;
             text-align: center;
+        }
+
+        .hero__eyebrow {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.8s var(--expo);
+        }
+
+        .hero.active .hero__eyebrow {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero__desc,
+        .hero__actions,
+        .hero__trust {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s var(--expo);
+        }
+
+        .hero.active .hero__desc {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.2s;
+        }
+
+        .hero.active .hero__actions {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.35s;
+        }
+
+        .hero.active .hero__trust {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.5s;
         }
 
         .hero__stage {
@@ -873,7 +902,8 @@
                 opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .hero__stage.active .clip-text>span {
+        .reveal.active .clip-text>span,
+        .hero.active .clip-text>span {
             transform: translateY(0);
             opacity: 1;
         }
@@ -1010,15 +1040,6 @@
             100% {
                 transform: translate(0);
             }
-        }
-
-        #hero-3d-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
         }
 
         .hero__desc {
@@ -2640,167 +2661,6 @@
         }
 
 
-        /* ============================================================
-           INNOVATION SECTION
-        ============================================================ */
-        .innovation-section {
-            position: relative;
-            width: 100%;
-        }
-
-        .innovation-sticky {
-            position: relative;
-            height: 100vh;
-            height: 100svh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            /* Vertically center the track */
-            justify-content: center;
-            /* overflow: hidden; Removed to prevent watermark clipping */
-            background: transparent;
-        }
-
-        .innovation-watermark {
-            position: absolute;
-            top: 35%;
-            /* Shifted up to be "half-visible" at the top */
-            left: 8vw;
-            /* Aligned to left edge for readability */
-            transform: translateY(-50%);
-            /* Removed horizontal centering */
-            width: max-content;
-            /* Ensure full word width is calculated */
-            font-family: 'Inter', system-ui, sans-serif;
-            font-size: 40vw;
-            /* Huge scale matching reference screenshot */
-            font-weight: 950;
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
-            color: var(--text-primary, #ffffff);
-            opacity: 0.15;
-            /* Subtle but clear prominence */
-            white-space: nowrap;
-            pointer-events: none;
-            user-select: none;
-            z-index: 0;
-            line-height: 1;
-            will-change: transform;
-        }
-
-        .innovation-track-wrapper {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            will-change: transform;
-        }
-
-        .innovation-track {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 60px;
-            /* Fixed generous gap */
-            padding: 0 40vw;
-            /* Padding to ensure first/last cards can center */
-            width: max-content;
-            align-items: center;
-        }
-
-        .innovation-card {
-            flex: 0 0 auto;
-            width: 420px;
-            height: 280px;
-            /* Fixed desktop height */
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.04);
-            overflow: hidden;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
-            /* transition removed to avoid GSAP conflict */
-            will-change: transform;
-        }
-
-        /* Subtle rotation for that floating feel */
-        .innovation-card:nth-child(even) {
-            transform: rotate(2deg);
-        }
-
-        .innovation-card:nth-child(odd) {
-            transform: rotate(-1.5deg);
-        }
-
-        .innovation-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            pointer-events: none;
-        }
-
-        .innovation-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            pointer-events: none;
-        }
-
-        /* Mobile: innovation section falls back to natural horizontal scroll */
-        @media (max-width: 767px) {
-            .innovation-section {
-                /* Remove any pinning height — natural document flow */
-                height: auto !important;
-                overflow-x: hidden !important;
-                /* Critical: Prevent watermark bleed */
-                width: 100% !important;
-                max-width: 100% !important;
-                isolation: isolate;
-                /* Force new stacking context */
-            }
-
-            .innovation-sticky {
-                height: auto;
-                min-height: 0;
-                overflow-x: auto;
-                overflow-y: visible;
-                -webkit-overflow-scrolling: touch;
-                align-items: flex-start;
-                padding: 32px 0;
-            }
-
-            .innovation-track {
-                padding: 0 20px;
-                gap: 16px;
-            }
-
-            .innovation-card {
-                width: 260px;
-                min-height: 180px;
-                height: auto;
-                /* Prevent text clipping */
-            }
-
-            .innovation-watermark {
-                display: block !important;
-                font-size: 22vw !important;
-                /* Slightly smaller for better fit */
-                top: 40% !important;
-                /* Center vertically relative to cards */
-                left: 50% !important;
-                transform: translate(-50%, -50%) !important;
-                width: 100% !important;
-                text-align: center !important;
-                opacity: 0.16 !important;
-                /* Increased for readability */
-                z-index: -1 !important;
-                overflow: hidden !important;
-                pointer-events: none;
-                white-space: nowrap;
-                color: var(--text-primary);
-                filter: blur(1px);
-                /* Subtle depth effect */
-            }
-        }
 
         /* ============================================================
            GOVERNMENT RECOGNITION SECTION
@@ -3828,8 +3688,7 @@
             /* 1. Mobile viewport height correction */
             .hero,
             .hero__inner,
-            .czs-sticky,
-            .innovation-sticky {
+            .czs-sticky {
                 min-height: 100svh !important;
                 height: auto !important;
             }
@@ -3839,12 +3698,6 @@
             .hero__inner,
             .czs-sticky {
                 overflow-x: hidden !important;
-                overflow-y: visible !important;
-            }
-
-            /* Enable native horizontal scrolling fallback for innovation section on mobile */
-            .innovation-track-wrapper {
-                overflow-x: auto !important;
                 overflow-y: visible !important;
             }
 
@@ -4403,144 +4256,7 @@
         }
 
 
-        /* ============================================================
-           INNOVATION SECTION
-        ============================================================ */
-        .innovation-section {
-            position: relative;
-            width: 100%;
-        }
 
-        .innovation-sticky {
-            position: relative;
-            height: 100vh;
-            height: 100svh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            /* Vertically center the track */
-            justify-content: center;
-            /* overflow: hidden; Removed to prevent watermark clipping */
-            background: transparent;
-        }
-
-        .innovation-watermark {
-            position: absolute;
-            top: 35%;
-            /* Shifted up to be "half-visible" at the top */
-            left: 8vw;
-            /* Aligned to left edge for readability */
-            transform: translateY(-50%);
-            /* Removed horizontal centering */
-            width: max-content;
-            /* Ensure full word width is calculated */
-            font-family: 'Inter', system-ui, sans-serif;
-            font-size: 40vw;
-            /* Huge scale matching reference screenshot */
-            font-weight: 950;
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
-            color: var(--text-primary, #ffffff);
-            opacity: 0.15;
-            /* Subtle but clear prominence */
-            white-space: nowrap;
-            pointer-events: none;
-            user-select: none;
-            z-index: 0;
-            line-height: 1;
-            will-change: transform;
-        }
-
-        .innovation-track-wrapper {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            will-change: transform;
-        }
-
-        .innovation-track {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 60px;
-            /* Fixed generous gap */
-            padding: 0 40vw;
-            /* Padding to ensure first/last cards can center */
-            width: max-content;
-            align-items: center;
-        }
-
-        .innovation-card {
-            flex: 0 0 auto;
-            width: 420px;
-            height: 280px;
-            /* Fixed desktop height */
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.04);
-            overflow: hidden;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
-            /* transition removed to avoid GSAP conflict */
-            will-change: transform;
-        }
-
-        /* Subtle rotation for that floating feel */
-        .innovation-card:nth-child(even) {
-            transform: rotate(2deg);
-        }
-
-        .innovation-card:nth-child(odd) {
-            transform: rotate(-1.5deg);
-        }
-
-        .innovation-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            pointer-events: none;
-        }
-
-        .innovation-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            pointer-events: none;
-        }
-
-        /* Mobile: innovation section falls back to natural horizontal scroll */
-        @media (max-width: 767px) {
-            .innovation-section {
-                /* Remove any pinning height — natural document flow */
-                height: auto !important;
-            }
-
-            .innovation-sticky {
-                height: auto;
-                min-height: 0;
-                overflow-x: auto;
-                overflow-y: visible;
-                -webkit-overflow-scrolling: touch;
-                align-items: flex-start;
-                padding: 32px 0;
-            }
-
-            .innovation-track {
-                padding: 0 20px;
-                gap: 16px;
-            }
-
-            .innovation-card {
-                width: 260px;
-                min-height: 180px;
-                height: auto;
-                /* Prevent text clipping */
-            }
-
-            .innovation-watermark {
-                display: none;
-            }
-        }
 
         /* ============================================================
            GOVERNMENT RECOGNITION SECTION
@@ -5558,36 +5274,8 @@
             }
         }
 
-        /* ============================================================
-           MOBILE RESPONSIVENESS OVERRIDES
-           Strictly overrides layout constraints that break on mobile
-           Without affecting JS/Animation calculations
-        ============================================================ */
+
         @media (max-width: 768px) {
-
-            /* 1. Mobile viewport height correction */
-            .hero,
-            .hero__inner,
-            .czs-sticky,
-            .innovation-sticky {
-                min-height: 100svh !important;
-                height: auto !important;
-            }
-
-            /* 2 & 3. Prevent vertical clipping on layout wrappers */
-            .hero,
-            .hero__inner,
-            .czs-sticky {
-                overflow-x: hidden !important;
-                overflow-y: visible !important;
-            }
-
-            /* Enable native horizontal scrolling fallback for innovation section on mobile */
-            .innovation-track-wrapper {
-                overflow-x: auto !important;
-                overflow-y: visible !important;
-            }
-
             /* 4. Header & Navbar Mobile Fixes - High Fidelity Refinements */
             .header-stack {
                 width: 100% !important;
@@ -5948,87 +5636,35 @@
     </div>
 
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero__inner">
-            <div class="hero__visual" id="heroVisual">
-                <canvas id="hero-3d-canvas"></canvas>
-
-
-            </div>
-
-            <div class="hero__narrative" id="heroNarrative">
-                <!-- Stage 0 -->
-                <div class="hero__stage active" id="stage0">
-                    <div class="hero__eyebrow">THE SINGULARITY</div>
-                    <h2 class="hero__h1">
-                        <span class="clip-text"><span class="delay-1">The world is</span></span><br>
-                        <span class="clip-text"><span class="delay-2">drowning in noise.</span></span>
-                    </h2>
+    <!-- ========== MINIMIZED HERO SECTION ========== -->
+    <section class="hero reveal" id="home">
+        <div class="hero__container">
+            <div class="hero__content">
+                <div class="hero__eyebrow">INDIA'S BESPOKE LEARNING PLATFORM</div>
+                <h1 class="hero__h1">
+                    <span class="clip-text"><span class="delay-1">Structured Learning.</span></span><br>
+                    <span class="clip-text"><span class="delay-2" style="color:var(--primary-blue); font-style:italic">Real-World Results.</span></span>
+                </h1>
+                <p class="hero__desc">Structured curriculum, expert mentorship, and real-world
+                    projects designed to take you from beginner to professional.</p>
+                <div class="hero__actions">
+                    <button type="button" class="btn-solid">
+                        Explore All Courses
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-text">
+                        View Bootcamps
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
                 </div>
-                <!-- Stage 1 -->
-                <div class="hero__stage" id="stage1">
-                    <h2 class="hero__h1">
-                        <span class="clip-text"><span class="delay-1">We synthesize</span></span><br>
-                        <span class="clip-text"><span class="delay-2">chaos into clarity.</span></span>
-                    </h2>
-                </div>
-                <!-- Stage 2 -->
-                <div class="hero__stage" id="stage2">
-                    <h2 class="hero__h1">
-                        <span class="clip-text"><span class="delay-1">Master the fundamentals</span></span><br>
-                        <span class="clip-text"><span class="delay-2">of tomorrow.</span></span>
-                    </h2>
-                </div>
-                <!-- Stage 3 (Brand Reveal) -->
-                <div class="hero__stage" id="stage3">
-                    <div class="hero__signature-wrapper">
-                        <div class="hero__signature-bg"></div>
-                        <h2 class="hero__signature">
-                            <span class="clip-text"><span class="delay-1" id="scramble-target"><span
-                                        class="dud">∑</span><span class="dud">∞</span><span class="dud">π</span><span
-                                        class="dud">δ</span><span class="dud">λ</span><span class="dud">√</span><span
-                                        class="dud">≈</span><span class="dud">Δ</span><span class="dud">∇</span><span
-                                        class="dud">ħ</span><span class="dud">ψ</span></span></span>
-                        </h2>
-                    </div>
-                </div>
-                <!-- Stage 4 (Final Action) -->
-                <div class="hero__stage" id="stage4">
-                    <!-- Spectacular Background for Final Page -->
-                    <div class="stage4-ambience">
-                        <div class="stage4-grid"></div>
-                        <div class="stage4-glow"></div>
-                    </div>
-
-                    <div class="hero__eyebrow">INDIA'S BESPOKE LEARNING PLATFORM</div>
-                    <h1 class="hero__h1">
-                        <span class="clip-text"><span class="delay-1">Structured Learning.</span></span><br>
-                        <span class="clip-text"><span class="delay-2"
-                                style="color:var(--primary-blue); font-style:italic">Real-World
-                                Results.</span></span>
-                    </h1>
-                    <p class="hero__desc">Structured curriculum, expert mentorship, and real-world
-                        projects designed to take you from beginner to professional.</p>
-                    <div class="hero__actions">
-                        <button type="button" class="btn-solid">
-                            Explore All Courses
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                        <button type="button" class="btn-text">
-                            View Bootcamps
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="hero__trust">
-                        <span>Trusted by 12,000+ learners across India</span>
-                    </div>
+                <div class="hero__trust">
+                    <span>Trusted by 12,000+ learners across India</span>
                 </div>
             </div>
         </div>
@@ -6275,23 +5911,6 @@
         </div>
     </section>
 
-    <!-- ========== CINEMATIC SCROLL-ZOOM SECTION ========== -->
-
-    <section id="cinematic-zoom-section">
-        <div class="czs-sticky" id="czsSticky">
-            <!-- White fade-out overlay applied by GSAP at end of pin -->
-            <div class="czs-transition" id="czsTransition"></div>
-            <h2 class="czs-heading" id="czsHeading">
-                <span class="czs-line">
-                    <span class="czs-word">WHERE</span>&nbsp;<span class="czs-word">INTELLIGENCE</span>
-                </span><br>
-                <span class="czs-line">
-                    <span class="czs-word">MEETS</span>&nbsp;<span class="czs-word" id="czsWordEducation">E<span
-                            class="czs-focal" id="zoom-target">D</span>UCATION</span>
-                </span>
-            </h2>
-        </div>
-    </section>
 
     <!-- NEW SECTION: Divisions - ClickUp Style Grid -->
     <section class="divisions" id="divisions">
@@ -6410,9 +6029,7 @@
                     <div class="div-l-badge div-l-badge--green">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2.5">
-                            <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <path d="M6 12v5c3 3 9 3 12 0v-5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                         </svg>
                     </div>
                     <h3 class="div-l-title">Education</h3>
@@ -6421,56 +6038,6 @@
         </div>
     </section>
 
-    <!-- ========== INNOVATION SECTION ========== -->
-    <section class="innovation-section" id="innovation-section">
-        <div class="innovation-sticky">
-            <span class="innovation-watermark">INNOVATION</span>
-            <div class="innovation-track-wrapper">
-                <div class="innovation-track">
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop"
-                            alt="AI Technology Core">
-                    </div>
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop"
-                            alt="AI Coding Lab">
-                    </div>
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop"
-                            alt="ML Analytics Dashboard">
-                    </div>
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=800&auto=format&fit=crop"
-                            alt="AI Robotics Automation">
-                    </div>
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop"
-                            alt="Enterprise System Architecture">
-                    </div>
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop"
-                            alt="Focused Exam Preparation">
-                    </div>
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=800&auto=format&fit=crop"
-                            alt="Modern Study Environment">
-                    </div>
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop"
-                            alt="Professional Mentorship">
-                    </div>
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800&auto=format&fit=crop"
-                            alt="Collab Learning Certificate">
-                    </div>
-                    <div class="innovation-card">
-                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=800&auto=format&fit=crop"
-                            alt="Corporate Training Session">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Government Recognition Section -->
     <section class="gov-rec" id="govRec">
@@ -7214,227 +6781,7 @@
 
         })();
 
-        /* ══════════════════════════════════════════════════
-           INNOVATION SECTION — Horizontal Scroll Logic
-        ══════════════════════════════════════════════════ */
-        (function () {
-            // Register ScrollTrigger if not already
-            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-                const section = document.querySelector('.innovation-section');
-                const track = document.querySelector('.innovation-track');
-                const cards = document.querySelectorAll('.innovation-card');
-                const watermark = document.querySelector('.innovation-watermark');
 
-                if (!section || !track) return;
-
-                const mm = gsap.matchMedia();
-                let mainTl;
-
-                mm.add("(min-width: 769px)", () => {
-                    // Dynamic scroll distance
-                    const getScrollDistance = () => track.scrollWidth - window.innerWidth;
-
-                    // Set initial watermark state
-                    gsap.set(watermark, { xPercent: 0, yPercent: -50, x: 0 });
-
-                    // Main Timeline
-                    mainTl = gsap.timeline({
-                        scrollTrigger: {
-                            trigger: section,
-                            start: "top top",
-                            end: () => "+=" + getScrollDistance(),
-                            scrub: 1.2,
-                            pin: true,
-                            anticipatePin: 1,
-                            invalidateOnRefresh: true
-                        }
-                    });
-
-                    // Set initial state for individual cards (Rising & Scaling)
-                    gsap.set(cards, {
-                        opacity: 0,
-                        y: 100,
-                        scale: 0.9
-                    });
-
-                    // Premium Staggered Entrance
-                    mainTl.to(cards, {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        duration: 0.5,
-                        stagger: {
-                            each: 0.05,
-                            ease: "power2.out"
-                        },
-                        ease: "back.out(1.2)"
-                    }, 0);
-
-                    // Horizontal movement
-                    mainTl.to(track, {
-                        x: () => -getScrollDistance(),
-                        ease: "none",
-                        duration: 0.6
-                    }, 0.4);
-
-                    // Watermark Parallax
-                    if (watermark) {
-                        mainTl.to(watermark, {
-                            x: () => -getScrollDistance() * 0.8,
-                            ease: "none",
-                            duration: 1
-                        }, 0);
-                    }
-
-                    // Individual Card Animations
-                    cards.forEach((card, i) => {
-                        const rot = (i % 2 === 0) ? 2.5 : -1.8;
-
-                        gsap.fromTo(card, {
-                            rotateZ: rot,
-                            y: 10
-                        }, {
-                            rotateZ: -rot * 0.4,
-                            y: -10,
-                            ease: "sine.inOut",
-                            scrollTrigger: {
-                                trigger: card,
-                                containerAnimation: mainTl,
-                                start: "left right",
-                                end: "right left",
-                                scrub: true
-                            }
-                        });
-                    });
-
-                    return () => {
-                        if (mainTl) mainTl.kill();
-                    };
-                });
-
-                mm.add("(max-width: 768px)", () => {
-                    // Reset mobile state: allow cards to be visible and flow naturally
-                    gsap.set(cards, { opacity: 1, y: 0, scale: 1, rotateZ: 0 });
-                    gsap.set(track, { x: 0 });
-                    if (watermark) {
-                        gsap.set(watermark, { x: 0, opacity: 0.18 }); // Reset and set improved readability opacity
-                    }
-
-                    // Lightweight Parallax for Mobile (Native Scroll)
-                    const stickyContainer = section.querySelector('.innovation-sticky');
-                    if (stickyContainer && watermark) {
-                        const handleMobileScroll = () => {
-                            const scrollLeft = stickyContainer.scrollLeft;
-                            // Move watermark at 60% speed of the scroll for parallax
-                            gsap.set(watermark, { x: -scrollLeft * 0.4 });
-                        };
-
-                        stickyContainer.addEventListener('scroll', handleMobileScroll, { passive: true });
-
-                        // Cleanup listener on breakpoint change
-                        return () => {
-                            stickyContainer.removeEventListener('scroll', handleMobileScroll);
-                        };
-                    }
-
-                    // Kill any stale triggers related to this section
-                    ScrollTrigger.getAll().forEach(t => {
-                        if (t.trigger === section || (mainTl && t.animation === mainTl)) {
-                            t.kill();
-                        }
-                    });
-                });
-            }
-        })();
-
-        /* ══════════════════════════════════════════════════
-           CINEMATIC SCROLL-ZOOM — Lenis-style GSAP pin + word zoom
-           Scrolls into the 'D' of EDUCATION, black bg → white transition
-        ══════════════════════════════════════════════════ */
-        (function () {
-            var section = document.getElementById('cinematic-zoom-section');
-            var sticky = document.getElementById('czsSticky');
-            var heading = document.getElementById('czsHeading');
-            var focal = document.getElementById('zoom-target');          // 'D' in EDUCATION
-            var overlay = document.getElementById('czsTransition');     // white fade overlay
-            if (!section || !heading) return;
-
-            // ─────────────────────────────────────────────
-            // Compute transform-origin so the scale zooms
-            // precisely into the centre of the focal letter.
-            // We do this after fonts are loaded to get correct rects.
-            // ─────────────────────────────────────────────
-            function getOrigin() {
-                if (window.innerWidth <= 600 || !focal) return '50% 50%';
-
-                var headingRect = heading.getBoundingClientRect();
-                var focalRect = focal.getBoundingClientRect();
-
-                // Aim at the LEFT STROKE (backbone/stem) of the 'D'.
-                // The geometric centre of 'D' is its hollow counter —
-                // 20% from the left edge of the glyph lands on solid ink.
-                var targetX = focalRect.left + focalRect.width * 0.2;
-                var targetY = focalRect.top + focalRect.height * 0.5;
-
-                var ox = (targetX - headingRect.left) / headingRect.width * 100;
-                var oy = (targetY - headingRect.top) / headingRect.height * 100;
-
-                return ox.toFixed(2) + '% ' + oy.toFixed(2) + '%';
-            }
-
-            // ─────────────────────────────────────────────
-            // Wait for document fonts then build ScrollTrigger
-            // ─────────────────────────────────────────────
-            function buildAnim() {
-                heading.style.transformOrigin = getOrigin();
-
-                var tl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: section,
-                        start: 'top top',
-                        end: 'bottom bottom',
-                        scrub: true,
-                        pin: sticky,
-                        anticipatePin: 1,
-                        invalidateOnRefresh: true,
-                        onRefresh: function () {
-                            heading.style.transformOrigin = getOrigin();
-                        }
-                    }
-                });
-
-                // Phase 1 (0 → 15%): Fade in + establish baseline
-                tl.fromTo(heading,
-                    { opacity: 0, scale: 0.3 },
-                    { opacity: 1, scale: 1, ease: 'power1.out', duration: 0.15 }
-                );
-
-                // Phase 2: Deep zoom rush into the 'D' span specifically
-                // Animate ONLY the zoom-target if on mobile for stability, or heading scaling correctly.
-                const zoomTarget = (window.innerWidth < 768) ? focal : heading;
-
-                tl.to(zoomTarget,
-                    { scale: 80, ease: 'power3.in', duration: 0.77 }
-                );
-
-                // Phase 3 (92% → 100%): White overlay fade-in to mask edges
-                if (overlay) {
-                    tl.to(overlay,
-                        { opacity: 1, ease: 'none', duration: 0.08 },
-                        0.92
-                    );
-                }
-
-                // Final safety: Hide text once transition is complete
-                tl.to(heading, { opacity: 0, duration: 0.01 }, 1.0);
-            }
-
-            if (document.fonts && document.fonts.ready) {
-                document.fonts.ready.then(buildAnim);
-            } else {
-                window.addEventListener('load', buildAnim);
-            }
-        }());
 
 
 
@@ -7513,633 +6860,6 @@
             });
         }
 
-        /* ══════════════════════════════════════════════════
-           FLAGSHIP v3: THE KNOWLEDGE SINGULARITY
-           World-first Morphing Symbol Sculpture
-           — Performance Optimized & Fully Responsive —
-        ══════════════════════════════════════════════════ */
-        (function () {
-            const canvas = document.getElementById('hero-3d-canvas');
-            if (!canvas) return;
-
-            const container = document.getElementById('heroVisual');
-
-            // ═══ DEVICE TIER DETECTION ═══
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            const screenW = window.innerWidth;
-
-            let TIER = 'desktop'; // default
-            if (screenW < 768) TIER = 'mobile';
-            else if (screenW <= 1024) TIER = 'tablet';
-
-            const TIER_CONFIG = {
-                mobile: { particles: 4800, rain: 500, rings: false, mouseWarp: false, pointSizeFactor: 0.8, signatureParticles: 30 },
-                tablet: { particles: 6000, rain: 800, rings: 250, mouseWarp: true, pointSizeFactor: 0.9, signatureParticles: 50 },
-                desktop: { particles: 8000, rain: 1000, rings: 400, mouseWarp: true, pointSizeFactor: 1.0, signatureParticles: 80 }
-            };
-
-            let config = TIER_CONFIG[TIER];
-
-            // ═══ RENDERER SETUP ═══
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: TIER === 'desktop', alpha: true });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, TIER === 'mobile' ? 1.5 : 2));
-
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 2000);
-            camera.position.z = 20;
-
-            // ═══ RESPONSIVE CAMERA ═══
-            function updateCameraForAspect() {
-                const aspect = container.offsetWidth / container.offsetHeight;
-                // Widen FOV on portrait/mobile so particles aren't clipped
-                if (aspect < 0.8) camera.fov = 60;
-                else if (aspect < 1.2) camera.fov = 50;
-                else camera.fov = 45;
-                camera.updateProjectionMatrix();
-            }
-
-            // ═══ DEBOUNCED RESIZE ═══
-            let resizeTimer;
-            function onResize() {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    // Responsive sizing: use window.inner directly on mobile per request
-                    if (window.innerWidth < 768) {
-                        renderer.setSize(window.innerWidth, window.innerHeight);
-                        camera.aspect = window.innerWidth / window.innerHeight;
-                    } else {
-                        const w = container.offsetWidth, h = container.offsetHeight;
-                        renderer.setSize(w, h);
-                        camera.aspect = w / h;
-                    }
-                    camera.updateProjectionMatrix();
-                    updateCameraForAspect();
-
-                    // ═══ CRITICAL: REFRESH SCROLLTRIGGER ═══
-                    if (window.ScrollTrigger) {
-                        ScrollTrigger.refresh();
-                    }
-                }, 150);
-            }
-            window.addEventListener('resize', onResize);
-
-            // Initial size
-            (function initSize() {
-                if (window.innerWidth < 768) {
-                    renderer.setSize(window.innerWidth, window.innerHeight);
-                    camera.aspect = window.innerWidth / window.innerHeight;
-                } else {
-                    const w = container.offsetWidth, h = container.offsetHeight;
-                    renderer.setSize(w, h);
-                    camera.aspect = w / h;
-                }
-                updateCameraForAspect();
-            })();
-
-            // ═══ SYMBOL TEXTURE ATLAS ═══
-            const symbols = ['∫', '∑', '∞', 'π', 'δ', 'λ', '√', '≈', 'f(x)', 'Δ', '∇', 'ħ', 'ψ', 'Ω', 'μ', 'σ'];
-            function createSymbolAtlas() {
-                const c = document.createElement('canvas');
-                c.width = 512; c.height = 512;
-                const ctx = c.getContext('2d');
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 80px EB Garamond, serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-
-                symbols.forEach((s, i) => {
-                    const x = (i % 4) * 128 + 64;
-                    const y = Math.floor(i / 4) * 128 + 64;
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = '#0046FF';
-                    ctx.fillText(s, x, y);
-                });
-                return new THREE.CanvasTexture(c);
-            }
-            const symbolAtlas = createSymbolAtlas();
-
-            // ═══ MORPHING GEOMETRY ═══
-            const count = config.particles;
-            const posData = new Float32Array(count * 3);
-            const brainData = new Float32Array(count * 3);
-            const atomData = new Float32Array(count * 3);
-            const bulbData = new Float32Array(count * 3);
-
-            for (let i = 0; i < count; i++) {
-                // INITIAL POSITION
-                const zSpread = (Math.random() - 0.5) * 60;
-                posData[i * 3] = (Math.random() - 0.5) * 20;
-                posData[i * 3 + 1] = (Math.random() - 0.5) * 20;
-                posData[i * 3 + 2] = zSpread;
-
-                // BRAIN
-                const phiBrain = Math.random() * Math.PI * 2;
-                const thetaBrain = Math.acos(Math.random() * 2 - 1);
-                const rB = 2.2 + Math.sin(phiBrain * 6) * 0.2 * Math.cos(thetaBrain * 4);
-                const side = Math.random() > 0.5 ? 1 : -1;
-                brainData[i * 3] = rB * Math.sin(thetaBrain) * Math.cos(phiBrain) * 0.8 + (0.5 * side);
-                brainData[i * 3 + 1] = rB * Math.sin(thetaBrain) * Math.sin(phiBrain);
-                brainData[i * 3 + 2] = rB * Math.cos(thetaBrain);
-
-                // ATOM
-                if (i < count * 0.1) { // Nucleus (10%)
-                    const rN = Math.random() * 0.5;
-                    const pN = Math.random() * Math.PI * 2;
-                    const tN = Math.acos(Math.random() * 2 - 1);
-                    atomData[i * 3] = rN * Math.sin(tN) * Math.cos(pN);
-                    atomData[i * 3 + 1] = rN * Math.sin(tN) * Math.sin(pN);
-                    atomData[i * 3 + 2] = -20.0 + rN * Math.cos(tN);
-                } else { // Orbitals
-                    const ring = Math.floor(Math.random() * 3);
-                    const angle = Math.random() * Math.PI * 2;
-                    const rA = 3.0;
-                    let x = rA * Math.cos(angle);
-                    let y = rA * Math.sin(angle);
-                    let z = (Math.random() - 0.5) * 0.2;
-                    if (ring === 1) { z = y * Math.sin(Math.PI / 3); y = y * Math.cos(Math.PI / 3); }
-                    else if (ring === 2) { let tempX = x; x = x * Math.cos(Math.PI / 3); z = tempX * Math.sin(Math.PI / 3); }
-                    atomData[i * 3] = x; atomData[i * 3 + 1] = y; atomData[i * 3 + 2] = -20.0 + z;
-                }
-
-                // BULB
-                const phiBulb = Math.random() * Math.PI * 2;
-                const tBulb = Math.random() * Math.PI;
-                if (tBulb < Math.PI * 0.7) {
-                    const rBulb = 2.5 * (1 - Math.cos(tBulb) * 0.2);
-                    bulbData[i * 3] = rBulb * Math.sin(tBulb) * Math.cos(phiBulb);
-                    bulbData[i * 3 + 1] = rBulb * Math.cos(tBulb) + 1;
-                    bulbData[i * 3 + 2] = -42.0 + rBulb * Math.sin(tBulb) * Math.sin(phiBulb);
-                } else {
-                    bulbData[i * 3] = (Math.random() - 0.5) * 1.5;
-                    bulbData[i * 3 + 1] = -1.5 - (Math.random() * 1.0);
-                    bulbData[i * 3 + 2] = -42.0 + (Math.random() - 0.5) * 1.5;
-                }
-
-                // Random initial scatter
-                posData[i * 3] = (Math.random() - 0.5) * 15;
-                posData[i * 3 + 1] = (Math.random() - 0.5) * 15;
-                posData[i * 3 + 2] = (Math.random() - 0.5) * 15;
-            }
-
-            const geo = new THREE.BufferGeometry();
-            geo.setAttribute('position', new THREE.BufferAttribute(posData, 3));
-            geo.setAttribute('brain', new THREE.BufferAttribute(brainData, 3));
-            geo.setAttribute('atom', new THREE.BufferAttribute(atomData, 3));
-            geo.setAttribute('bulb', new THREE.BufferAttribute(bulbData, 3));
-
-            // Point size factor for responsive scaling
-            const psFactor = config.pointSizeFactor;
-            const mouseWarpStrength = config.mouseWarp ? 1.2 : 0.0;
-
-            // Custom Morphing Points Material
-            const mat = new THREE.ShaderMaterial({
-                uniforms: {
-                    uTime: { value: 0 },
-                    uMorph: { value: 0 },
-                    uMouse: { value: new THREE.Vector2(0, 0) },
-                    uAtlas: { value: symbolAtlas },
-                    uWarpStrength: { value: mouseWarpStrength }
-                },
-                vertexShader: `
-                    uniform float uTime;
-                    uniform float uMorph;
-                    uniform vec2 uMouse;
-                    uniform float uWarpStrength;
-                    attribute vec3 brain;
-                    attribute vec3 atom;
-                    attribute vec3 bulb;
-                    varying float vOpacity;
-                    varying float vDist;
-                    varying vec2 vUv;
-                    
-                    void main() {
-                        vec3 target;
-                        if(uMorph < 1.0) target = mix(position, brain, smoothstep(0.0, 1.0, uMorph));
-                        else if(uMorph < 2.0) target = mix(brain, atom, smoothstep(1.0, 2.0, uMorph));
-                        else target = mix(atom, bulb, smoothstep(2.0, 3.0, uMorph));
-                        
-                        // Core Singularity Pulse
-                        float pulse = sin(uTime * 1.5) * 0.1;
-                        target *= 1.0 + pulse * (1.0 - smoothstep(0.0, 4.0, length(target.xy)));
-                        
-                        // Breathing
-                        target *= 1.0 + sin(uTime * 0.5 + float(gl_VertexID)) * 0.05;
-                        
-                        // Gravitational Lens (Mouse) — disabled on mobile via uWarpStrength=0
-                        vec2 m = uMouse * 5.0;
-                        float dist = distance(target.xy, m);
-                        float warp = smoothstep(4.0, 0.0, dist) * uWarpStrength;
-                        vec3 finalPos = target;
-                        finalPos.xy += normalize(target.xy - m) * warp;
-                        finalPos.z += warp * 0.5;
-
-                        vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
-                        gl_PointSize = (${(200 * psFactor).toFixed(1)} / -mvPosition.z) * (1.0 + pulse);
-                        gl_Position = projectionMatrix * mvPosition;
-                        
-                        vDist = length(finalPos.xy);
-                        vOpacity = 0.8 + sin(uTime + float(gl_VertexID)) * 0.1;
-                        float idx = mod(float(gl_VertexID), 16.0);
-                        vUv = vec2(mod(idx, 4.0), floor(idx / 4.0)) * 0.25;
-                    }
-                `,
-                fragmentShader: `
-                    uniform sampler2D uAtlas;
-                    varying float vOpacity;
-                    varying float vDist;
-                    varying vec2 vUv;
-                    void main() {
-                        vec2 uv = vUv + gl_PointCoord * 0.25;
-                        vec4 tex = texture2D(uAtlas, uv);
-                        if(tex.a < 0.1) discard;
-                        
-                        float mask = 1.0 - smoothstep(12.0, 22.0, vDist); 
-                        vec3 color = vec3(0.0, 0.27, 1.0); 
-                        
-                        gl_FragColor = vec4(tex.rgb * color, tex.a * vOpacity * mask);
-                    }
-                `,
-                transparent: true,
-                depthWrite: false,
-                blending: THREE.NormalBlending
-            });
-
-            const singularity = new THREE.Points(geo, mat);
-            scene.add(singularity);
-
-            // ═══ KNOWLEDGE RAIN ═══
-            const rainCount = config.rain;
-            const rainGeo = new THREE.BufferGeometry();
-            const rainPos = new Float32Array(rainCount * 3);
-            for (let i = 0; i < rainCount * 3; i += 3) {
-                rainPos[i] = (Math.random() - 0.5) * 15;
-                rainPos[i + 1] = (Math.random() - 0.5) * 15;
-                rainPos[i + 2] = -5 - Math.random() * 5;
-            }
-            rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
-            const rainMat = new THREE.ShaderMaterial({
-                uniforms: {
-                    uAtlas: { value: symbolAtlas },
-                    uOpacity: { value: 0.1 }
-                },
-                vertexShader: `
-                    varying float vY;
-                    varying vec2 vUv;
-                    void main() {
-                        vY = position.y;
-                        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                        gl_PointSize = (${(100 * psFactor).toFixed(1)} / -mvPosition.z);
-                        gl_Position = projectionMatrix * mvPosition;
-                        float idx = mod(float(gl_VertexID), 16.0);
-                        vUv = vec2(mod(idx, 4.0), floor(idx / 4.0)) * 0.25;
-                    }
-                `,
-                fragmentShader: `
-                    uniform sampler2D uAtlas;
-                    uniform float uOpacity;
-                    varying float vY;
-                    varying vec2 vUv;
-                    void main() {
-                        vec2 uv = vUv + gl_PointCoord * 0.25;
-                        vec4 tex = texture2D(uAtlas, uv);
-                        if(tex.a < 0.1) discard;
-                        float fade = smoothstep(-6.5, -3.5, vY);
-                        gl_FragColor = vec4(tex.rgb * vec3(0.0, 0.27, 1.0), tex.a * uOpacity * fade);
-                    }
-                `,
-                transparent: true,
-                depthWrite: false,
-                blending: THREE.NormalBlending
-            });
-            const rainPoints = new THREE.Points(rainGeo, rainMat);
-            scene.add(rainPoints);
-
-            // ═══ ORBITAL DATA RINGS (Skip on mobile) ═══
-            let ring1, ring2, ringMat;
-            if (config.rings) {
-                const ringCount = TIER === 'tablet' ? 250 : 400;
-                const ringGeo = new THREE.BufferGeometry();
-                const ringPos = new Float32Array(ringCount * 3);
-                for (let i = 0; i < ringCount; i++) {
-                    const angle = (i / ringCount) * Math.PI * 2;
-                    const radius = 5.5 + Math.random() * 0.8;
-                    ringPos[i * 3] = Math.cos(angle) * radius;
-                    ringPos[i * 3 + 1] = (Math.random() - 0.5) * 0.2;
-                    ringPos[i * 3 + 2] = Math.sin(angle) * radius;
-                }
-                ringGeo.setAttribute('position', new THREE.BufferAttribute(ringPos, 3));
-                ringMat = new THREE.ShaderMaterial({
-                    uniforms: {
-                        uTime: { value: 0 },
-                        uAtlas: { value: symbolAtlas }
-                    },
-                    vertexShader: `
-                        uniform float uTime;
-                        varying float vOpacity;
-                        varying vec2 vUv;
-                        void main() {
-                            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                            gl_PointSize = (${(120 * psFactor).toFixed(1)} / -mvPosition.z);
-                            gl_Position = projectionMatrix * mvPosition;
-                            vOpacity = 0.2 + sin(uTime * 2.0 + float(gl_VertexID)) * 0.1;
-                            float idx = mod(float(gl_VertexID), 16.0);
-                            vUv = vec2(mod(idx, 4.0), floor(idx / 4.0)) * 0.25;
-                        }
-                    `,
-                    fragmentShader: `
-                        uniform sampler2D uAtlas;
-                        varying float vOpacity;
-                        varying vec2 vUv;
-                        void main() {
-                            vec2 uv = vUv + gl_PointCoord * 0.25;
-                            vec4 tex = texture2D(uAtlas, uv);
-                            if(tex.a < 0.1) discard;
-                            gl_FragColor = vec4(tex.rgb * vec3(0.0, 0.27, 1.0), tex.a * vOpacity * 3.0);
-                        }
-                    `,
-                    transparent: true,
-                    depthWrite: false,
-                    blending: THREE.NormalBlending
-                });
-                ring1 = new THREE.Points(ringGeo, ringMat);
-                ring2 = ring1.clone();
-                ring2.rotation.x = Math.PI * 0.4;
-                scene.add(ring1, ring2);
-            }
-
-            // ═══ INTERACTION (Desktop/Tablet only) ═══
-            let targetMouse = new THREE.Vector2(0, 0);
-            if (config.mouseWarp) {
-                function onMove(e) {
-                    const r = container.getBoundingClientRect();
-                    targetMouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
-                    targetMouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
-                }
-                window.addEventListener('mousemove', onMove, { passive: true });
-            }
-
-            // ═══ TEXT SCRAMBLE SYSTEM ═══
-            class TextScramble {
-                constructor(el) {
-                    this.el = el;
-                    this.chars = ['∫', '∑', '∞', 'π', 'δ', 'λ', '√', '≈', 'Δ', '∇', 'ħ', 'ψ'];
-                    this.update = this.update.bind(this);
-                }
-                setText(newText, htmlTemplate) {
-                    const length = newText.length;
-                    const promise = new Promise((resolve) => this.resolve = resolve);
-                    this.queue = [];
-                    for (let i = 0; i < length; i++) {
-                        const to = newText[i] || '';
-                        const end = Math.floor(Math.random() * 20) + 20;
-                        this.queue.push({ to, end });
-                    }
-                    cancelAnimationFrame(this.frameRequest);
-                    this.frame = 0;
-                    this.htmlTemplate = htmlTemplate;
-                    this.update();
-                    return promise;
-                }
-                update() {
-                    let output = '';
-                    let complete = 0;
-                    for (let i = 0, n = this.queue.length; i < n; i++) {
-                        let { to, end, char } = this.queue[i];
-                        if (this.frame >= end) {
-                            complete++;
-                            output += to;
-                        } else {
-                            if (!char || Math.random() < 0.28) {
-                                char = this.randomChar();
-                                this.queue[i].char = char;
-                            }
-                            output += '<span class="dud">' + char + '</span>';
-                        }
-                    }
-
-                    if (complete === this.queue.length && this.htmlTemplate) {
-                        this.el.innerHTML = this.htmlTemplate;
-                    } else {
-                        this.el.innerHTML = output;
-                    }
-
-                    if (complete === this.queue.length) {
-                        this.resolve();
-                    } else {
-                        this.frameRequest = requestAnimationFrame(this.update);
-                        this.frame++;
-                    }
-                }
-                randomChar() {
-                    return this.chars[Math.floor(Math.random() * this.chars.length)];
-                }
-            }
-
-            let brandScrambled = false;
-            const targetEl = document.getElementById('scramble-target');
-            const targetText = "Henceprove.";
-            const targetHtml = "Hence<em>prove</em><span style='color:var(--text-primary)'>.</span>";
-            const scrambler = targetEl ? new TextScramble(targetEl) : null;
-
-            // ═══ SCROLLTRIGGER INTEGRATION ═══
-            let scrollProgress = 0;
-
-            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-                gsap.registerPlugin(ScrollTrigger);
-
-                // UX Audit GSAP Cleanup Context
-                const gsapCtx = gsap.context(() => { });
-                window.addEventListener('unload', () => {
-                    gsapCtx.revert();
-                    ScrollTrigger.getAll().forEach(t => t.kill());
-                });
-
-                // Responsive pin distance: shorter on mobile to prevent 'stuck' feeling
-                const heroPinDistance = window.innerWidth < 768 ? '+=200%' : '+=500%';
-
-                ScrollTrigger.create({
-                    trigger: "#home",
-                    start: "top top",
-                    end: heroPinDistance,
-                    pin: true,
-                    scrub: 1,
-                    onUpdate: (self) => {
-                        scrollProgress = self.progress;
-
-                        const stages = document.querySelectorAll('.hero__stage');
-                        const stageCount = stages.length;
-                        const step = 1.0 / stageCount;
-
-                        stages.forEach((stage, index) => {
-                            const start = index * step;
-                            const end = start + step - 0.02;
-
-                            if (index === stageCount - 1) {
-                                if (scrollProgress >= start) {
-                                    stage.classList.add('active');
-                                } else {
-                                    stage.classList.remove('active');
-                                }
-                            } else {
-                                if (scrollProgress >= start && scrollProgress < end) {
-                                    stage.classList.add('active');
-
-                                    if (index === 3 && !brandScrambled && scrambler) {
-                                        brandScrambled = true;
-                                        scrambler.setText(targetText, targetHtml);
-                                    }
-                                } else {
-                                    stage.classList.remove('active');
-
-                                    if (index === 3 && scrollProgress < start) {
-                                        if (brandScrambled) {
-                                            brandScrambled = false;
-                                            setTimeout(() => {
-                                                if (!stage.classList.contains('active') && targetEl) {
-                                                    targetEl.innerHTML = '<span class="dud">∑</span><span class="dud">∞</span><span class="dud">π</span><span class="dud">δ</span><span class="dud">λ</span><span class="dud">√</span><span class="dud">≈</span><span class="dud">Δ</span><span class="dud">∇</span><span class="dud">ħ</span><span class="dud">ψ</span>';
-                                                }
-                                            }, 600);
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
-
-                ScrollTrigger.sort();
-                ScrollTrigger.refresh();
-            }
-
-            // ═══ VISIBILITY-AWARE ANIMATION ENGINE ═══
-            const clock = new THREE.Clock();
-            let isHeroVisible = true;
-            let animFrameId;
-
-            // Pause rendering when hero is scrolled out of view
-            const heroSection = document.getElementById('home');
-            if (heroSection && 'IntersectionObserver' in window) {
-                const visObs = new IntersectionObserver((entries) => {
-                    isHeroVisible = entries[0].isIntersecting;
-                    if (isHeroVisible && !animFrameId) {
-                        clock.start(); // Resume clock
-                        animFrameId = requestAnimationFrame(animate);
-                    }
-                }, { threshold: 0.01 });
-                visObs.observe(heroSection);
-            }
-
-            // ═══ GPU FAILSAFE ═══
-            let frameCount = 0;
-            let failsafeChecked = false;
-
-            function animate() {
-                if (!isHeroVisible) {
-                    animFrameId = null;
-                    clock.stop();
-                    return;
-                }
-                animFrameId = requestAnimationFrame(animate);
-                const time = clock.getElapsedTime();
-
-                mat.uniforms.uTime.value = time;
-                if (config.mouseWarp) {
-                    mat.uniforms.uMouse.value.lerp(targetMouse, 0.05);
-                }
-
-                // Morph based on scroll
-                const targetMorph = scrollProgress * 3;
-                mat.uniforms.uMorph.value = THREE.MathUtils.lerp(mat.uniforms.uMorph.value, targetMorph, 0.05);
-
-                // Cinematic Neural Flythrough
-                const diveProgress = Math.pow(scrollProgress, 1.2);
-                const targetCamZ = 15 - (diveProgress * 55);
-                const targetCamX = Math.sin(time * 0.3) * 2;
-                const targetCamY = Math.cos(time * 0.2) * 2;
-
-                camera.position.z += (targetCamZ - camera.position.z) * 0.05;
-                camera.position.x += (targetCamX - camera.position.x) * 0.04;
-                camera.position.y += (targetCamY - camera.position.y) * 0.04;
-
-                // Look-ahead focus (disable mouse offset on touch)
-                if (config.mouseWarp) {
-                    camera.lookAt(targetMouse.x * 2.5, targetMouse.y * 2.5, targetCamZ - 15);
-                } else {
-                    camera.lookAt(0, 0, targetCamZ - 15);
-                }
-
-                singularity.rotation.y = time * 0.15 + (scrollProgress * Math.PI);
-
-                // Rain Fall
-                const rainArr = rainGeo.attributes.position.array;
-                for (let i = 0; i < rainCount * 3; i += 3) {
-                    rainArr[i + 1] -= 0.02;
-                    if (rainArr[i + 1] < -10) rainArr[i + 1] = 10;
-                }
-                rainGeo.attributes.position.needsUpdate = true;
-
-                // Rings (only if enabled)
-                if (ring1 && ringMat) {
-                    ring1.rotation.y = time * 0.2;
-                    ring1.rotation.z = time * 0.1;
-                    ring2.rotation.y = -time * 0.15;
-                    ring2.rotation.x = time * 0.1;
-                    ringMat.uniforms.uTime.value = time;
-                }
-
-                renderer.render(scene, camera);
-
-                // GPU Failsafe: check after 60 frames
-                frameCount++;
-                if (!failsafeChecked && frameCount === 60) {
-                    failsafeChecked = true;
-                    const info = renderer.info.render;
-                    // If rendering is struggling (high triangle count check or we can use timing)
-                    // Simple heuristic: if we're on a device that claims desktop but is actually slow
-                    if (TIER === 'desktop' && renderer.info.render.frame > 0) {
-                        // The GPU failsafe already applied via tier detection
-                        // Additional runtime detection could be added here if needed
-                    }
-                }
-            }
-            animFrameId = requestAnimationFrame(animate);
-
-            // ═══ SIGNATURE SYMBOL ANIMATION ═══
-            function createSignatureParticles() {
-                const bgContainer = document.querySelector('.hero__signature-bg');
-                if (!bgContainer) return;
-
-                const chars = ['∫', '∑', '∞', 'π', 'δ', 'λ', '√', '≈', 'Δ', '∇', 'ħ', 'ψ'];
-                const particleCount = config.signatureParticles;
-
-                for (let i = 0; i < particleCount; i++) {
-                    const span = document.createElement('span');
-                    span.className = 'sig-symbol';
-                    span.innerText = chars[Math.floor(Math.random() * chars.length)];
-
-                    const left = Math.random() * 100;
-                    const top = Math.random() * 100;
-                    const tx = (Math.random() - 0.5) * 100 + 'px';
-                    const ty = (Math.random() - 0.5) * 100 + 'px';
-                    const tr = (Math.random() - 0.5) * 360 + 'deg';
-                    const ts = 0.5 + Math.random() * 1.5;
-
-                    span.style.left = `${left}%`;
-                    span.style.top = `${top}%`;
-                    span.style.setProperty('--tx', tx);
-                    span.style.setProperty('--ty', ty);
-                    span.style.setProperty('--tr', tr);
-                    span.style.setProperty('--ts', ts);
-                    span.style.animationDelay = `${Math.random() * -8}s`;
-                    span.style.animationDuration = `${6 + Math.random() * 4}s`;
-
-                    bgContainer.appendChild(span);
-                }
-            }
-            createSignatureParticles();
-
-
-        })();
     </script>
 
 </body>
